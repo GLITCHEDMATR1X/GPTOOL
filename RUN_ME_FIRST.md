@@ -64,6 +64,14 @@ Use honest non-render fallback:
 python bridge.py full-pass /path/to/project --profile panda3d --runtime mock --smoke
 ```
 
+Generated project stress proof:
+
+```bash
+python main.py --screenshot-mode --route-proof --stress-proof --screenshot-path screenshots/stress.png --proof-path reports/stress.json
+```
+
+Generated templates also write crash diagnostics under `logs/crash_latest.txt`, `logs/runtime_latest.json`, `logs/last_controls_state.json`, and `logs/last_scene_state.json`.
+
 ## 4. Read the report
 
 The pass writes:

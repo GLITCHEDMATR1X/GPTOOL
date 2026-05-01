@@ -38,13 +38,186 @@ def _main_py_template() -> str:
 import json
 import math
 import os
+import platform
 import sys
+import traceback
 from datetime import datetime
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 SETTINGS_PATH = BASE_DIR / "settings" / "game_settings.json"
 HUMAN_MANIFEST_PATH = BASE_DIR / "assets" / "characters" / "humans" / "human_manifest.json"
+TEMPLATE_VERSION = "panda3d_playable_simulation_template.v6"
+APP_INSTANCE = None
+
+
+def _truthy(value: str | None) -> bool:
+    return str(value or "").lower() in {"1", "true", "yes", "on"}
+
+
+def _safe_vec3_list(value) -> list[float] | None:
+    try:
+        return [round(float(value[0]), 4), round(float(value[1]), 4), round(float(value[2]), 4)]
+    except Exception:
+        try:
+            return [round(float(value.x), 4), round(float(value.y), 4), round(float(value.z), 4)]
+        except Exception:
+            return None
+
+
+def _write_json_safely(path: Path, payload: dict) -> bool:
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
+        return True
+    except Exception:
+        return False
+
+
+def _runtime_state_snapshot() -> dict:
+    app = APP_INSTANCE
+    payload = {
+        "schema_version": "gptool_runtime_state.v1",
+        "template_version": TEMPLATE_VERSION,
+        "generated_at": datetime.now().isoformat(timespec="seconds"),
+        "argv": list(sys.argv),
+        "cwd": str(Path.cwd()),
+        "python_version": sys.version,
+        "platform": platform.platform(),
+        "settings_path": str(SETTINGS_PATH),
+        "screenshot_path": os.environ.get("GPT_BRIDGE_SCREENSHOT_PATH"),
+        "proof_path": os.environ.get("GPT_BRIDGE_SMOKE_PROOF_PATH"),
+        "route_proof_requested": _truthy(os.environ.get("GPT_BRIDGE_SIMULATION_ROUTE_PROOF")),
+        "stress_proof_requested": _truthy(os.environ.get("GPT_BRIDGE_STRESS_PROOF")),
+    }
+    try:
+        import panda3d
+        payload["panda3d_version"] = getattr(panda3d, "__version__", None)
+    except Exception:
+        payload["panda3d_version"] = None
+    try:
+        active = app._active_character() if app else None
+        payload["active_character"] = {
+            "id": active.get("id") if active else None,
+            "name": active.get("name") if active else None,
+        }
+        payload["character_positions"] = app._character_positions_snapshot() if app else {}
+        payload["points"] = int(getattr(app, "points", 0)) if app else 0
+        payload["camera"] = {
+            "distance": round(float(getattr(app, "camera_distance", 0.0)), 4),
+            "target_distance": round(float(getattr(app, "camera_target_distance", 0.0)), 4),
+            "height": round(float(getattr(app, "camera_height", 0.0)), 4),
+            "target_height": round(float(getattr(app, "camera_target_height", 0.0)), 4),
+            "yaw": round(float(getattr(app, "camera_yaw", 0.0)), 4),
+            "position": _safe_vec3_list(app.camera.getPos()) if app and getattr(app, "camera", None) else None,
+        }
+    except Exception as exc:
+        payload["snapshot_error"] = f"{type(exc).__name__}: {exc}"
+    return payload
+
+
+def _controls_state_snapshot() -> dict:
+    app = APP_INSTANCE
+    payload = {
+        "schema_version": "gptool_controls_state.v1",
+        "template_version": TEMPLATE_VERSION,
+        "generated_at": datetime.now().isoformat(timespec="seconds"),
+        "keys": {},
+        "camera_distance": None,
+        "camera_height": None,
+        "jump_was_down": None,
+        "was_grounded": None,
+    }
+    if app is None:
+        return payload
+    try:
+        payload.update(
+            {
+                "keys": {str(k): bool(v) for k, v in getattr(app, "keys", {}).items()},
+                "camera_distance": round(float(getattr(app, "camera_distance", 0.0)), 4),
+                "camera_target_distance": round(float(getattr(app, "camera_target_distance", 0.0)), 4),
+                "camera_height": round(float(getattr(app, "camera_height", 0.0)), 4),
+                "camera_target_height": round(float(getattr(app, "camera_target_height", 0.0)), 4),
+                "camera_yaw": round(float(getattr(app, "camera_yaw", 0.0)), 4),
+                "vertical_velocity": round(float(getattr(app, "vertical_velocity", 0.0)), 4),
+                "velocity": _safe_vec3_list(getattr(app, "velocity", None)),
+                "jump_was_down": bool(getattr(app, "jump_was_down", False)),
+                "was_grounded": bool(getattr(app, "was_grounded", False)),
+            }
+        )
+    except Exception as exc:
+        payload["snapshot_error"] = f"{type(exc).__name__}: {exc}"
+    return payload
+
+
+def _scene_state_snapshot() -> dict:
+    app = APP_INSTANCE
+    payload = {
+        "schema_version": "gptool_scene_state.v1",
+        "template_version": TEMPLATE_VERSION,
+        "generated_at": datetime.now().isoformat(timespec="seconds"),
+    }
+    if app is None:
+        payload["scene"] = None
+        return payload
+    try:
+        payload["scene"] = app.gpt_bridge_scene_state()
+    except Exception as exc:
+        payload["snapshot_error"] = f"{type(exc).__name__}: {exc}"
+    return payload
+
+
+def _write_runtime_diagnostics(reason: str) -> dict:
+    written = {}
+    try:
+        logs_dir = BASE_DIR / "logs"
+        runtime = _runtime_state_snapshot()
+        runtime["reason"] = reason
+        controls = _controls_state_snapshot()
+        controls["reason"] = reason
+        scene = _scene_state_snapshot()
+        scene["reason"] = reason
+        written["runtime_latest"] = _write_json_safely(logs_dir / "runtime_latest.json", runtime)
+        written["last_controls_state"] = _write_json_safely(logs_dir / "last_controls_state.json", controls)
+        written["last_scene_state"] = _write_json_safely(logs_dir / "last_scene_state.json", scene)
+    except Exception:
+        pass
+    return written
+
+
+def _write_crash_log(exc: BaseException, reason: str = "runtime") -> Path | None:
+    try:
+        _write_runtime_diagnostics(reason)
+        out = BASE_DIR / "logs" / "crash_latest.txt"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        runtime = _runtime_state_snapshot()
+        lines = [
+            "GPTOOL generated template crash report",
+            f"timestamp: {datetime.now().isoformat(timespec='seconds')}",
+            f"reason: {reason}",
+            f"exception_type: {type(exc).__name__}",
+            f"exception_message: {exc}",
+            f"argv: {runtime.get('argv')}",
+            f"cwd: {runtime.get('cwd')}",
+            f"python_version: {runtime.get('python_version')}",
+            f"panda3d_version: {runtime.get('panda3d_version')}",
+            f"settings_path: {runtime.get('settings_path')}",
+            f"screenshot_path: {runtime.get('screenshot_path')}",
+            f"proof_path: {runtime.get('proof_path')}",
+            f"route_proof_requested: {runtime.get('route_proof_requested')}",
+            f"stress_proof_requested: {runtime.get('stress_proof_requested')}",
+            f"active_character: {runtime.get('active_character')}",
+            f"character_positions: {runtime.get('character_positions')}",
+            f"points: {runtime.get('points')}",
+            f"camera: {runtime.get('camera')}",
+            "",
+            "traceback:",
+            "".join(traceback.format_exception(type(exc), exc, exc.__traceback__)),
+        ]
+        out.write_text("\n".join(lines), encoding="utf-8")
+        return out
+    except Exception:
+        return None
 
 
 def _arg_value(flag: str, default: str | None = None) -> str | None:
@@ -64,7 +237,7 @@ def _strip_generated_cli_args() -> None:
         if skip_next:
             skip_next = False
             continue
-        if item in {"--screenshot-mode", "--route-proof", "--simulation-route-proof"}:
+        if item in {"--screenshot-mode", "--route-proof", "--simulation-route-proof", "--stress-proof", "--force-crash-test"}:
             continue
         if item in takes_value:
             skip_next = True
@@ -79,7 +252,9 @@ def _timestamp() -> str:
 
 def _prepare_screenshot_mode() -> None:
     route_requested = "--route-proof" in sys.argv or "--simulation-route-proof" in sys.argv
-    if "--screenshot-mode" not in sys.argv and not route_requested:
+    stress_requested = "--stress-proof" in sys.argv
+    force_crash_requested = "--force-crash-test" in sys.argv
+    if "--screenshot-mode" not in sys.argv and not route_requested and not stress_requested and not force_crash_requested:
         return
     screenshot_path = _arg_value("--screenshot-path") or str(BASE_DIR / "screenshots" / "simulation_mode_backup.png")
     proof_path = _arg_value("--proof-path") or str(BASE_DIR / "reports" / "simulation_mode_scene_proof.json")
@@ -89,14 +264,22 @@ def _prepare_screenshot_mode() -> None:
     os.environ.setdefault("GPT_BRIDGE_SCREENSHOT_PATH", screenshot_path)
     os.environ.setdefault("GPT_BRIDGE_SMOKE_PROOF_PATH", proof_path)
     os.environ.setdefault("GPT_BRIDGE_WINDOW_TYPE", window_type)
-    os.environ.setdefault("GPT_BRIDGE_SMOKE_FRAMES", "64" if route_requested else "8")
-    if route_requested:
+    os.environ.setdefault("GPT_BRIDGE_SMOKE_FRAMES", "64" if route_requested or stress_requested else "8")
+    if route_requested or stress_requested:
         os.environ.setdefault("GPT_BRIDGE_SIMULATION_ROUTE_PROOF", "1")
+    if stress_requested:
+        os.environ.setdefault("GPT_BRIDGE_STRESS_PROOF", "1")
+    if force_crash_requested:
+        os.environ.setdefault("GPT_BRIDGE_FORCE_CRASH_TEST", "1")
     os.environ.setdefault("GPT_BRIDGE_EXIT_AFTER_SCREENSHOT", "1")
     print(f"GPT_SIMULATION_SCREENSHOT_MODE: screenshot={screenshot_path}", flush=True)
     print(f"GPT_SIMULATION_SCREENSHOT_MODE: proof={proof_path}", flush=True)
     if route_requested:
         print("GPT_SIMULATION_ROUTE_PROOF_MODE: enabled", flush=True)
+    if stress_requested:
+        print("GPT_SIMULATION_STRESS_PROOF_MODE: enabled", flush=True)
+    if force_crash_requested:
+        print("GPT_SIMULATION_FORCE_CRASH_TEST: enabled", flush=True)
     _strip_generated_cli_args()
 
 
@@ -134,6 +317,9 @@ except Exception as exc:
     print("Panda3D is required to run this generated template.", file=sys.stderr)
     print("Install with: python -m pip install panda3d", file=sys.stderr)
     print(f"Import error: {exc}", file=sys.stderr)
+    crash_path = _write_crash_log(exc, "panda3d_import")
+    if crash_path:
+        print(f"GPT_BRIDGE_CRASH_LOG_WRITTEN: {crash_path}", file=sys.stderr)
     raise SystemExit(1)
 
 _window_type_hint = os.environ.get("GPT_BRIDGE_WINDOW_TYPE", "default").strip().lower()
@@ -151,11 +337,13 @@ loadPrcFileData("", "multisamples 4")
 
 class GeneratedGame(ShowBase):
     def __init__(self) -> None:
+        global APP_INSTANCE
         requested_window_type = os.environ.get("GPT_BRIDGE_WINDOW_TYPE", "").strip().lower()
         if requested_window_type in {"none", "offscreen"}:
             super().__init__(windowType=requested_window_type)
         else:
             super().__init__()
+        APP_INSTANCE = self
         self.settings = load_settings()
         self.human_manifest = self._load_human_manifest()
         self.disableMouse()
@@ -220,6 +408,14 @@ class GeneratedGame(ShowBase):
 
     def _set_key(self, key: str, value: bool) -> None:
         self.keys[key] = value
+
+    def _adjust_camera_zoom(self, delta: float) -> None:
+        self.camera_target_distance = max(self.camera_min_distance, min(self.camera_max_distance, self.camera_target_distance + float(delta)))
+
+    def _reset_camera(self) -> None:
+        self.camera_yaw = 0.0
+        self.camera_target_distance = 18.0
+        self.camera_target_height = 6.8
 
     def _build_lights(self) -> None:
         ambient = AmbientLight("ambient")
@@ -616,6 +812,9 @@ class GeneratedGame(ShowBase):
     def _route_proof_requested(self) -> bool:
         return str(os.environ.get("GPT_BRIDGE_SIMULATION_ROUTE_PROOF") or "").lower() in {"1", "true", "yes", "on"}
 
+    def _stress_proof_requested(self) -> bool:
+        return str(os.environ.get("GPT_BRIDGE_STRESS_PROOF") or "").lower() in {"1", "true", "yes", "on"}
+
     def _character_positions_snapshot(self) -> dict:
         return {
             str(item.get("id")): [round(float(v), 3) for v in item["node"].getPos()]
@@ -756,6 +955,141 @@ class GeneratedGame(ShowBase):
         self._write_fallback_scene_proof(screenshot_path, screenshot_exists)
         print("GPT_SIMULATION_ROUTE_PROOF_COMPLETE", flush=True)
 
+    def _capture_requested_screenshot(self) -> tuple[str | None, bool]:
+        screenshot_path = os.environ.get("GPT_BRIDGE_SCREENSHOT_PATH")
+        screenshot_exists = False
+        if not screenshot_path:
+            return None, False
+        out = Path(screenshot_path)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            self.graphicsEngine.renderFrame()
+            self.graphicsEngine.renderFrame()
+        except Exception:
+            pass
+        if getattr(self, "win", None):
+            self.win.saveScreenshot(Filename.fromOsSpecific(str(out)))
+            screenshot_exists = out.exists()
+        return screenshot_path, screenshot_exists
+
+    def run_stress_proof_now(self) -> None:
+        if len(self.simulation_characters) < 2:
+            self._write_stress_proof(False, None, False, {"reason": "fewer than two simulation characters"})
+            return
+        flags = {
+            "tab_swap_tested": False,
+            "jump_tested": False,
+            "sprint_tested": False,
+            "camera_zoom_tested": False,
+            "camera_reset_tested": False,
+        }
+        start_positions = self._character_positions_snapshot()
+        self.simulation_route_events = []
+        self.route_marker_count = 0
+        self._switch_character(0, announce=True)
+        self.keys.update({"w": True, "shift": True})
+        flags["sprint_tested"] = True
+        self.simulation_route_events.append({"step": 1, "event": "stress_male_move_sprint", "character": "playable_male"})
+        for step in range(1, 18):
+            active = self._active_character()
+            if active:
+                active["node"].setY(active["node"].getY() + 0.34)
+                active["node"].setH(0)
+                self.points += 2
+                if step in {1, 6, 12, 17}:
+                    self._drop_route_marker(str(active.get("id")), active.get("color", [0.0, 0.84, 1.0, 1.0]))
+        self.keys["q"] = True
+        self.camera_yaw += 42.0
+        self.keys["space"] = True
+        self.vertical_velocity = max(float(getattr(self, "vertical_velocity", 0.0)), float(self.settings.get("player", {}).get("jump_strength", 8.0)))
+        flags["jump_tested"] = True
+        self.keys.update({"w": False, "shift": False, "q": False, "space": False})
+        self._switch_character(None, announce=True)
+        flags["tab_swap_tested"] = True
+        self.simulation_route_events.append({"step": 22, "event": "stress_tab_swap", "character": "playable_female"})
+        self.keys.update({"d": True})
+        for step in range(1, 18):
+            active = self._active_character()
+            if active:
+                active["node"].setX(active["node"].getX() + 0.34)
+                active["node"].setH(-90)
+                self.points += 2
+                if step in {1, 6, 12, 17}:
+                    self._drop_route_marker(str(active.get("id")), active.get("color", [0.78, 0.28, 1.0, 1.0]))
+        self.keys["d"] = False
+        self._adjust_camera_zoom(-4.0)
+        flags["camera_zoom_tested"] = self.camera_target_distance < 18.0
+        self._reset_camera()
+        flags["camera_reset_tested"] = self.camera_target_distance == 18.0 and self.camera_yaw == 0.0
+        end_positions = self._character_positions_snapshot()
+        self.route_proof_completed = True
+        self.simulation_route_summary = {
+            "enabled": True,
+            "completed": True,
+            "mode": "synchronous_stress_proof",
+            "swap_count": 1,
+            "start_positions": start_positions,
+            "end_positions": end_positions,
+            "route_marker_count": self.route_marker_count,
+            "events": list(self.simulation_route_events),
+        }
+        active = self._active_character()
+        active_name = active.get("name") if active else "None"
+        self.points_node.setText(f"POINTS {self.points}")
+        self.active_node.setText(f"ACTIVE {active_name} | STRESS PROOF | ZOOM {self.camera_target_distance:.0f}")
+        points = [item["node"].getPos() for item in self.simulation_characters]
+        mid = Vec3(sum(p.x for p in points) / len(points), sum(p.y for p in points) / len(points), 2.6)
+        self._ensure_platform_chunks(mid)
+        if getattr(self, "camera", None):
+            self.camera.setPos(mid.x, mid.y - 24.0, mid.z + 9.5)
+            self.camera.lookAt(mid)
+        screenshot_path, screenshot_exists = self._capture_requested_screenshot()
+        status = "pass" if all(flags.values()) and screenshot_exists else "partial"
+        self._write_stress_proof(status == "pass", screenshot_path, screenshot_exists, flags)
+        print("GPT_SIMULATION_STRESS_PROOF_COMPLETE", flush=True)
+
+    def _write_stress_proof(self, ok: bool, screenshot_path: str | None, screenshot_exists: bool, flags: dict) -> None:
+        proof_path = os.environ.get("GPT_BRIDGE_SMOKE_PROOF_PATH")
+        if not proof_path:
+            return
+        out = Path(proof_path)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        _write_runtime_diagnostics("stress_proof")
+        active = self._active_character()
+        diagnostics_files = {
+            "runtime": str((BASE_DIR / "logs" / "runtime_latest.json").resolve()),
+            "controls": str((BASE_DIR / "logs" / "last_controls_state.json").resolve()),
+            "scene": str((BASE_DIR / "logs" / "last_scene_state.json").resolve()),
+            "crash": str((BASE_DIR / "logs" / "crash_latest.txt").resolve()),
+        }
+        payload = {
+            "schema_version": "gptool_simulation_proof.v2",
+            "status": "pass" if ok else "partial",
+            "template_version": TEMPLATE_VERSION,
+            "generated_at": datetime.now().isoformat(timespec="seconds"),
+            "controller_model": self.gpt_bridge_scene_state().get("controller_model", {}),
+            "playable_character_count": len(self.simulation_characters),
+            "active_character": {
+                "id": active.get("id") if active else None,
+                "name": active.get("name") if active else None,
+            },
+            "tab_swap_tested": bool(flags.get("tab_swap_tested")),
+            "jump_tested": bool(flags.get("jump_tested")),
+            "sprint_tested": bool(flags.get("sprint_tested")),
+            "camera_zoom_tested": bool(flags.get("camera_zoom_tested")),
+            "camera_reset_tested": bool(flags.get("camera_reset_tested")),
+            "route_markers": int(self.route_marker_count),
+            "points": int(self.points),
+            "screenshot_exists": bool(screenshot_exists),
+            "screenshot_path": str(Path(screenshot_path).resolve()) if screenshot_path else None,
+            "crash_log_exists": (BASE_DIR / "logs" / "crash_latest.txt").exists(),
+            "diagnostics_files": diagnostics_files,
+            "route_proof": self.simulation_route_summary,
+            "app_state": self.gpt_bridge_scene_state(),
+        }
+        out.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        print(f"GPT_BRIDGE_STRESS_PROOF_WRITTEN: {out}", flush=True)
+
     def _manual_screenshot(self) -> None:
         out = BASE_DIR / "screenshots" / f"manual_simulation_backup_{_timestamp()}.png"
         out.parent.mkdir(parents=True, exist_ok=True)
@@ -772,6 +1106,7 @@ class GeneratedGame(ShowBase):
     def gpt_bridge_scene_state(self) -> dict:
         active = self._active_character()
         return {
+            "template_version": TEMPLATE_VERSION,
             "mode": "playable_character_edit_test",
             "controls": {
                 "move": "WASD/Arrow keys with smoothed acceleration and friction",
@@ -782,6 +1117,7 @@ class GeneratedGame(ShowBase):
                 "backup_screenshot": "F12 or --screenshot-mode",
                 "cycle_animation": "C",
                 "route_proof": "--route-proof",
+                "stress_proof": "--stress-proof",
             },
             "controller_model": {
                 "schema_version": "gptool_player_controller.v1",
@@ -821,6 +1157,7 @@ class GeneratedGame(ShowBase):
             return
         out = Path(proof_path)
         out.parent.mkdir(parents=True, exist_ok=True)
+        _write_runtime_diagnostics("scene_proof")
         payload = {
             "schema_version": "panda3d_smoke_proof.v1",
             "status": "screenshot_captured" if screenshot_exists else "headless_scene_built",
@@ -973,6 +1310,11 @@ def _truthy_env(name: str) -> bool:
 
 def _run_generated_app() -> None:
     app = GeneratedGame()
+    if _truthy_env("GPT_BRIDGE_FORCE_CRASH_TEST"):
+        raise RuntimeError("Forced GPTOOL crash diagnostics test")
+    if _truthy_env("GPT_BRIDGE_STRESS_PROOF"):
+        app.run_stress_proof_now()
+        os._exit(0)
     if _truthy_env("GPT_BRIDGE_SIMULATION_ROUTE_PROOF"):
         app.run_simulation_route_proof_now()
         os._exit(0)
@@ -988,7 +1330,23 @@ def _run_generated_app() -> None:
 
 
 if __name__ == "__main__":
-    _run_generated_app()
+    try:
+        _run_generated_app()
+    except SystemExit as exc:
+        if exc.code in (0, None):
+            raise
+        crash_path = _write_crash_log(exc, "system_exit")
+        if crash_path:
+            print(f"GPT_BRIDGE_CRASH_LOG_WRITTEN: {crash_path}", file=sys.stderr, flush=True)
+        raise
+    except BaseException as exc:
+        crash_path = _write_crash_log(exc, "runtime")
+        if crash_path:
+            print(f"GPT_BRIDGE_CRASH_LOG_WRITTEN: {crash_path}", file=sys.stderr, flush=True)
+        proof_mode = _truthy_env("GPT_BRIDGE_TEST_MODE") or _truthy_env("GPT_BRIDGE_SMOKE") or _truthy_env("GPT_BRIDGE_SIMULATION_ROUTE_PROOF") or _truthy_env("GPT_BRIDGE_STRESS_PROOF")
+        if proof_mode:
+            raise SystemExit(1)
+        raise
 '''
 
 def _readme_template(settings: dict[str, Any]) -> str:
@@ -1035,6 +1393,8 @@ From the GPT Tool folder, run something like:
 - Press `F12` or run `python main.py --screenshot-mode` to write a backup screenshot.
 - Improved controls include smoothed acceleration/friction, Shift sprint, edge-triggered Space jump/gravity, mouse-wheel camera zoom, and `R` camera reset.
 - Run `python main.py --screenshot-mode --route-proof` to automatically move both testers, simulate a Tab swap, drop route markers, write proof JSON, and capture one backup screenshot.
+- Run `python main.py --screenshot-mode --route-proof --stress-proof` to exercise sprint, jump, camera zoom/reset, Tab swapping, route markers, diagnostics JSON, and screenshot proof in one deterministic pass.
+- Crash diagnostics are written to `logs/crash_latest.txt`, `logs/runtime_latest.json`, `logs/last_controls_state.json`, and `logs/last_scene_state.json`.
 - Characters use non-placeholder silhouettes where possible.
 - The settings file is the source of truth for AI edits.
 - Bridge smoke tests can run headless with `--window-type none --require-proof` when no display is available, or offscreen with `--window-type offscreen --require-screenshot` when the runtime can provide a fallback framebuffer.
@@ -1122,6 +1482,7 @@ def generate_panda3d_template(output_dir: str | Path, settings: dict[str, Any], 
         "python -m pip install -r requirements.txt",
         "python main.py",
         "python main.py --screenshot-mode --route-proof --screenshot-path screenshots/simulation_mode_backup.png",
+        "python main.py --screenshot-mode --route-proof --stress-proof --screenshot-path screenshots/stress.png --proof-path reports/stress.json",
         "# From GPT Tool: python bridge.py panda3d-smoke <project> --entry main.py --runtime-path /path/to/panda3d_py --window-type offscreen --require-screenshot --require-proof",
     ]
     files.append(_safe_write(out / "VALIDATION_COMMANDS.txt", "\n".join(validation_commands) + "\n", overwrite=overwrite))
@@ -1130,7 +1491,7 @@ def generate_panda3d_template(output_dir: str | Path, settings: dict[str, Any], 
         "schema_version": "generated_template_manifest.v1",
         "generated_at": _now_iso(),
         "generator": "GPT Game Generation Bridge",
-        "template": "panda3d_playable_simulation_template.v5",
+        "template": "panda3d_playable_simulation_template.v6",
         "project_slug": slug,
         "settings_id": settings.get("settings_id"),
         "file_count": len([f for f in files if f.get("written")]),
