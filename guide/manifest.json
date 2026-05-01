@@ -1,0 +1,82 @@
+{
+  "bridge_name": "GPT Game Generation Bridge",
+  "bridge_version": "0.5.0",
+  "status": "blocking-step-gate",
+  "authoritative_rule_order": [
+    "project-specific rules",
+    "current user instructions",
+    "bridge guide rules",
+    "engine profile rules"
+  ],
+  "primary_profile": "panda3d",
+  "supported_profiles": [
+    "panda3d",
+    "generic_python_tool"
+  ],
+  "required_delivery_gates": [
+    "syntax_pass",
+    "runtime_smoke_pass_when_runnable",
+    "no_new_crash_log",
+    "explicitly_document_unknowns",
+    "screenshot_present_when_visual_and_tested",
+    "mechanic_manifest_available_when_standards_pack_present",
+    "asset_reference_scan_run_when_project_code_present",
+    "regression_diff_recorded_against_previous_bundle_when_upgrading",
+    "mechanic_acceptance_manifest_present",
+    "screenshot_review_pass_when_visual",
+    "screenshot_correction_plan_run_when_visual",
+    "screenshot_memory_update_run_when_visual",
+    "pre_submit_gate_pass_when_visual",
+    "authoritative_build_receipt_pass",
+    "scope_lock_receipt_pass",
+    "candidate_workspace_receipt_pass",
+    "runtime_validation_receipt_pass",
+    "delivery_gate_receipt_pass"
+  ],
+  "modules": {
+    "diagnostics": [
+      "diagnostics/env_probe.py",
+      "diagnostics/crash_parser.py",
+      "diagnostics/regression_checker.py",
+      "diagnostics/pre_submit_gate.py",
+      "diagnostics/screenshot_memory_updater.py",
+      "diagnostics/step_gate_engine.py",
+      "diagnostics/reminder_checkpoint_validator.py"
+    ],
+    "validators": [
+      "validators/syntax_validator.py",
+      "validators/import_validator.py",
+      "validators/runtime_smoke_test.py",
+      "validators/asset_validator.py",
+      "validators/ui_bounds_validator.py",
+      "validators/text_fit_validator.py"
+    ],
+    "reports": [
+      "reports/latest_report.schema.json"
+    ],
+    "mechanics": [
+      "mechanics/mechanic_manifest_loader.py",
+      "mechanics/acceptance_gate_runner.py"
+    ],
+    "scanners": [
+      "scanners/project_scanner.py"
+    ],
+    "reviewers": [
+      "reviewers/layout_expectations.py",
+      "reviewers/image_zone_analyzer.py",
+      "reviewers/screenshot_reviewer.py",
+      "reviewers/screenshot_review_schema.json",
+      "reviewers/screenshot_adjustment_router.py",
+      "reviewers/screenshot_correction_planner.py"
+    ],
+    "rules": [
+      "rules/workflow_sequence.json",
+      "rules/reminder_cards.json"
+    ]
+  },
+  "output_conventions": {
+    "json_first": true,
+    "unknowns_must_be_explicit": true,
+    "logs_directory": "logs"
+  }
+}

@@ -1,0 +1,12 @@
+# Core screenshot-review dependencies
+numpy>=1.24.0
+Pillow>=10.0.0
+
+# Optional schema/report validation helper
+jsonschema>=4.0.0
+
+# Optional Panda3D project validation/runtime work
+# Install these only when validating Panda3D builds:
+# panda3d>=1.10.16
+# panda3d-gltf
+# panda3d-simplepbr

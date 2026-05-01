@@ -1,0 +1,234 @@
+{
+  "cards": [
+    {
+      "id": "authoritative_build_check",
+      "title": "Authoritative Build Check",
+      "why": "Stop GPT from editing the wrong source of truth.",
+      "hard_reminders": [
+        "Identify the exact latest passing runtime-tested build before editing.",
+        "Do not use an old draft, canvas-only draft, or guessed file as authoritative.",
+        "Do not overwrite the last known good build."
+      ],
+      "forbidden_actions": ["edit_code", "promote_candidate", "deliver"],
+      "required_ack_fields": [
+        "authoritative_build",
+        "last_passing_test_evidence",
+        "entry_file",
+        "requested_change",
+        "must_preserve"
+      ],
+      "pass_if": {
+        "all_required_fields_present": true
+      }
+    },
+    {
+      "id": "request_scope_lock",
+      "title": "Request Scope Lock",
+      "why": "Prevent collateral edits and make preserved systems explicit.",
+      "hard_reminders": [
+        "Edit only approved files unless a required dependency forces expansion.",
+        "List controls, UI rules, launch routing, and asset paths that must survive unchanged.",
+        "Name neighboring regression risks before touching code."
+      ],
+      "forbidden_actions": ["edit_out_of_scope_files", "package_build", "deliver"],
+      "required_ack_fields": [
+        "allowed_edit_targets",
+        "preserved_systems",
+        "neighboring_regression_risks",
+        "out_of_scope_files_untouched",
+        "out_of_scope_files_untouched_status"
+      ],
+      "pass_if": {
+        "all_required_fields_present": true,
+        "out_of_scope_files_untouched_status": ["pass"]
+      }
+    },
+    {
+      "id": "candidate_workspace_only",
+      "title": "Candidate Workspace Only",
+      "why": "Keep the authoritative build insulated from unverified edits.",
+      "hard_reminders": [
+        "Never patch the authoritative tree in place.",
+        "Edit only the candidate clone.",
+        "Promotion happens only after all gates pass."
+      ],
+      "forbidden_actions": ["edit_authoritative_tree", "deliver", "ship_build"],
+      "required_ack_fields": [
+        "authoritative_root",
+        "candidate_root",
+        "backup_or_snapshot_id",
+        "candidate_workspace_status"
+      ],
+      "pass_if": {
+        "all_required_fields_present": true,
+        "candidate_workspace_status": ["pass"]
+      }
+    },
+    {
+      "id": "pre_edit_backup",
+      "title": "Pre-Edit Backup",
+      "why": "Preserve rollback safety before risky changes land.",
+      "hard_reminders": [
+        "Create or verify a rollback snapshot before editing.",
+        "Do not treat an unverified copy as a validated backup.",
+        "Record the backup location or snapshot identifier."
+      ],
+      "forbidden_actions": ["destructive_edit", "promote_candidate", "deliver"],
+      "required_ack_fields": [
+        "backup_path",
+        "backup_verified_status",
+        "rollback_ready_status"
+      ],
+      "pass_if": {
+        "all_required_fields_present": true,
+        "backup_verified_status": ["pass"],
+        "rollback_ready_status": ["pass"]
+      }
+    },
+    {
+      "id": "edit_execution",
+      "title": "Edit Execution",
+      "why": "Constrain GPT to the requested change and its justified dependencies.",
+      "hard_reminders": [
+        "Make the smallest viable change first.",
+        "Avoid unrelated rewrites, renames, moves, or structure changes unless requested.",
+        "Record every touched file honestly."
+      ],
+      "forbidden_actions": ["broad_refactor", "silent_file_move", "deliver"],
+      "required_ack_fields": [
+        "files_touched",
+        "out_of_scope_edits",
+        "request_alignment_status"
+      ],
+      "pass_if": {
+        "all_required_fields_present": true,
+        "request_alignment_status": ["pass"]
+      }
+    },
+    {
+      "id": "static_validation",
+      "title": "Static Validation",
+      "why": "Catch syntax, imports, asset paths, and layout risks before runtime.",
+      "hard_reminders": [
+        "Run static checks before runtime claims.",
+        "Do not ignore validator failures because the edit seems small.",
+        "Record unknown and skipped states explicitly."
+      ],
+      "forbidden_actions": ["package_build", "promote_candidate", "deliver"],
+      "required_ack_fields": [
+        "syntax_status",
+        "import_status",
+        "asset_status",
+        "ui_bounds_status",
+        "text_fit_status"
+      ],
+      "pass_if": {
+        "all_required_fields_present": true,
+        "syntax_status": ["pass"],
+        "import_status": ["pass"],
+        "asset_status": ["pass", "warn", "unknown", "n/a"],
+        "ui_bounds_status": ["pass", "warn", "unknown", "n/a"],
+        "text_fit_status": ["pass", "warn", "unknown", "n/a"]
+      }
+    },
+    {
+      "id": "runtime_validation",
+      "title": "Runtime Validation Required",
+      "why": "Stop GPT from claiming completion based only on reading code.",
+      "hard_reminders": [
+        "Do not claim success from code inspection alone.",
+        "Do not promote candidate code without a runtime test when runnable.",
+        "Do not ignore fresh crash logs.",
+        "Use the latest passing tested build as authority."
+      ],
+      "forbidden_actions": ["mark_finished", "promote_candidate", "package_build"],
+      "required_ack_fields": [
+        "authoritative_build",
+        "candidate_build",
+        "test_command",
+        "launch_status",
+        "crash_log_status",
+        "requested_feature_status",
+        "neighbor_regression_status",
+        "clean_exit_status"
+      ],
+      "pass_if": {
+        "all_required_fields_present": true,
+        "launch_status": ["pass"],
+        "crash_log_status": ["none", "no_new_crash", "pass"],
+        "requested_feature_status": ["pass"],
+        "neighbor_regression_status": ["pass", "n/a"],
+        "clean_exit_status": ["pass", "n/a"]
+      }
+    },
+    {
+      "id": "screenshot_proof",
+      "title": "Screenshot Proof",
+      "why": "Visual work needs current evidence from the latest tested run.",
+      "hard_reminders": [
+        "Capture screenshot proof from the latest validated run when visuals matter.",
+        "Do not reuse outdated screenshots for a new build.",
+        "If no screenshot is possible, document the reason explicitly."
+      ],
+      "forbidden_actions": ["deliver", "package_build"],
+      "required_ack_fields": [
+        "visual_build_status",
+        "screenshot_path",
+        "screenshot_current_status"
+      ],
+      "pass_if": {
+        "all_required_fields_present": true,
+        "visual_build_status": ["pass", "n/a"],
+        "screenshot_current_status": ["pass", "n/a"]
+      }
+    },
+    {
+      "id": "promotion_gate",
+      "title": "Promotion Gate",
+      "why": "Only fully validated candidates may replace the authoritative build.",
+      "hard_reminders": [
+        "Do not replace the authoritative build until all prior steps pass.",
+        "Preserve failed candidates separately for debugging.",
+        "Promotion must be explicit, never implied."
+      ],
+      "forbidden_actions": ["overwrite_authoritative_without_pass", "deliver"],
+      "required_ack_fields": [
+        "all_prior_steps_passed_status",
+        "promotion_decision",
+        "authoritative_replacement_status"
+      ],
+      "pass_if": {
+        "all_required_fields_present": true,
+        "all_prior_steps_passed_status": ["pass"],
+        "promotion_decision": ["promote_candidate"],
+        "authoritative_replacement_status": ["pass"]
+      }
+    },
+    {
+      "id": "delivery_gate",
+      "title": "Delivery Gate",
+      "why": "Stop unfinished or weakly validated work from being presented as done.",
+      "hard_reminders": [
+        "Do not present unfinished work as finished.",
+        "Do not ship if the latest test produced a crash log.",
+        "Clearly distinguish changed, preserved, tested, and unresolved items.",
+        "Provide screenshot proof when visuals matter and testing was possible."
+      ],
+      "forbidden_actions": ["deliver_unvalidated_work"],
+      "required_ack_fields": [
+        "latest_test_timestamp",
+        "crash_log_status",
+        "changed_items",
+        "preserved_items",
+        "tested_items",
+        "unresolved_items",
+        "delivery_ready_status"
+      ],
+      "pass_if": {
+        "all_required_fields_present": true,
+        "crash_log_status": ["none", "no_new_crash", "pass"],
+        "delivery_ready_status": ["pass"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "profile": "panda3d",
+  "runtime": {
+    "providers": [
+      "auto",
+      "system_python",
+      "portable_python",
+      "packaged_exe",
+      "mock_display"
+    ],
+    "auto_order": [
+      "packaged_exe",
+      "portable_python",
+      "system_python",
+      "mock_display"
+    ],
+    "portable_runtime_paths": [
+      "runtimes/panda3d_py313",
+      "runtimes/panda3d",
+      ".gpt_runtimes/panda3d_py313",
+      ".gpt_runtimes/panda3d"
+    ],
+    "required_packages": [
+      "panda3d",
+      "direct"
+    ],
+    "optional_packages": [
+      "panda3d-gltf",
+      "simplepbr",
+      "Pillow"
+    ],
+    "smoke_env": {
+      "GPT_BRIDGE_TEST_MODE": "1",
+      "GPT_BRIDGE_SMOKE": "1",
+      "GPT_BRIDGE_SCREENSHOT_PATH": "reports/panda3d_smoke.png",
+      "GPT_BRIDGE_SMOKE_FRAMES": "4",
+      "GPT_BRIDGE_EXIT_AFTER_SCREENSHOT": "1",
+      "GPT_BRIDGE_RUNTIME_PROVIDER": "selected provider name"
+    },
+    "entry_candidates": [
+      "main.py",
+      "app.py",
+      "game.py",
+      "run.py",
+      "launcher.py",
+      "src/main.py",
+      "HoloVerse/main.py",
+      "data/HoloVerse/main.py"
+    ],
+    "recommended_commands": [
+      "python bridge.py panda3d-runtimes . --runtime auto",
+      "python bridge.py panda3d-doctor .",
+      "python bridge.py panda3d-smoke . --runtime portable --runtime-path runtimes/panda3d_py313 --entry main.py --require-screenshot",
+      "python bridge.py panda3d-smoke . --runtime packaged-exe --exe dist/HoloVerse.exe --require-screenshot",
+      "python bridge.py full-pass . --profile panda3d --runtime auto --smoke --entry main.py --require-screenshot"
+    ]
+  },
+  "preferred_templates": [
+    "app_shell",
+    "settings_menu",
+    "minimal_hud",
+    "crash_reporter",
+    "runtime_hooks/panda3d_smoke_hook.py"
+  ],
+  "required_controls": [
+    "Esc opens settings or exits as designed",
+    "H toggles HUD when HUD exists"
+  ],
+  "common_failures": [
+    "missing asset path",
+    "texture load failure",
+    "window configuration mismatch",
+    "camera spawn or clipping issue",
+    "input binding regression",
+    "packaged build missing runtime assets",
+    "portable runtime path exists but does not contain Panda3D",
+    "mock display accidentally treated as screenshot proof",
+    "smoke process timed out because no bridge hook or project smoke mode exited the app"
+  ],
+  "required_runtime_checks": [
+    "runtime provider resolution",
+    "dependency probe when using system/portable Python",
+    "entry point discovery when using source runtime",
+    "packaged executable discovery when using packaged_exe runtime",
+    "launch smoke when --smoke is supplied",
+    "window/render screenshot when --require-screenshot is supplied",
+    "fresh log collection",
+    "explicit skipped-reporting for untested interaction checks"
+  ],
+  "shipping_rules": [
+    "do not ship if latest required smoke produced a crash log",
+    "do not treat mock display mode as visual proof",
+    "keep screenshot proof for tested visual builds",
+    "prefer packaged_exe mode for final/Steam player-route proof",
+    "document unsupported or unverified paths honestly",
+    "do not treat generic proof routes as the real player route unless the screenshot/marker proves it"
+  ],
+  "required_static_checks": [
+    "syntax validation",
+    "import validation",
+    "asset reference scan",
+    "ui bounds heuristic when UI code changed",
+    "text fit heuristic when UI code changed"
+  ],
+  "mechanic_rule_sources": [
+    "Mechanic_Standards_Combined_Complete.md",
+    "00_Master_Index.md",
+    "08_UI_Settings_and_Responsiveness.md",
+    "09_QA_Performance_and_Shipping.md"
+  ]
+}

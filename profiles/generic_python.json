@@ -1,0 +1,19 @@
+{
+  "profile": "generic_python",
+  "required_static_checks": [
+    "project scan",
+    "syntax validation",
+    "import validation",
+    "asset reference scan"
+  ],
+  "optional_static_checks": [
+    "ui bounds heuristic",
+    "text fit heuristic",
+    "regression diff"
+  ],
+  "shipping_rules": [
+    "do not ship if syntax validation fails",
+    "do not ship if required imports are missing",
+    "document skipped runtime checks honestly"
+  ]
+}

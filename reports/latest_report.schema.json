@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GPT Game Generation Bridge Latest Report",
+  "type": "object",
+  "required": [
+    "bridge_version",
+    "profile",
+    "requested_change",
+    "files_touched",
+    "validations",
+    "delivery"
+  ],
+  "properties": {
+    "bridge_version": {
+      "type": "string"
+    },
+    "profile": {
+      "type": "string"
+    },
+    "requested_change": {
+      "type": "string"
+    },
+    "files_touched": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "validations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "status"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "pass",
+              "fail",
+              "warn",
+              "skipped",
+              "unknown"
+            ]
+          },
+          "details": {}
+        }
+      }
+    },
+    "mechanic_manifest": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "project_scan": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "regression": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "delivery": {
+      "type": "object",
+      "required": [
+        "deliverable",
+        "known_limitations"
+      ],
+      "properties": {
+        "deliverable": {
+          "type": "boolean"
+        },
+        "known_limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "screenshot_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "screenshot_review": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "pre_submit_gate": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "mechanic_acceptance": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "step_gate": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "workflow_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "pending_step": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "completed_steps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "blocked_actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "latest_receipt": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "work_order": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "command_verification": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

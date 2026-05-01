@@ -1,0 +1,65 @@
+name: GPTOOL CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    name: Python smoke checks
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.13']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install core dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Version check
+        run: python bridge.py --version
+
+      - name: Source syntax check
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import ast
+          count = 0
+          for p in sorted(Path('.').rglob('*.py')):
+              if any(part in {'.git', '__pycache__'} for part in p.parts):
+                  continue
+              ast.parse(p.read_text(encoding='utf-8'), filename=str(p))
+              count += 1
+          print(f'AST syntax PASS: {count} Python files')
+          PY
+
+      - name: Package audit
+        run: python bridge.py package-audit . --json
+
+      - name: Generate template smoke project
+        run: |
+          python bridge.py generate-game ./GeneratedCI --profile panda3d --command "make a neon vector test world with two playable testers and points only"
+          python ./GeneratedCI/main.py --settings-check
+
+      - name: Generated project syntax check
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import ast
+          p = Path('GeneratedCI/main.py')
+          ast.parse(p.read_text(encoding='utf-8'), filename=str(p))
+          print('Generated main.py AST syntax PASS')
+          PY

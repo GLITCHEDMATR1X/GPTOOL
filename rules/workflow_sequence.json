@@ -1,0 +1,16 @@
+{
+  "workflow_id": "blocking_prompted_delivery_v1",
+  "description": "Mandatory reminder checkpoints that block GPT from proceeding until each phase is acknowledged with a structured receipt.",
+  "steps": [
+    "authoritative_build_check",
+    "request_scope_lock",
+    "candidate_workspace_only",
+    "pre_edit_backup",
+    "edit_execution",
+    "static_validation",
+    "runtime_validation",
+    "screenshot_proof",
+    "promotion_gate",
+    "delivery_gate"
+  ]
+}

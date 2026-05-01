@@ -1,0 +1,11 @@
+{
+  "bridge_version": "0.5.1-pass1",
+  "notes": [
+    "Latest passing tested build remains authoritative.",
+    "Prefer small edits over rewrites.",
+    "Do not mark visual builds as shipped without screenshot proof when testing is possible.",
+    "Blocking reminder cards must be acknowledged before guarded actions can proceed."
+  ],
+  "screenshot_failures": {},
+  "projects": {}
+}
