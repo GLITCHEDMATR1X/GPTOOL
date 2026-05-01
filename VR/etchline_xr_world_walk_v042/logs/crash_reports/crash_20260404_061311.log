@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "D:\Apps\Matrix-OS-Arcade-Evolution-github-tests\etchline_xr_world_walk_v042\p3dopenxr\app.py", line 470, in __init__
+    self.xr.init(mirroring=1, mirror_mode=self.user_config.get('mirror_mode', 'average'), near=0.03, far=float(self.user_config.get('max_view_distance', 620.0)))
+  File "D:\Apps\Matrix-OS-Arcade-Evolution-github-tests\etchline_xr_world_walk_v042\p3dopenxr\p3dopenxr.py", line 176, in init
+    self.system = System(self.instance)
+                  ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Apps\Matrix-OS-Arcade-Evolution-github-tests\etchline_xr_world_walk_v042\p3dopenxr\system.py", line 31, in __init__
+    self.handle = xr.get_system(instance.handle, system_get_info)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\glitc\AppData\Local\Programs\Python\Python312\Lib\site-packages\xr\functions.py", line 246, in get_system
+    raise result
+xr.exception.FormFactorUnavailableError: The specified form factor is supported, but the device is currently not available, e.g. not plugged in or powered off.

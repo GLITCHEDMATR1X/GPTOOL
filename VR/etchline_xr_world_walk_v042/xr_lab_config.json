@@ -1,0 +1,10 @@
+{
+  "hud_visible": true,
+  "settings_visible": true,
+  "mirror_mode": "average",
+  "movement_speed": 2.3,
+  "turn_speed": 88.0,
+  "smooth_turn": true,
+  "last_patch_note": "patch_20260328_v026.md",
+  "last_patch_version": "0.3.0"
+}

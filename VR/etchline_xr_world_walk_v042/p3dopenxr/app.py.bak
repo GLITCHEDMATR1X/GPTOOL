@@ -1,0 +1,1416 @@
+
+from __future__ import annotations
+
+import json
+import math
+import random
+import struct
+import sys
+import time
+import traceback
+import wave
+from dataclasses import asdict, dataclass
+from pathlib import Path
+
+from direct.gui.DirectGui import DirectButton, DirectFrame, DirectLabel
+from direct.showbase.ShowBase import ShowBase
+from direct.showbase.ShowBaseGlobal import globalClock
+from direct.task import Task
+from panda3d.core import (
+    AmbientLight,
+    AntialiasAttrib,
+    Filename,
+    Fog,
+    InputDevice,
+    LineSegs,
+    MatrixLens,
+    NodePath,
+    TextNode,
+    TransparencyAttrib,
+    Vec2,
+    Vec3,
+    WindowProperties,
+    load_prc_file_data,
+)
+
+from .p3dopenxr import P3DOpenXR
+from .version import __version__
+
+APP_NAME = 'Etchline XR World Walk'
+PACKAGE_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = PACKAGE_ROOT.parent
+APP_ROOT = PROJECT_ROOT if (PROJECT_ROOT / 'main.py').exists() else Path.cwd()
+ASSETS_DIR = APP_ROOT / 'assets'
+MUSIC_DIR = ASSETS_DIR / 'music'
+LOG_DIR = APP_ROOT / 'logs'
+PATCH_DIR = APP_ROOT / 'patch_notes'
+CRASH_DIR = LOG_DIR / 'crash_reports'
+SCREENSHOT_DIR = LOG_DIR / 'screenshots'
+CONFIG_PATH = APP_ROOT / 'xr_world_walk_config.json'
+PLACEHOLDER_MUSIC = MUSIC_DIR / 'placeholder_loop.wav'
+
+load_prc_file_data(
+    '',
+    '\n'.join(
+        [
+            f'window-title {APP_NAME}',
+            'sync-video 1',
+            'framebuffer-srgb false',
+            'framebuffer-multisample 0',
+            'multisamples 0',
+            'win-size 1600 900',
+            'show-frame-rate-meter 0',
+            'texture-anisotropic-degree 4',
+            'cursor-hidden 1',
+            'notify-level-display warning',
+            'notify-level-glgsg warning',
+            'audio-library-name p3openal_audio',
+        ]
+    ),
+)
+
+WORLD_COLOR_PRESETS = [
+    ('Noir', (0.05, 0.05, 0.06)),
+    ('Cobalt', (0.04, 0.07, 0.14)),
+    ('Violet', (0.07, 0.05, 0.11)),
+    ('Rust', (0.12, 0.06, 0.04)),
+    ('Emerald', (0.03, 0.10, 0.08)),
+]
+LINE_COLOR_PRESETS = [
+    ('Ivory', (0.92, 0.92, 0.89)),
+    ('Cyan', (0.60, 0.95, 1.00)),
+    ('Amber', (1.00, 0.85, 0.44)),
+    ('Rose', (1.00, 0.68, 0.78)),
+    ('Lime', (0.76, 1.00, 0.62)),
+]
+DIALOGUE_BANK = [
+    'Signal is quiet tonight. The city is thinking.',
+    'Walk slow. The linework shifts when rushed.',
+    'We patrol, but nothing here wants war anymore.',
+    'Those ships overhead never land where you expect.',
+    'Every district redraws itself a little after midnight.',
+    'You look calibrated now. Better than before.',
+    'The skyline remembers older versions of us.',
+    'The plazas are safer than the bridges in bad weather.',
+]
+
+
+@dataclass
+class WorldConfig:
+    chunk_size: int = 72
+    active_chunk_radius: int = 3
+    max_view_distance: float = 620.0
+    fog_start_ratio: float = 0.52
+    line_thickness: float = 1.25
+    line_jitter: float = 0.025
+    movement_speed: float = 2.55
+    sprint_multiplier: float = 1.45
+    turn_speed: float = 95.0
+    player_height_m: float = 1.8288
+    eye_height_m: float = 1.70
+    player_radius: float = 0.42
+    show_hud: bool = False
+    world_color_index: int = 0
+    line_color_index: int = 0
+    music_enabled: bool = True
+    music_volume: float = 0.32
+    world_seed: int = 74219
+    mirror_mode: str = 'average'
+
+
+@dataclass
+class BoxBounds:
+    min_v: Vec3
+    max_v: Vec3
+    normal_hint: Vec3
+
+
+@dataclass
+class WalkerNPC:
+    root: NodePath
+    body: NodePath
+    radius: float
+    height: float
+    wander_dir: Vec3
+    wander_timer: float
+    speed: float
+    phase: float
+    seed: int
+    label: str
+    talk_cooldown: float = 0.0
+
+
+@dataclass
+class SkyShip:
+    root: NodePath
+    velocity: Vec3
+    lifetime: float
+    phase: float
+
+
+@dataclass
+class ClawHand:
+    root: NodePath
+    palm: NodePath
+    finger_nodes: list[NodePath]
+    side: str
+
+
+
+def ensure_dirs() -> None:
+    for path in (ASSETS_DIR, MUSIC_DIR, LOG_DIR, PATCH_DIR, CRASH_DIR, SCREENSHOT_DIR):
+        path.mkdir(exist_ok=True, parents=True)
+
+
+
+def _is_runtime_unavailable(exc: BaseException) -> bool:
+    names = {exc.__class__.__name__, exc.__class__.__qualname__}
+    return 'RuntimeUnavailableError' in names or ('runtime' in str(exc).lower() and 'unavailable' in str(exc).lower())
+
+
+
+def write_crash_report(exc: BaseException) -> Path:
+    ensure_dirs()
+    stamp = time.strftime('%Y%m%d_%H%M%S')
+    path = CRASH_DIR / f'crash_{stamp}.log'
+    path.write_text(''.join(traceback.format_exception(exc)), encoding='utf-8')
+    return path
+
+
+
+def write_patch_notes(force: bool = True) -> Path:
+    ensure_dirs()
+    existing = sorted(PATCH_DIR.glob('patch_*.md'))
+    if not force and existing:
+        return existing[-1]
+    stamp = time.strftime('%Y%m%d_%H%M%S')
+    path = PATCH_DIR / f'patch_{stamp}.md'
+    body = (
+        f'# Patch Notes - {APP_NAME} {__version__}\n\n'
+        '- Stabilized floor calibration around a 6-foot-tall standing profile with a 1.70m eye line.\n'
+        '- Reworked XR anchor handling to stop head-height floor flips and reduce recenter jitter.\n'
+        '- Slowed ambient walkers and added interaction dialogue when you approach them.\n'
+        '- Added color customization for world and line palettes with automatic config saving.\n'
+        '- Added replaceable looping music placeholder in assets/music.\n'
+        '- Added robotic claw hands for controller-tracked XR presence, stars, and occasional overhead ships.\n'
+        '- Tightened rendering cost with calmer palette updates, lighter sky effects, and fewer active transient systems.\n'
+    )
+    path.write_text(body, encoding='utf-8')
+    return path
+
+
+
+def ensure_placeholder_music() -> None:
+    ensure_dirs()
+    if PLACEHOLDER_MUSIC.exists():
+        return
+    sample_rate = 22050
+    duration = 12.0
+    total = int(sample_rate * duration)
+    rng = random.Random(90210)
+    with wave.open(str(PLACEHOLDER_MUSIC), 'wb') as wav_f:
+        wav_f.setnchannels(1)
+        wav_f.setsampwidth(2)
+        wav_f.setframerate(sample_rate)
+        frames = bytearray()
+        for i in range(total):
+            t = i / sample_rate
+            env = 0.5 - 0.5 * math.cos(min(1.0, t / 1.5) * math.pi)
+            release = 0.5 - 0.5 * math.cos(min(1.0, (duration - t) / 1.5) * math.pi)
+            env *= release
+            tone = (
+                0.55 * math.sin(math.tau * 55.0 * t)
+                + 0.22 * math.sin(math.tau * 82.5 * t)
+                + 0.12 * math.sin(math.tau * (110.0 + 8.0 * math.sin(t * 0.3)) * t)
+            )
+            shimmer = 0.04 * math.sin(math.tau * 420.0 * t + math.sin(t * 1.7) * 1.5)
+            noise = 0.015 * rng.uniform(-1.0, 1.0)
+            sample = max(-1.0, min(1.0, (tone + shimmer + noise) * 0.25 * env))
+            frames.extend(struct.pack('<h', int(sample * 32767)))
+        wav_f.writeframes(frames)
+
+
+
+def _yaw_from_vec(vec: Vec3) -> float:
+    if vec.length_squared() < 1e-8:
+        return 0.0
+    return math.degrees(math.atan2(-vec.x, vec.y))
+
+
+class XRWorldWalk(ShowBase):
+    def __init__(self):
+        ensure_dirs()
+        ensure_placeholder_music()
+        self.patch_note_path = write_patch_notes(force=True)
+        super().__init__()
+        self.disableMouse()
+        self.win.set_clear_color_active(True)
+
+        self.user_config = self._load_config()
+        self.hud_visible = bool(self.user_config.get('show_hud', False))
+        self.settings_visible = False
+        self._clamp_config()
+        self.status_lines: list[str] = []
+        self.keys: dict[str, bool] = {}
+        self.elapsed = 0.0
+        self.day_mix = 0.0
+        self.player_root = self.render.attach_new_node('player-root')
+        self.player_root.set_pos(0, 0, 0)
+        self.spawn_safe_z = 0.0
+        self.player_heading = 0.0
+        self.player_height_m = float(self.user_config.get('player_height_m', 1.8288))
+        self.eye_height_m = float(self.user_config.get('eye_height_m', 1.70))
+        self.player_radius = float(self.user_config.get('player_radius', 0.42))
+        self.floor_offset_z = 0.0
+        self.xr_floor_calibrated = False
+        self.last_local_head_z: float | None = None
+        self.last_local_head_yaw: float | None = None
+        self.desktop_pitch = -9.0
+        self.walkers: list[WalkerNPC] = []
+        self.walker_nodes_by_chunk: dict[tuple[int, int], list[WalkerNPC]] = {}
+        self.chunks: dict[tuple[int, int], NodePath] = {}
+        self.chunk_obstacles: dict[tuple[int, int], list[BoxBounds]] = {}
+        self.chunk_npc_spawns: dict[tuple[int, int], list[tuple[float, float, int]]] = {}
+        self.xr: P3DOpenXR | None = None
+        self.music = None
+        self.music_active = False
+        self.dialogue_timer = 0.0
+        self.dialogue_text = ''
+        self.dialogue_speaker = ''
+        self.prev_interact_down = False
+        self.prev_recenter_down = False
+        self.prev_menu_down = False
+        self.sky_ships: list[SkyShip] = []
+        self.next_ship_timer = 6.0
+        self._last_palette_key = None
+        self.left_claw: ClawHand | None = None
+        self.right_claw: ClawHand | None = None
+
+        self.accept('escape', self.toggle_settings)
+        self.accept('h', self.toggle_hud)
+        self.accept('f', self._set_key, ['interact', True])
+        self.accept('f-up', self._set_key, ['interact', False])
+        self.accept('r', self._set_key, ['recenter', True])
+        self.accept('r-up', self._set_key, ['recenter', False])
+        self.accept('w', self._set_key, ['w', True])
+        self.accept('w-up', self._set_key, ['w', False])
+        self.accept('a', self._set_key, ['a', True])
+        self.accept('a-up', self._set_key, ['a', False])
+        self.accept('s', self._set_key, ['s', True])
+        self.accept('s-up', self._set_key, ['s', False])
+        self.accept('d', self._set_key, ['d', True])
+        self.accept('d-up', self._set_key, ['d', False])
+        self.accept('shift', self._set_key, ['shift', True])
+        self.accept('shift-up', self._set_key, ['shift', False])
+        self.accept('q', self._set_key, ['turn_left', True])
+        self.accept('q-up', self._set_key, ['turn_left', False])
+        self.accept('e', self._set_key, ['turn_right', True])
+        self.accept('e-up', self._set_key, ['turn_right', False])
+        self.accept('arrow_left', self._set_key, ['turn_left', True])
+        self.accept('arrow_left-up', self._set_key, ['turn_left', False])
+        self.accept('arrow_right', self._set_key, ['turn_right', True])
+        self.accept('arrow_right-up', self._set_key, ['turn_right', False])
+        self.accept('f12', self.capture_screenshot)
+
+        self.render.setAntialias(AntialiasAttrib.MLine)
+        self.render.setTransparency(TransparencyAttrib.MAlpha)
+        self._build_scene()
+        self._build_ui()
+        self._setup_music()
+
+        try:
+            self.xr = P3DOpenXR(self)
+            self.xr.init(mirroring=1, mirror_mode=self.user_config.get('mirror_mode', 'average'), near=0.03, far=float(self.user_config.get('max_view_distance', 620.0)))
+            self._build_claws()
+            self.status_lines.append('XR bridge initialized.')
+        except Exception as exc:
+            self.xr = None
+            if _is_runtime_unavailable(exc):
+                self.status_lines.append('OpenXR runtime not found. Running in desktop fallback mode.')
+            else:
+                crash_path = write_crash_report(exc)
+                self.status_lines.append(f'XR startup failed: {crash_path.name}')
+                self.status_lines.append(str(exc))
+
+        if self.xr is None:
+            props = WindowProperties()
+            props.setCursorHidden(True)
+            self.win.requestProperties(props)
+            self.camera.set_pos(0, -2.0, self.eye_height_m)
+            self.camera.look_at(0, 6.0, 1.6)
+        else:
+            self._calibrate_floor(force=True)
+
+        self.generate_city_around_player(force=True)
+        self.taskMgr.add(self._update_world_task, 'xr-world-walk-update')
+        self.taskMgr.add(self._update_ui_task, 'xr-world-walk-ui')
+        self.taskMgr.add(self._late_sky_task, 'xr-world-walk-sky', sort=50)
+
+    def _load_config(self) -> dict:
+        user_config = asdict(WorldConfig())
+        if CONFIG_PATH.exists():
+            try:
+                user_config.update(json.loads(CONFIG_PATH.read_text(encoding='utf-8')))
+            except Exception:
+                pass
+        CONFIG_PATH.write_text(json.dumps(user_config, indent=2), encoding='utf-8')
+        return user_config
+
+    def _clamp_config(self) -> None:
+        self.user_config['world_color_index'] = int(self.user_config.get('world_color_index', 0)) % len(WORLD_COLOR_PRESETS)
+        self.user_config['line_color_index'] = int(self.user_config.get('line_color_index', 0)) % len(LINE_COLOR_PRESETS)
+        self.user_config['player_height_m'] = 1.8288
+        self.user_config['eye_height_m'] = 1.70
+        self.user_config['movement_speed'] = max(1.4, min(5.5, float(self.user_config.get('movement_speed', 2.55))))
+        self.user_config['turn_speed'] = max(45.0, min(180.0, float(self.user_config.get('turn_speed', 95.0))))
+        self.user_config['music_volume'] = max(0.0, min(1.0, float(self.user_config.get('music_volume', 0.32))))
+        self.user_config['max_view_distance'] = max(280.0, min(1200.0, float(self.user_config.get('max_view_distance', 620.0))))
+        self._save_config()
+
+    def _save_config(self) -> None:
+        self.user_config['show_hud'] = self.hud_visible
+        self.user_config['last_patch_note'] = self.patch_note_path.name
+        self.user_config['last_patch_version'] = __version__
+        CONFIG_PATH.write_text(json.dumps(self.user_config, indent=2), encoding='utf-8')
+
+    def _append_status(self, line: str) -> None:
+        self.status_lines.append(line)
+        self.status_lines = self.status_lines[-10:]
+
+    def _set_key(self, key: str, value: bool) -> None:
+        self.keys[key] = value
+
+    def _setup_music(self) -> None:
+        self.music_active = False
+        try:
+            if not bool(self.user_config.get('music_enabled', True)):
+                return
+            music_path = PLACEHOLDER_MUSIC
+            panda_path = Filename.fromOsSpecific(str(music_path))
+            self.music = self.loader.loadMusic(panda_path)
+            if self.music is not None:
+                self.music.setLoop(True)
+                self.music.setVolume(float(self.user_config.get('music_volume', 0.32)))
+                self.music.play()
+                self.music_active = True
+        except Exception as exc:
+            self.music = None
+            self._append_status(f'Music unavailable: {exc}')
+
+    def _apply_music_state(self) -> None:
+        if self.music is None:
+            return
+        enabled = bool(self.user_config.get('music_enabled', True))
+        try:
+            self.music.setVolume(float(self.user_config.get('music_volume', 0.32)))
+            if enabled and not self.music.status() == self.music.PLAYING:
+                self.music.setLoop(True)
+                self.music.play()
+            elif not enabled and self.music.status() == self.music.PLAYING:
+                self.music.stop()
+        except Exception:
+            pass
+
+    def _build_scene(self) -> None:
+        self.city_root = self.render.attach_new_node('city-root')
+        ambient = AmbientLight('ambient')
+        ambient.set_color((1.0, 1.0, 1.0, 1.0))
+        self.render.set_light(self.render.attach_new_node(ambient))
+        self.fog = Fog('distance-fog')
+        max_view = float(self.user_config.get('max_view_distance', 620.0))
+        self.fog.setExpDensity(0.0)
+        self.fog.setLinearRange(max_view * float(self.user_config.get('fog_start_ratio', 0.52)), max_view)
+        self.render.setFog(self.fog)
+        self.camLens.setNearFar(0.03, max_view)
+        self.camLens.setFov(82)
+        self.ground_root = self.render.attach_new_node('ground-root')
+        self._draw_ground_grid(self.ground_root, span=1400.0, step=14.0)
+        self.sky_root = self.render.attach_new_node('sky-root')
+        self.sky_root.setBin('background', 0)
+        self.sky_root.setDepthWrite(False)
+        self.sky_root.setDepthTest(False)
+        self.ship_root = self.render.attach_new_node('ship-root')
+        self._build_star_field()
+        self.update_palette(0.0, force=True)
+
+    def _draw_ground_grid(self, parent: NodePath, span: float, step: float) -> None:
+        segs = LineSegs('ground-grid')
+        segs.setThickness(0.8)
+        segs.setColor(0.15, 0.15, 0.15, 0.22)
+        half = span * 0.5
+        count = int(span / step)
+        for i in range(count + 1):
+            x = -half + i * step
+            segs.moveTo(x, -half, 0)
+            segs.drawTo(x, half, 0)
+            y = -half + i * step
+            segs.moveTo(-half, y, 0)
+            segs.drawTo(half, y, 0)
+        np = parent.attach_new_node(segs.create())
+        np.set_z(-0.045)
+        np.setAntialias(AntialiasAttrib.MLine)
+        np.setTransparency(TransparencyAttrib.MAlpha)
+        np.setDepthWrite(False)
+
+    def _build_star_field(self) -> None:
+        rng = random.Random(1937)
+        segs = LineSegs('stars')
+        segs.setThickness(1.0)
+        for _ in range(140):
+            theta = rng.uniform(0.0, math.tau)
+            phi = rng.uniform(0.12, 0.46 * math.pi)
+            radius = rng.uniform(260.0, 420.0)
+            x = math.cos(theta) * math.sin(phi) * radius
+            y = math.sin(theta) * math.sin(phi) * radius
+            z = math.cos(phi) * radius + 100.0
+            s = rng.uniform(0.2, 0.75)
+            segs.setColor(1.0, 1.0, 1.0, rng.uniform(0.18, 0.45))
+            segs.moveTo(x - s, y, z)
+            segs.drawTo(x + s, y, z)
+            segs.moveTo(x, y - s, z)
+            segs.drawTo(x, y + s, z)
+        self.star_np = self.sky_root.attach_new_node(segs.create())
+        self.star_np.setTransparency(TransparencyAttrib.MAlpha)
+        self.star_np.setDepthWrite(False)
+        self.star_np.setDepthTest(False)
+
+    def _spawn_sky_ship(self) -> None:
+        rng = random.Random(int(self.elapsed * 1000) ^ 58123 ^ len(self.sky_ships) * 37)
+        start_side = rng.choice([-1, 1])
+        player = self.player_root.get_pos(self.render)
+        start = Vec3(player.x + start_side * rng.uniform(110.0, 160.0), player.y + rng.uniform(-40.0, 40.0), rng.uniform(72.0, 118.0))
+        end = Vec3(player.x - start_side * rng.uniform(110.0, 160.0), player.y + rng.uniform(-80.0, 80.0), start.z + rng.uniform(-8.0, 8.0))
+        direction = end - start
+        if direction.length_squared() < 0.01:
+            return
+        speed = rng.uniform(8.0, 14.0)
+        velocity = direction.normalized() * speed
+        lifetime = direction.length() / speed
+        root = self.ship_root.attach_new_node(f'sky-ship-{int(self.elapsed*1000)}')
+        root.set_pos(start)
+        body = LineSegs('sky-ship')
+        body.setThickness(1.3)
+        body.setColor(*self._ship_color(alpha=0.65))
+        outline = [
+            ((-2.8, 0.0, 0.0), (-1.1, 2.4, 0.0)),
+            ((-1.1, 2.4, 0.0), (1.9, 1.2, 0.0)),
+            ((1.9, 1.2, 0.0), (3.0, 0.0, 0.0)),
+            ((3.0, 0.0, 0.0), (1.9, -1.2, 0.0)),
+            ((1.9, -1.2, 0.0), (-1.1, -2.4, 0.0)),
+            ((-1.1, -2.4, 0.0), (-2.8, 0.0, 0.0)),
+            ((-0.9, 0.0, 0.0), (1.6, 0.0, 0.0)),
+            ((-1.2, 1.6, 0.0), (-2.6, 2.7, 0.0)),
+            ((-1.2, -1.6, 0.0), (-2.6, -2.7, 0.0)),
+        ]
+        for a, b in outline:
+            body.moveTo(*a)
+            body.drawTo(*b)
+        np = root.attach_new_node(body.create())
+        np.setTransparency(TransparencyAttrib.MAlpha)
+        root.look_at(start + velocity)
+        self.sky_ships.append(SkyShip(root=root, velocity=velocity, lifetime=lifetime, phase=rng.random() * math.tau))
+
+    def _ship_color(self, alpha: float = 1.0) -> tuple[float, float, float, float]:
+        line_rgb = self._line_rgb()
+        return (min(1.0, line_rgb[0] * 0.72 + 0.18), min(1.0, line_rgb[1] * 0.72 + 0.18), min(1.0, line_rgb[2] * 0.72 + 0.18), alpha)
+
+    def _build_ui(self) -> None:
+        self.hud_text = DirectLabel(
+            parent=self.aspect2d,
+            text='',
+            text_align=TextNode.ALeft,
+            text_scale=0.038,
+            text_fg=(0.92, 0.92, 0.92, 1.0),
+            frameColor=(0, 0, 0, 0),
+            pos=(-1.27, 0, 0.92),
+            textMayChange=True,
+        )
+        self.dialogue_label = DirectLabel(
+            parent=self.aspect2d,
+            text='',
+            text_align=TextNode.ACenter,
+            text_scale=0.048,
+            text_fg=(0.96, 0.96, 0.96, 1.0),
+            frameColor=(0.02, 0.02, 0.02, 0.68),
+            frameSize=(-1.1, 1.1, -0.12, 0.12),
+            pos=(0.0, 0.0, -0.82),
+            textMayChange=True,
+        )
+        self.settings_panel = DirectFrame(
+            parent=self.aspect2d,
+            frameColor=(0.04, 0.04, 0.04, 0.94),
+            frameSize=(-0.62, 0.62, -0.82, 0.82),
+            pos=(0.64, 0, 0.0),
+        )
+        DirectLabel(
+            parent=self.settings_panel,
+            text='XR WORLD WALK',
+            text_scale=0.056,
+            text_fg=(0.96, 0.96, 0.96, 1.0),
+            frameColor=(0, 0, 0, 0),
+            pos=(0, 0, 0.72),
+        )
+        self.settings_text = DirectLabel(
+            parent=self.settings_panel,
+            text='',
+            text_align=TextNode.ALeft,
+            text_scale=0.032,
+            text_fg=(0.92, 0.92, 0.92, 1.0),
+            frameColor=(0, 0, 0, 0),
+            pos=(-0.56, 0, 0.54),
+            textMayChange=True,
+        )
+        btn_kwargs = dict(scale=0.045, frameColor=(0.12, 0.12, 0.12, 0.96), text_fg=(0.95, 0.95, 0.95, 1))
+        DirectButton(parent=self.settings_panel, text='Resume', command=self.toggle_settings, pos=(0.0, 0.0, -0.72), **btn_kwargs)
+        DirectButton(parent=self.settings_panel, text='More Draw Distance', command=self._adjust_draw_distance, extraArgs=[60.0], pos=(0.0, 0.0, -0.57), **btn_kwargs)
+        DirectButton(parent=self.settings_panel, text='Faster Move', command=self._adjust_move_speed, extraArgs=[0.2], pos=(0.0, 0.0, -0.45), **btn_kwargs)
+        DirectButton(parent=self.settings_panel, text='Cycle World Color', command=self._cycle_world_color, pos=(0.0, 0.0, -0.33), **btn_kwargs)
+        DirectButton(parent=self.settings_panel, text='Cycle Line Color', command=self._cycle_line_color, pos=(0.0, 0.0, -0.21), **btn_kwargs)
+        DirectButton(parent=self.settings_panel, text='Toggle Music', command=self._toggle_music, pos=(0.0, 0.0, -0.09), **btn_kwargs)
+        self.settings_panel.hide()
+        if self.hud_visible:
+            self.hud_text.show()
+        else:
+            self.hud_text.hide()
+
+    def toggle_settings(self) -> None:
+        self.settings_visible = not self.settings_visible
+        if self.settings_visible:
+            self.settings_panel.show()
+        else:
+            self.settings_panel.hide()
+        self._save_config()
+
+    def toggle_hud(self) -> None:
+        self.hud_visible = not self.hud_visible
+        if self.hud_visible:
+            self.hud_text.show()
+        else:
+            self.hud_text.hide()
+        self._save_config()
+
+    def _adjust_draw_distance(self, delta: float) -> None:
+        self.user_config['max_view_distance'] = max(280.0, min(1200.0, float(self.user_config.get('max_view_distance', 620.0)) + delta))
+        max_view = float(self.user_config['max_view_distance'])
+        self.camLens.setNearFar(0.03, max_view)
+        self.fog.setLinearRange(max_view * float(self.user_config.get('fog_start_ratio', 0.52)), max_view)
+        self._append_status(f'Draw distance {int(max_view)}')
+        self._save_config()
+
+    def _adjust_move_speed(self, delta: float) -> None:
+        self.user_config['movement_speed'] = max(1.2, min(5.0, float(self.user_config.get('movement_speed', 2.55)) + delta))
+        self._append_status(f'Move speed {self.user_config["movement_speed"]:.2f}')
+        self._save_config()
+
+    def _cycle_world_color(self) -> None:
+        self.user_config['world_color_index'] = (int(self.user_config.get('world_color_index', 0)) + 1) % len(WORLD_COLOR_PRESETS)
+        self._append_status(f'World color {WORLD_COLOR_PRESETS[self.user_config["world_color_index"]][0]}')
+        self.update_palette(0.0, force=True)
+        self._save_config()
+
+    def _cycle_line_color(self) -> None:
+        self.user_config['line_color_index'] = (int(self.user_config.get('line_color_index', 0)) + 1) % len(LINE_COLOR_PRESETS)
+        self._append_status(f'Line color {LINE_COLOR_PRESETS[self.user_config["line_color_index"]][0]}')
+        self.update_palette(0.0, force=True)
+        self._save_config()
+
+    def _toggle_music(self) -> None:
+        self.user_config['music_enabled'] = not bool(self.user_config.get('music_enabled', True))
+        self._apply_music_state()
+        self._append_status('Music on' if self.user_config['music_enabled'] else 'Music off')
+        self._save_config()
+
+    def capture_screenshot(self) -> None:
+        ensure_dirs()
+        stamp = time.strftime('%Y%m%d_%H%M%S')
+        path = SCREENSHOT_DIR / f'shot_{stamp}.png'
+        self.win.saveScreenshot(str(path))
+        self._append_status(f'Screenshot: {path.name}')
+
+    def _world_rgb(self) -> tuple[float, float, float]:
+        return WORLD_COLOR_PRESETS[int(self.user_config.get('world_color_index', 0)) % len(WORLD_COLOR_PRESETS)][1]
+
+    def _line_rgb(self) -> tuple[float, float, float]:
+        return LINE_COLOR_PRESETS[int(self.user_config.get('line_color_index', 0)) % len(LINE_COLOR_PRESETS)][1]
+
+    def current_district_label(self) -> str:
+        csize = int(self.user_config.get('chunk_size', 72))
+        cx = int(math.floor(self.player_root.get_x() / csize))
+        cy = int(math.floor(self.player_root.get_y() / csize))
+        names = ['Transit Wards', 'Relay Plaza', 'Needle Court', 'Iron Promenade', 'Signal Bastion']
+        return names[self.hashed_seed(cx, cy, 404) % len(names)]
+
+    def current_line_color(self, alpha: float = 1.0) -> tuple[float, float, float, float]:
+        rgb = self._line_rgb()
+        intensity = 0.78 + 0.22 * (1.0 - self.day_mix * 0.45)
+        return (min(1.0, rgb[0] * intensity), min(1.0, rgb[1] * intensity), min(1.0, rgb[2] * intensity), alpha)
+
+    def update_palette(self, dt: float, force: bool = False) -> None:
+        day_len = 600.0
+        phase = (self.elapsed % day_len) / day_len
+        transition = 120.0 / day_len
+        def smooth_band(x: float, center: float) -> float:
+            d = abs((x - center + 0.5) % 1.0 - 0.5)
+            if d >= transition * 0.5:
+                return 0.0
+            y = 1.0 - d / (transition * 0.5)
+            return y * y * (3 - 2 * y)
+        dawn = smooth_band(phase, 0.10)
+        dusk = smooth_band(phase, 0.60)
+        day_base = 1.0 if 0.10 <= phase < 0.60 else 0.0
+        day_amount = max(day_base, dawn)
+        self.day_mix = min(day_amount, 1.0 - dusk * (1.0 - day_amount))
+        base = self._world_rgb()
+        dark_scale = 0.24 + 0.34 * self.day_mix
+        bg = tuple(max(0.01, min(1.0, c * dark_scale)) for c in base)
+        key = (
+            round(bg[0], 3), round(bg[1], 3), round(bg[2], 3),
+            int(self.user_config.get('line_color_index', 0)),
+            int(self.user_config.get('world_color_index', 0)),
+            round(self.day_mix, 2),
+        )
+        if not force and key == self._last_palette_key:
+            return
+        self._last_palette_key = key
+        self.setBackgroundColor(bg[0], bg[1], bg[2], 1.0)
+        self.fog.setColor(bg[0], bg[1], bg[2])
+        tint = self.current_line_color(alpha=0.96)
+        for chunk in self.chunks.values():
+            chunk.setColor(*tint)
+        for walker in self.walkers:
+            walker.body.setColor(*self.current_line_color(alpha=0.98))
+        if hasattr(self, 'star_np'):
+            self.star_np.setColorScale(1.0, 1.0, 1.0, 0.45 + (1.0 - self.day_mix) * 0.4)
+        for ship in self.sky_ships:
+            ship.root.setColorScale(*self._ship_color(alpha=0.7))
+        for claw in (self.left_claw, self.right_claw):
+            if claw is not None:
+                claw.root.setColorScale(*self.current_line_color(alpha=0.95))
+
+    def hashed_seed(self, x: int, y: int, salt: int = 0) -> int:
+        return (x * 92837111 ^ y * 689287499 ^ int(self.user_config.get('world_seed', 74219)) ^ salt * 334214459) & 0xFFFFFFFF
+
+    def draw_box_outline_2d(self, segs: LineSegs, x0: float, y0: float, x1: float, y1: float, z: float) -> None:
+        segs.moveTo(x0, y0, z)
+        segs.drawTo(x1, y0, z)
+        segs.drawTo(x1, y1, z)
+        segs.drawTo(x0, y1, z)
+        segs.drawTo(x0, y0, z)
+
+    def draw_ring(self, segs: LineSegs, center: Vec3, radius: float, segments: int) -> None:
+        last = None
+        first = None
+        for i in range(segments):
+            ang = math.tau * i / segments
+            p = Vec3(center.x + math.cos(ang) * radius, center.y, center.z + math.sin(ang) * radius)
+            if first is None:
+                first = p
+            if last is not None:
+                segs.moveTo(last)
+                segs.drawTo(p)
+            last = p
+        if last is not None and first is not None:
+            segs.moveTo(last)
+            segs.drawTo(first)
+
+    def draw_box_edges(self, segs: LineSegs, center: Vec3, size: Vec3) -> None:
+        hx, hy, hz = size.x * 0.5, size.y * 0.5, size.z * 0.5
+        x0, x1 = center.x - hx, center.x + hx
+        y0, y1 = center.y - hy, center.y + hy
+        z0, z1 = center.z - hz, center.z + hz
+        edges = [
+            ((x0, y0, z0), (x1, y0, z0)), ((x1, y0, z0), (x1, y1, z0)), ((x1, y1, z0), (x0, y1, z0)), ((x0, y1, z0), (x0, y0, z0)),
+            ((x0, y0, z1), (x1, y0, z1)), ((x1, y0, z1), (x1, y1, z1)), ((x1, y1, z1), (x0, y1, z1)), ((x0, y1, z1), (x0, y0, z1)),
+            ((x0, y0, z0), (x0, y0, z1)), ((x1, y0, z0), (x1, y0, z1)), ((x1, y1, z0), (x1, y1, z1)), ((x0, y1, z0), (x0, y1, z1)),
+        ]
+        jitter = float(self.user_config.get('line_jitter', 0.025))
+        for a, b in edges:
+            j = Vec3(random.uniform(-jitter, jitter), random.uniform(-jitter, jitter), random.uniform(-jitter, jitter))
+            segs.moveTo(a[0] + j.x, a[1] + j.y, a[2] + j.z)
+            segs.drawTo(b[0] + j.x, b[1] + j.y, b[2] + j.z)
+
+    def add_building_mass(self, segs: LineSegs, obstacles: list[BoxBounds], base_pos: Vec3, width: float, depth: float, height: float, rng: random.Random, style: int, district: str) -> None:
+        tiers = 2 + (1 if rng.random() < 0.55 else 0)
+        cur_center = Vec3(base_pos.x, base_pos.y, height * 0.5)
+        cur_w = width
+        cur_d = depth
+        cur_h = height
+        for tier in range(tiers):
+            size = Vec3(cur_w, cur_d, cur_h)
+            self.draw_box_edges(segs, cur_center, size)
+            obstacles.append(BoxBounds(cur_center - size * 0.5, cur_center + size * 0.5, Vec3(0, 0, 1)))
+            roof_z = cur_center.z + cur_h * 0.5
+            if style in (1, 4):
+                fin_top = roof_z + rng.uniform(8, 18)
+                segs.moveTo(cur_center.x, cur_center.y, roof_z)
+                segs.drawTo(cur_center.x, cur_center.y, fin_top)
+                segs.moveTo(cur_center.x - cur_w * 0.18, cur_center.y, fin_top - 3)
+                segs.drawTo(cur_center.x + cur_w * 0.18, cur_center.y, fin_top - 3)
+            if style in (2, 3) and tier == 0:
+                buttress_w = max(2.8, cur_w * 0.22)
+                for sign in (-1, 1):
+                    brace_center = Vec3(cur_center.x + sign * (cur_w * 0.5 + buttress_w * 0.36), cur_center.y, cur_center.z - cur_h * 0.12)
+                    brace_size = Vec3(buttress_w, max(2.6, cur_d * 0.48), cur_h * 0.76)
+                    self.draw_box_edges(segs, brace_center, brace_size)
+                    obstacles.append(BoxBounds(brace_center - brace_size * 0.5, brace_center + brace_size * 0.5, Vec3(0, 0, 1)))
+            cur_center = Vec3(
+                cur_center.x + rng.uniform(-2.6, 2.6) if style != 0 else cur_center.x,
+                cur_center.y + rng.uniform(-2.6, 2.6) if style in (0, 3, 4) else cur_center.y,
+                roof_z + max(8.0, cur_h * 0.33),
+            )
+            cur_w = max(4.2, cur_w * rng.uniform(0.56, 0.82))
+            cur_d = max(4.2, cur_d * rng.uniform(0.56, 0.82))
+            cur_h = max(8.0, cur_h * rng.uniform(0.45, 0.68))
+        if district == 'bridge' and rng.random() < 0.35:
+            wing = rng.uniform(8, 14)
+            bridge_center = Vec3(base_pos.x, base_pos.y, height * rng.uniform(0.35, 0.62))
+            bridge_size = Vec3(wing, 3.2, 2.8) if rng.random() < 0.5 else Vec3(3.2, wing, 2.8)
+            self.draw_box_edges(segs, bridge_center, bridge_size)
+            obstacles.append(BoxBounds(bridge_center - bridge_size * 0.5, bridge_center + bridge_size * 0.5, Vec3(0, 0, 1)))
+
+    def draw_plaza_landmark(self, segs: LineSegs, obstacles: list[BoxBounds], center: Vec3, rng: random.Random, avenue_vertical: bool, avenue_axis: float, road_half: float, avenue_half: float) -> None:
+        self.draw_ring(segs, Vec3(center.x, center.y, 0.15), 9.0, 18)
+        self.draw_ring(segs, Vec3(center.x, center.y, 0.15), 4.8, 14)
+        for off in (-1, 1):
+            p = Vec3(center.x + off * 5.5, center.y, 3.6)
+            self.draw_box_edges(segs, p, Vec3(2.6, 2.6, 7.2))
+            obstacles.append(BoxBounds(p - Vec3(1.3, 1.3, 3.6), p + Vec3(1.3, 1.3, 3.6), Vec3(0, 0, 1)))
+
+    def draw_spire_landmark(self, segs: LineSegs, obstacles: list[BoxBounds], center: Vec3, rng: random.Random, avenue_vertical: bool, avenue_axis: float, road_half: float, avenue_half: float) -> None:
+        spire_center = Vec3(center.x, center.y, 28)
+        spire_size = Vec3(6.4, 6.4, 56)
+        self.draw_box_edges(segs, spire_center, spire_size)
+        obstacles.append(BoxBounds(spire_center - spire_size * 0.5, spire_center + spire_size * 0.5, Vec3(0, 0, 1)))
+        for z in (18, 34, 48):
+            self.draw_ring(segs, Vec3(center.x, center.y, z), 5.2 + z * 0.04, 14)
+
+    def draw_industrial_landmark(self, segs: LineSegs, obstacles: list[BoxBounds], center: Vec3, rng: random.Random, avenue_vertical: bool, avenue_axis: float, road_half: float, avenue_half: float) -> None:
+        for off in (-1, 1):
+            tank = Vec3(center.x + off * 5.4, center.y, 7.0)
+            self.draw_box_edges(segs, tank, Vec3(6.8, 6.8, 14.0))
+            obstacles.append(BoxBounds(tank - Vec3(3.4, 3.4, 7.0), tank + Vec3(3.4, 3.4, 7.0), Vec3(0, 0, 1)))
+            self.draw_ring(segs, Vec3(tank.x, tank.y, 14.4), 3.2, 12)
+        stack = Vec3(center.x, center.y - 5.5, 18)
+        self.draw_box_edges(segs, stack, Vec3(4.2, 4.2, 36.0))
+        obstacles.append(BoxBounds(stack - Vec3(2.1, 2.1, 18), stack + Vec3(2.1, 2.1, 18), Vec3(0, 0, 1)))
+
+    def draw_bridge_landmark(self, segs: LineSegs, obstacles: list[BoxBounds], center: Vec3, rng: random.Random, avenue_vertical: bool, avenue_axis: float, road_half: float, avenue_half: float) -> None:
+        bridge_center = Vec3(center.x, center.y, 8.6)
+        bridge_size = Vec3(22.0, 5.4, 3.0) if avenue_vertical else Vec3(5.4, 22.0, 3.0)
+        self.draw_box_edges(segs, bridge_center, bridge_size)
+        obstacles.append(BoxBounds(bridge_center - bridge_size * 0.5, bridge_center + bridge_size * 0.5, Vec3(0, 0, 1)))
+        for off in (-1, 1):
+            pylon = Vec3(center.x + off * (8.0 if avenue_vertical else 0), center.y + off * (0 if avenue_vertical else 8.0), 12.0)
+            size = Vec3(3.2, 3.2, 24.0)
+            self.draw_box_edges(segs, pylon, size)
+            obstacles.append(BoxBounds(pylon - size * 0.5, pylon + size * 0.5, Vec3(0, 0, 1)))
+
+    def draw_sentinel_landmark(self, segs: LineSegs, obstacles: list[BoxBounds], center: Vec3, rng: random.Random, avenue_vertical: bool, avenue_axis: float, road_half: float, avenue_half: float) -> None:
+        dais = Vec3(center.x, center.y, 2.0)
+        self.draw_box_edges(segs, dais, Vec3(12.0, 12.0, 4.0))
+        obstacles.append(BoxBounds(dais - Vec3(6.0, 6.0, 2.0), dais + Vec3(6.0, 6.0, 2.0), Vec3(0, 0, 1)))
+        statue = Vec3(center.x, center.y, 11.0)
+        self.draw_box_edges(segs, statue, Vec3(3.2, 3.2, 14.0))
+        obstacles.append(BoxBounds(statue - Vec3(1.6, 1.6, 7.0), statue + Vec3(1.6, 1.6, 7.0), Vec3(0, 0, 1)))
+        self.draw_ring(segs, Vec3(center.x, center.y, 17.2), 4.6, 12)
+
+    def generate_chunk_geometry(self, cx: int, cy: int) -> tuple[NodePath, list[BoxBounds], list[tuple[float, float, int]]]:
+        chunk_seed = self.hashed_seed(cx, cy)
+        rng = random.Random(chunk_seed)
+        origin_x = cx * int(self.user_config.get('chunk_size', 72))
+        origin_y = cy * int(self.user_config.get('chunk_size', 72))
+        size = int(self.user_config.get('chunk_size', 72))
+        np = self.city_root.attach_new_node(f'chunk-{cx}-{cy}')
+        segs = LineSegs(f'chunk-lines-{cx}-{cy}')
+        segs.setThickness(float(self.user_config.get('line_thickness', 1.25)))
+        segs.setColor(*self.current_line_color(alpha=0.94))
+        obstacles: list[BoxBounds] = []
+        npc_spawns: list[tuple[float, float, int]] = []
+
+        district_styles = ['plaza', 'spire', 'industrial', 'bridge', 'sentinel']
+        district = district_styles[chunk_seed % len(district_styles)]
+        road_half = 8.0 + (chunk_seed % 3) * 1.4
+        avenue_half = 5.0 + ((chunk_seed >> 3) % 3) * 1.1
+        avenue_vertical = (chunk_seed >> 5) & 1 == 0
+        avenue_axis = origin_x + size * 0.5 if avenue_vertical else origin_y + size * 0.5
+
+        self.draw_box_outline_2d(segs, origin_x, origin_y, origin_x + size, origin_y + size, 0)
+        self.draw_box_outline_2d(segs, origin_x + road_half, origin_y + road_half, origin_x + size - road_half, origin_y + size - road_half, 0)
+        lane_step = 12
+        for gx in range(lane_step, size, lane_step):
+            x = origin_x + gx
+            segs.moveTo(x, origin_y + road_half * 0.65, 0)
+            segs.drawTo(x, origin_y + road_half, 0)
+            segs.moveTo(x, origin_y + size - road_half * 0.65, 0)
+            segs.drawTo(x, origin_y + size - road_half, 0)
+        for gy in range(lane_step, size, lane_step):
+            y = origin_y + gy
+            segs.moveTo(origin_x + road_half * 0.65, y, 0)
+            segs.drawTo(origin_x + road_half, y, 0)
+            segs.moveTo(origin_x + size - road_half * 0.65, y, 0)
+            segs.drawTo(origin_x + size - road_half, y, 0)
+        if avenue_vertical:
+            x0 = avenue_axis - avenue_half
+            x1 = avenue_axis + avenue_half
+            segs.moveTo(x0, origin_y + road_half, 0)
+            segs.drawTo(x0, origin_y + size - road_half, 0)
+            segs.moveTo(x1, origin_y + road_half, 0)
+            segs.drawTo(x1, origin_y + size - road_half, 0)
+        else:
+            y0 = avenue_axis - avenue_half
+            y1 = avenue_axis + avenue_half
+            segs.moveTo(origin_x + road_half, y0, 0)
+            segs.drawTo(origin_x + size - road_half, y0, 0)
+            segs.moveTo(origin_x + road_half, y1, 0)
+            segs.drawTo(origin_x + size - road_half, y1, 0)
+
+        build_margin = road_half + 6.0
+        interior_min_x = origin_x + build_margin
+        interior_max_x = origin_x + size - build_margin
+        interior_min_y = origin_y + build_margin
+        interior_max_y = origin_y + size - build_margin
+        landmarks = {
+            'plaza': self.draw_plaza_landmark,
+            'spire': self.draw_spire_landmark,
+            'industrial': self.draw_industrial_landmark,
+            'bridge': self.draw_bridge_landmark,
+            'sentinel': self.draw_sentinel_landmark,
+        }
+        landmark_center = Vec3(origin_x + size * 0.5, origin_y + size * 0.5, 0)
+        landmarks[district](segs, obstacles, landmark_center, rng, avenue_vertical, avenue_axis, road_half, avenue_half)
+
+        if avenue_vertical:
+            plot_regions = [
+                (interior_min_x, avenue_axis - avenue_half - 4, interior_min_y, interior_max_y),
+                (avenue_axis + avenue_half + 4, interior_max_x, interior_min_y, interior_max_y),
+            ]
+        else:
+            plot_regions = [
+                (interior_min_x, interior_max_x, interior_min_y, avenue_axis - avenue_half - 4),
+                (interior_min_x, interior_max_x, avenue_axis + avenue_half + 4, interior_max_y),
+            ]
+        unique_regions = []
+        for rx0, rx1, ry0, ry1 in plot_regions:
+            if rx1 - rx0 > 12 and ry1 - ry0 > 12:
+                unique_regions.append((rx0, rx1, ry0, ry1))
+        built_centers: list[tuple[float, float]] = []
+        for idx, (rx0, rx1, ry0, ry1) in enumerate(unique_regions):
+            count = 1 + (1 if rng.random() < 0.45 else 0)
+            for slot in range(count):
+                bx = rng.uniform(rx0 + 4, rx1 - 4)
+                by = rng.uniform(ry0 + 4, ry1 - 4)
+                if avenue_vertical and abs(bx - avenue_axis) < avenue_half + 7:
+                    continue
+                if (not avenue_vertical) and abs(by - avenue_axis) < avenue_half + 7:
+                    continue
+                if any((Vec2(bx, by) - Vec2(px, py)).length() < 12.0 for px, py in built_centers):
+                    continue
+                style = (idx + slot + (chunk_seed % 4)) % 5
+                footprint = rng.uniform(8.0, 14.0)
+                depth = rng.uniform(8.0, 14.0)
+                height = rng.uniform(18.0, 64.0)
+                self.add_building_mass(segs, obstacles, Vec3(bx, by, 0), footprint, depth, height, rng, style, district)
+                built_centers.append((bx, by))
+
+        spawn_candidates = [
+            (origin_x + size * 0.5, origin_y + road_half + 8),
+            (origin_x + size * 0.5, origin_y + size - road_half - 8),
+            (origin_x + road_half + 8, origin_y + size * 0.5),
+            (origin_x + size - road_half - 8, origin_y + size * 0.5),
+            (origin_x + size * 0.5 + (14 if avenue_vertical else 0), origin_y + size * 0.5 + (0 if avenue_vertical else 14)),
+        ]
+        rng.shuffle(spawn_candidates)
+        for i, (px, py) in enumerate(spawn_candidates[: 1 + rng.randint(1, 2)]):
+            if not self.point_hits_obstacle(Vec3(px, py, 0), radius=1.6, height=5.2, obstacles=obstacles):
+                npc_spawns.append((px, py, self.hashed_seed(cx, cy, i + 91)))
+        visual_np = np.attach_new_node(segs.create())
+        visual_np.setAntialias(AntialiasAttrib.MLine)
+        visual_np.setTransparency(TransparencyAttrib.MAlpha)
+        return np, obstacles, npc_spawns
+
+    def _draw_walker_model(self, parent: NodePath) -> NodePath:
+        body = parent.attach_new_node('walker-body')
+        body.setTransparency(TransparencyAttrib.MAlpha)
+        body.setAntialias(AntialiasAttrib.MLine)
+        def add_box(pos: tuple[float, float, float], size: tuple[float, float, float]) -> None:
+            segs = LineSegs('walker-box')
+            segs.setThickness(max(1.0, float(self.user_config.get('line_thickness', 1.25)) * 0.92))
+            segs.setColor(*self.current_line_color(alpha=0.96))
+            self.draw_box_edges(segs, Vec3(*pos), Vec3(*size))
+            np = body.attach_new_node(segs.create())
+            np.setAntialias(AntialiasAttrib.MLine)
+        for pos, size in [
+            ((0, 0, 2.8), (1.55, 1.05, 1.95)),
+            ((0, 0.08, 4.15), (0.9, 0.86, 0.72)),
+            ((0, 0.2, 1.55), (0.95, 0.82, 0.7)),
+            ((-1.02, 0.0, 3.55), (0.56, 0.62, 0.44)),
+            ((1.02, 0.0, 3.55), (0.56, 0.62, 0.44)),
+            ((-0.42, 0.08, 0.16), (0.5, 0.74, 1.82)),
+            ((0.42, 0.08, 0.16), (0.5, 0.74, 1.82)),
+            ((-0.46, 0.24, -0.38), (0.72, 1.12, 0.3)),
+            ((0.46, 0.24, -0.38), (0.72, 1.12, 0.3)),
+        ]:
+            add_box(pos, size)
+        ring = LineSegs('walker-ring')
+        ring.setThickness(max(1.0, float(self.user_config.get('line_thickness', 1.25)) * 0.86))
+        ring.setColor(*self.current_line_color(alpha=0.95))
+        self.draw_ring(ring, Vec3(0, 0.46, 4.15), 0.32, 12)
+        ring_np = body.attach_new_node(ring.create())
+        ring_np.setAntialias(AntialiasAttrib.MLine)
+        return body
+
+    def _spawn_walker(self, pos: Vec3, seed: int) -> WalkerNPC:
+        rng = random.Random(seed)
+        root = self.render.attach_new_node(f'walker-{seed}')
+        root.set_pos(pos)
+        body = self._draw_walker_model(root)
+        wander = Vec3(rng.uniform(-1, 1), rng.uniform(-1, 1), 0)
+        if wander.length_squared() < 0.05:
+            wander = Vec3(1, 0, 0)
+        wander.normalize()
+        return WalkerNPC(
+            root=root,
+            body=body,
+            radius=0.95,
+            height=4.9,
+            wander_dir=wander,
+            wander_timer=1.6 + rng.random() * 3.2,
+            speed=0.55 + rng.random() * 0.35,
+            phase=rng.random() * math.tau,
+            seed=seed,
+            label=f'Walker-{seed % 1000:03d}',
+        )
+
+    def generate_city_around_player(self, force: bool = False) -> None:
+        csize = int(self.user_config.get('chunk_size', 72))
+        px = int(math.floor(self.player_root.get_x() / csize))
+        py = int(math.floor(self.player_root.get_y() / csize))
+        required = set()
+        radius = int(self.user_config.get('active_chunk_radius', 3))
+        for cx in range(px - radius, px + radius + 1):
+            for cy in range(py - radius, py + radius + 1):
+                required.add((cx, cy))
+                if (cx, cy) not in self.chunks:
+                    chunk_np, obstacles, spawns = self.generate_chunk_geometry(cx, cy)
+                    self.chunks[(cx, cy)] = chunk_np
+                    self.chunk_obstacles[(cx, cy)] = obstacles
+                    self.chunk_npc_spawns[(cx, cy)] = spawns
+                    spawned_walkers: list[WalkerNPC] = []
+                    for ex, ey, seed in spawns:
+                        if len(self.walkers) < 72:
+                            walker = self._spawn_walker(Vec3(ex, ey, 0.0), seed)
+                            self.walkers.append(walker)
+                            spawned_walkers.append(walker)
+                    self.walker_nodes_by_chunk[(cx, cy)] = spawned_walkers
+        for key in list(self.chunks.keys()):
+            if key not in required:
+                self.chunks[key].remove_node()
+                del self.chunks[key]
+                self.chunk_obstacles.pop(key, None)
+                self.chunk_npc_spawns.pop(key, None)
+                for walker in self.walker_nodes_by_chunk.pop(key, []):
+                    if walker in self.walkers:
+                        self.walkers.remove(walker)
+                    walker.root.remove_node()
+
+    def point_hits_obstacle(self, pos: Vec3, radius: float = 0.42, height: float = 1.8, obstacles: list[BoxBounds] | None = None) -> bool:
+        obs = obstacles
+        if obs is None:
+            obs = []
+            csize = int(self.user_config.get('chunk_size', 72))
+            px = int(math.floor(pos.x / csize))
+            py = int(math.floor(pos.y / csize))
+            for cx in range(px - 1, px + 2):
+                for cy in range(py - 1, py + 2):
+                    obs.extend(self.chunk_obstacles.get((cx, cy), []))
+        test_min = Vec3(pos.x - radius, pos.y - radius, 0)
+        test_max = Vec3(pos.x + radius, pos.y + radius, height)
+        for box in obs:
+            if (
+                test_min.x <= box.max_v.x and test_max.x >= box.min_v.x and
+                test_min.y <= box.max_v.y and test_max.y >= box.min_v.y and
+                test_min.z <= box.max_v.z and test_max.z >= box.min_v.z
+            ):
+                return True
+        return False
+
+    def _head_quat(self):
+        if self.xr is not None:
+            return self.xr.hmd_anchor.get_quat(self.render)
+        return self.camera.get_quat(self.render)
+
+    def _head_world_pos(self) -> Vec3:
+        if self.xr is not None:
+            return self.xr.hmd_anchor.get_pos(self.render)
+        return self.camera.get_pos(self.render)
+
+    def _local_hmd_pose(self) -> tuple[Vec3, float]:
+        if self.xr is None:
+            return Vec3(0, 0, self.eye_height_m), 0.0
+        local = self.xr.hmd_anchor.get_pos(self.xr.tracking_space_anchor)
+        quat = self.xr.hmd_anchor.get_quat(self.xr.tracking_space_anchor)
+        forward = quat.get_forward()
+        forward.z = 0
+        yaw = _yaw_from_vec(forward) if forward.length_squared() > 1e-6 else 0.0
+        return Vec3(local), yaw
+
+    def _calibrate_floor(self, force: bool = False) -> None:
+        if self.xr is None:
+            return
+        if not getattr(self.xr, 'hmd_pose_valid', False) and not force:
+            return
+        local, local_yaw = self._local_hmd_pose()
+        target = self.eye_height_m - local.z
+        if local.z < 0.35:
+            # Some runtimes report a head-local origin until stage/floor data is ready.
+            # In that case, lift the tracking anchor by the desired eye height instead of
+            # clamping the user into the pavement.
+            target = self.eye_height_m
+        target = max(-0.35, min(self.eye_height_m + 0.35, target))
+        if not self.xr_floor_calibrated or force:
+            self.floor_offset_z = target
+        else:
+            self.floor_offset_z = self.floor_offset_z * 0.82 + target * 0.18
+        self.last_local_head_z = local.z
+        self.last_local_head_yaw = local_yaw
+        self.xr_floor_calibrated = True
+        self._append_status(f'Floor calibrated for 6ft profile: eye {self.eye_height_m:.2f}m')
+
+    def _xr_button_down(self, action_name: str) -> bool:
+        if self.xr is None:
+            return False
+        try:
+            return self.xr.button(action_name, 'left') or self.xr.button(action_name, 'right')
+        except Exception:
+            return False
+
+    def _movement_input(self) -> tuple[Vec2, float]:
+        move = Vec2(0, 0)
+        turn = 0.0
+        if self.xr is not None:
+            try:
+                lx, ly = self.xr.axis2d('thumbstick', 'left')
+                rx, _ = self.xr.axis2d('thumbstick', 'right')
+                move = Vec2(lx, ly)
+                turn = rx
+            except Exception:
+                pass
+        else:
+            if self.keys.get('a'):
+                move.x -= 1.0
+            if self.keys.get('d'):
+                move.x += 1.0
+            if self.keys.get('w'):
+                move.y += 1.0
+            if self.keys.get('s'):
+                move.y -= 1.0
+            if self.keys.get('turn_left'):
+                turn += 1.0
+            if self.keys.get('turn_right'):
+                turn -= 1.0
+        if move.length_squared() > 1.0:
+            move.normalize()
+        return move, turn
+
+    def _update_desktop_fallback_camera(self) -> None:
+        self.camera.set_hpr(self.player_heading, self.desktop_pitch, 0)
+        self.camera.set_pos(self.player_root.get_pos(self.render) + Vec3(0, 0, self.eye_height_m))
+
+    def _apply_tracking_anchor(self) -> None:
+        if self.xr is None:
+            return
+        if not self.xr_floor_calibrated:
+            self._calibrate_floor(force=True)
+        self.xr.tracking_space_anchor.set_pos(self.player_root.get_x(), self.player_root.get_y(), self.floor_offset_z + self.spawn_safe_z)
+        self.xr.tracking_space_anchor.set_h(self.player_heading)
+
+    def _update_player_motion(self, dt: float) -> None:
+        move, turn = self._movement_input()
+        if abs(turn) > 0.12:
+            self.player_heading += -turn * float(self.user_config.get('turn_speed', 95.0)) * dt
+        if move.length_squared() > 0.0001:
+            speed = float(self.user_config.get('movement_speed', 2.55))
+            if self.keys.get('shift') and self.xr is None:
+                speed *= float(self.user_config.get('sprint_multiplier', 1.45))
+            heading = self._head_quat() if self.xr is not None else self.camera.get_quat(self.render)
+            forward = heading.get_forward()
+            right = heading.get_right()
+            forward.z = 0
+            right.z = 0
+            if forward.length_squared() > 0.0001:
+                forward.normalize()
+            if right.length_squared() > 0.0001:
+                right.normalize()
+            move_vec = forward * move.y + right * move.x
+            if move_vec.length_squared() > 1.0:
+                move_vec.normalize()
+            next_pos = self.player_root.get_pos(self.render) + move_vec * speed * dt
+            next_pos.z = self.spawn_safe_z
+            if not self.point_hits_obstacle(next_pos, radius=self.player_radius, height=self.player_height_m):
+                self.player_root.set_pos(next_pos)
+        if self.xr is not None:
+            local, local_yaw = self._local_hmd_pose()
+            if not self.xr_floor_calibrated and getattr(self.xr, 'hmd_pose_valid', False):
+                self._calibrate_floor(force=True)
+            if self.xr_floor_calibrated and (local.z < 0.10 or local.z > 3.0):
+                self._append_status('Recovered from invalid floor sample.')
+                self._calibrate_floor(force=True)
+            self.last_local_head_z = local.z
+            self.last_local_head_yaw = local_yaw
+            self._apply_tracking_anchor()
+        else:
+            self._update_desktop_fallback_camera()
+
+    def _nearest_walker(self, max_dist: float = 5.2) -> WalkerNPC | None:
+        head = self._head_world_pos()
+        best = None
+        best_d = max_dist
+        for walker in self.walkers:
+            d = (walker.root.get_pos(self.render) - head).length()
+            if d < best_d:
+                best = walker
+                best_d = d
+        return best
+
+    def _walker_line(self, walker: WalkerNPC) -> str:
+        idx = (walker.seed + int(self.elapsed * 0.25)) % len(DIALOGUE_BANK)
+        return DIALOGUE_BANK[idx]
+
+    def _trigger_dialogue(self, walker: WalkerNPC) -> None:
+        line = self._walker_line(walker)
+        self.dialogue_speaker = walker.label
+        self.dialogue_text = line
+        self.dialogue_timer = 4.2
+        walker.talk_cooldown = 4.5
+        walker.wander_timer = max(walker.wander_timer, 2.4)
+        self._append_status(f'{walker.label} engaged.')
+        if self.xr is not None:
+            try:
+                self.xr.pulse('right', amplitude=0.18, duration_sec=0.04)
+            except Exception:
+                pass
+
+    def _handle_interactions(self) -> None:
+        interact_down = bool(self.keys.get('interact', False)) or self._xr_button_down('primary_button')
+        recenter_down = bool(self.keys.get('recenter', False)) or self._xr_button_down('secondary_button')
+        menu_down = False
+        if self.xr is not None:
+            try:
+                menu_down = self.xr.button('menu_click', 'left')
+            except Exception:
+                menu_down = False
+        if interact_down and not self.prev_interact_down:
+            walker = self._nearest_walker()
+            if walker is not None and walker.talk_cooldown <= 0.0:
+                self._trigger_dialogue(walker)
+        if recenter_down and not self.prev_recenter_down:
+            self._calibrate_floor(force=True)
+            self._append_status('Manual recenter applied.')
+        if menu_down and not self.prev_menu_down:
+            self.toggle_settings()
+        self.prev_interact_down = interact_down
+        self.prev_recenter_down = recenter_down
+        self.prev_menu_down = menu_down
+
+    def _update_walkers(self, dt: float) -> None:
+        for walker in self.walkers:
+            walker.talk_cooldown = max(0.0, walker.talk_cooldown - dt)
+            walker.wander_timer -= dt
+            if walker.wander_timer <= 0.0:
+                rng = random.Random(walker.seed ^ int(self.elapsed * 800))
+                new_dir = Vec3(rng.uniform(-1, 1), rng.uniform(-1, 1), 0)
+                if new_dir.length_squared() < 0.05:
+                    new_dir = Vec3(1, 0, 0)
+                new_dir.normalize()
+                walker.wander_dir = new_dir
+                walker.wander_timer = 2.0 + rng.random() * 4.0
+            speed = walker.speed * (0.35 if walker.talk_cooldown > 0.0 else 1.0)
+            candidate = walker.root.get_pos() + walker.wander_dir * speed * dt
+            candidate.z = 0
+            if not self.point_hits_obstacle(candidate, radius=walker.radius, height=walker.height):
+                walker.root.set_pos(candidate)
+            else:
+                walker.wander_dir *= -1
+            if walker.wander_dir.length_squared() > 0.001:
+                walker.root.set_h(math.degrees(math.atan2(-walker.wander_dir.x, walker.wander_dir.y)))
+            bob = math.sin(self.elapsed * 1.45 + walker.phase)
+            walker.body.setP(bob * 0.45)
+            walker.body.setR(math.sin(self.elapsed * 1.05 + walker.phase) * 0.8)
+            walker.body.setZ(math.sin(self.elapsed * 2.0 + walker.phase) * 0.025)
+            walker.body.setColor(*self.current_line_color(alpha=0.98))
+
+    def _build_claw(self, parent: NodePath, side: str) -> ClawHand:
+        root = parent.attach_new_node(f'{side}-claw-root')
+        root.setScale(0.14)
+        root.setP(-90)
+        palm_segs = LineSegs(f'{side}-claw-palm')
+        palm_segs.setThickness(1.6)
+        palm_segs.setColor(*self.current_line_color(alpha=0.95))
+        palm_lines = [
+            ((-1.2, 0.0, -0.9), (1.2, 0.0, -0.9)),
+            ((1.2, 0.0, -0.9), (1.4, 0.0, 0.2)),
+            ((1.4, 0.0, 0.2), (0.8, 0.0, 1.0)),
+            ((0.8, 0.0, 1.0), (-0.8, 0.0, 1.0)),
+            ((-0.8, 0.0, 1.0), (-1.4, 0.0, 0.2)),
+            ((-1.4, 0.0, 0.2), (-1.2, 0.0, -0.9)),
+            ((-0.7, 0.0, -0.9), (-0.7, 0.0, 1.0)),
+            ((0.0, 0.0, -0.9), (0.0, 0.0, 1.0)),
+            ((0.7, 0.0, -0.9), (0.7, 0.0, 1.0)),
+        ]
+        for a, b in palm_lines:
+            palm_segs.moveTo(*a)
+            palm_segs.drawTo(*b)
+        palm = root.attach_new_node(palm_segs.create())
+        finger_nodes = []
+        finger_offsets = [-0.68, 0.0, 0.68]
+        for idx, x in enumerate(finger_offsets):
+            finger_root = root.attach_new_node(f'{side}-finger-{idx}')
+            finger_root.setPos(x, 0.0, 1.0)
+            segs = LineSegs(f'{side}-finger-segs-{idx}')
+            segs.setThickness(1.4)
+            segs.setColor(*self.current_line_color(alpha=0.95))
+            segs.moveTo(0.0, 0.0, 0.0)
+            segs.drawTo(0.0, 0.0, 1.1)
+            segs.drawTo(0.0, 0.0, 2.0)
+            segs.drawTo(0.18 if side == 'right' else -0.18, 0.0, 2.45)
+            finger_root.attach_new_node(segs.create())
+            finger_nodes.append(finger_root)
+        return ClawHand(root=root, palm=palm, finger_nodes=finger_nodes, side=side)
+
+    def _build_claws(self) -> None:
+        if self.xr is None:
+            return
+        self.left_claw = self._build_claw(self.xr.left_grip_anchor, 'left')
+        self.right_claw = self._build_claw(self.xr.right_grip_anchor, 'right')
+
+    def _update_claws(self, dt: float) -> None:
+        if self.xr is None:
+            return
+        for side, claw in (('left', self.left_claw), ('right', self.right_claw)):
+            if claw is None:
+                continue
+            try:
+                curl = max(self.xr.axis1d('squeeze', side), self.xr.axis1d('trigger', side) * 0.8)
+            except Exception:
+                curl = 0.0
+            for idx, finger in enumerate(claw.finger_nodes):
+                bias = idx * 7.0
+                finger.setP(-15.0 - curl * (48.0 + bias))
+            claw.root.setColorScale(*self.current_line_color(alpha=0.94))
+
+    def _update_ships(self, dt: float) -> None:
+        self.next_ship_timer -= dt
+        if self.next_ship_timer <= 0.0 and len(self.sky_ships) < 2:
+            self._spawn_sky_ship()
+            self.next_ship_timer = random.uniform(16.0, 32.0)
+        for ship in list(self.sky_ships):
+            ship.lifetime -= dt
+            ship.root.set_pos(ship.root.get_pos() + ship.velocity * dt)
+            ship.root.setR(math.sin(self.elapsed * 0.8 + ship.phase) * 6.0)
+            ship.root.setZ(ship.root.get_z() + math.sin(self.elapsed * 0.7 + ship.phase) * 0.03)
+            ship.root.setColorScale(*self._ship_color(alpha=0.58 + 0.18 * math.sin(self.elapsed * 0.7 + ship.phase)))
+            if ship.lifetime <= 0.0:
+                ship.root.remove_node()
+                self.sky_ships.remove(ship)
+
+    def _late_sky_task(self, task: Task):
+        head = self._head_world_pos()
+        self.sky_root.set_pos(head)
+        return Task.cont
+
+    def _update_ui_task(self, task: Task):
+        district = self.current_district_label()
+        world_name = WORLD_COLOR_PRESETS[int(self.user_config.get('world_color_index', 0))][0]
+        line_name = LINE_COLOR_PRESETS[int(self.user_config.get('line_color_index', 0))][0]
+        hud_lines = [
+            APP_NAME,
+            f'District: {district}',
+            f'Walkers: {len(self.walkers)}',
+            f'World: {world_name}',
+            f'Lines: {line_name}',
+        ]
+        settings_lines = [
+            'Esc settings | H HUD | F12 screenshot',
+            '',
+            f'Draw distance: {int(float(self.user_config.get("max_view_distance", 620.0)))}',
+            f'Move speed: {float(self.user_config.get("movement_speed", 2.55)):.2f}',
+            f'World color: {world_name}',
+            f'Line color: {line_name}',
+            f'Music: {"On" if self.user_config.get("music_enabled", True) else "Off"}',
+            f'Eye height: {self.eye_height_m:.2f} m (6ft profile)',
+            '',
+            'Interaction:',
+            '- Approach a walker and press F / A / X to talk',
+            '- Press R / B / Y to recenter floor and orientation',
+            '- Robotic claws follow controller tracking',
+        ]
+        if self.xr is not None:
+            try:
+                diag = self.xr.get_diagnostics()
+                hud_lines.extend([
+                    f'Runtime: {diag.runtime_name}',
+                    f'Session: {diag.session_state}',
+                ])
+                settings_lines.extend([
+                    '',
+                    f'Runtime: {diag.runtime_name} {diag.runtime_version}',
+                    f'Session state: {diag.session_state}',
+                    f'Should render: {diag.should_render}',
+                    f'HMD tracked: {diag.headset_tracked}',
+                    f'Left tracked: {diag.left_controller_tracked}',
+                    f'Right tracked: {diag.right_controller_tracked}',
+                    '',
+                    'VR controls:',
+                    '- Left stick: move',
+                    '- Right stick: turn',
+                    '- A / X: interact',
+                    '- B / Y: recenter',
+                ])
+            except Exception as exc:
+                settings_lines.extend(['', f'Diagnostics failed: {exc}'])
+        else:
+            settings_lines.extend([
+                '',
+                'Desktop fallback controls:',
+                '- WASD move',
+                '- Q/E or arrows turn',
+                '- F interact',
+                '- R recenter view height',
+            ])
+        if self.status_lines:
+            settings_lines.extend(['', 'Status:'])
+            settings_lines.extend(f'- {line}' for line in self.status_lines[-6:])
+        self.hud_text['text'] = '\n'.join(hud_lines)
+        self.settings_text['text'] = '\n'.join(settings_lines)
+        self.dialogue_label['text'] = f'{self.dialogue_speaker}: {self.dialogue_text}' if self.dialogue_timer > 0.0 else ''
+        if self.hud_visible:
+            self.hud_text.show()
+        else:
+            self.hud_text.hide()
+        return Task.cont
+
+    def _update_world_task(self, task: Task):
+        dt = min(0.033, globalClock.getDt())
+        self.elapsed += dt
+        self.update_palette(dt)
+        self._update_player_motion(dt)
+        self.generate_city_around_player(force=False)
+        self._handle_interactions()
+        self._update_walkers(dt)
+        self._update_claws(dt)
+        self._update_ships(dt)
+        self._apply_music_state()
+        self.dialogue_timer = max(0.0, self.dialogue_timer - dt)
+        return Task.cont
+
+
+def main() -> None:
+    try:
+        app = XRWorldWalk()
+        app.run()
+    except SystemExit:
+        raise
+    except Exception as exc:
+        path = write_crash_report(exc)
+        print(f'Crash log written to: {path}')
+        raise
