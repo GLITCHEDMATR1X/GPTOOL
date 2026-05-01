@@ -1,10 +1,10 @@
-# HoloVerse Fauna Preview Workflow — Pass 17/18/19/20
+# HoloVerse Fauna + Asset Knowledge Workflow — Pass 17/18/19/20/21
 
-This workflow improves HoloVerse fauna with an assets-first loop instead of vibe-coding directly into the main world.
+This workflow improves HoloVerse fauna and asset quality with an assets-first loop instead of vibe-coding directly into the main world.
 
 ## Goal
 
-Create isolated Panda3D preview scenes for creature silhouettes, region identity, color accents, simple idle motion, and imported model candidates before any fauna is promoted into the real HoloVerse project.
+Create isolated Panda3D preview scenes for creature silhouettes, region identity, color accents, simple idle motion, imported model candidates, and metadata-first asset knowledge before any asset is promoted into the real HoloVerse project.
 
 ## Preview tool
 
@@ -49,9 +49,42 @@ reports/fauna_scan/fauna_resource_scan.md
 
 The scanner reports likely fauna score, region hints, glTF animation/skin counts when available, nearby README/LICENSE signals, and known GitHub reference candidates. Local candidates are still not approved until visual proof and license review are done.
 
+## Asset Knowledge Base builder
+
+Pass 21 adds a metadata-first knowledge base builder for Codex/GPTOOL. It does not copy model geometry by default. It builds structured JSON that Codex can use to understand candidate animals, people, structures, and objects.
+
+Build from curated defaults only:
+
+```bash
+python tools/holoverse_asset_kb_builder.py --output-dir data/asset_kb
+```
+
+Build from one or more scan reports:
+
+```bash
+python tools/holoverse_asset_kb_builder.py reports/fauna_scan/fauna_resource_scan.json --output-dir data/asset_kb
+```
+
+It writes:
+
+```text
+data/asset_kb/assets.json
+data/asset_kb/licenses.json
+data/asset_kb/rig_profiles.json
+data/asset_kb/animation_profiles.json
+data/asset_kb/holoverse_region_fit.json
+data/asset_kb/codex_training_manifest.json
+data/asset_kb/holoverse_asset_kb.json
+data/asset_kb/README.md
+```
+
+Codex rule: use the KB to choose candidates, write import plans, and build procedural equivalents. Do not copy or promote assets without license/proof gates.
+
 ## Known external reference target
 
 The first reference target is `KhronosGroup/glTF-Sample-Models/2.0/Fox`, because it is a low-poly animated fox with Survey, Walk, and Run cycles. The model body is listed as CC0, while the rigging/animation is CC-BY 4.0, so attribution must be preserved before promotion.
+
+The curated default KB also includes reference entries for Cesium Man, Rigged Simple, Sponza, Virtual City, Barramundi Fish, Duck, and Box Textured so Codex can reason about people, structures, objects, and water creatures.
 
 ## Generated preview contents
 
@@ -151,6 +184,7 @@ If `--target-manifest` is not supplied, the approved manifest is written inside 
 - The generated preview is disposable until approved.
 - The preview generator does not modify main HoloVerse files.
 - The resource scanner does not import or promote assets automatically.
+- The Asset KB builder does not copy geometry by default.
 - The demo sheet does not count as Panda3D render proof.
 - The promotion gate is dry-run by default.
 - `--apply` is required before any target manifest is written.
@@ -160,4 +194,4 @@ If `--target-manifest` is not supplied, the approved manifest is written inside 
 
 ## Next upgrade
 
-Wire these into `bridge.py` as first-class commands named `fauna-preview`, `fauna-demo-sheet`, `fauna-resource-scan`, and `promote-fauna-preview`, then add a controlled import pass for the Khronos Fox and any valid local backup-folder candidates.
+Wire these into `bridge.py` as first-class commands named `fauna-preview`, `fauna-demo-sheet`, `fauna-resource-scan`, `asset-kb-build`, and `promote-fauna-preview`, then add a controlled import pass for the Khronos Fox and any valid local backup-folder candidates.
