@@ -1,0 +1,19 @@
+# Panda XR Builder validation commands
+
+# Static/settings proof. Does not require Panda3D.
+python vr/main.py --settings-check --json
+
+# Deterministic builder proof. Does not require Panda3D because it exercises the scene manifest/export pipeline without opening a window.
+python vr/main.py --proof-mode --save-project --export-scene --proof-path vr/reports/pass18_builder_proof.json
+
+# Desktop Panda3D builder. Requires Panda3D 1.10.16+.
+python vr/main.py
+
+# VR-requested startup. Safe fallback: if OpenXR bindings/runtime are not detected, the app remains in desktop fallback.
+python vr/main.py --vr
+
+# GPTOOL full pass against the VR folder.
+python bridge.py full-pass vr --profile panda3d --runtime mock
+
+# GPTOOL Panda3D smoke pass when Panda3D is installed or a portable runtime is supplied.
+python bridge.py panda3d-smoke vr --entry main.py --runtime system_python --require-proof --proof-path vr/reports/smoke_proof.json
