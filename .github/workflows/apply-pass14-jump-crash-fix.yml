@@ -1,0 +1,60 @@
+name: Apply GPTOOL Pass 14 Jump Crash Fix
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - tools/apply_pass14_jump_crash_fix.py
+      - .github/workflows/apply-pass14-jump-crash-fix.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply-pass14:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Apply Pass 14 crash fix
+        run: python tools/apply_pass14_jump_crash_fix.py
+
+      - name: Validate patched source
+        run: |
+          python -S bridge.py --version
+          python -S - <<'PY'
+          from pathlib import Path
+          import ast
+          count = 0
+          for p in sorted(Path('.').rglob('*.py')):
+              if any(part in {'.git', '__pycache__'} for part in p.parts):
+                  continue
+              ast.parse(p.read_text(encoding='utf-8'), filename=str(p))
+              count += 1
+          print(f'AST syntax PASS: {count} Python files')
+          PY
+          python -S bridge.py generate-game ./GeneratedPass14CI --profile panda3d --command "make a playable simulation with two testers and crash fixed jump proof"
+          python -S ./GeneratedPass14CI/main.py --settings-check
+          python -S - <<'PY'
+          from pathlib import Path
+          import ast
+          p = Path('GeneratedPass14CI/main.py')
+          ast.parse(p.read_text(encoding='utf-8'), filename=str(p))
+          print('Generated main.py AST syntax PASS')
+          PY
+
+      - name: Commit Pass 14 source changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No Pass 14 changes to commit."
+          else
+            git commit -m "Apply GPTOOL Pass 14 generated crash fix"
+            git push
+          fi
