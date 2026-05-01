@@ -1,12 +1,12 @@
-# HoloVerse Fauna Preview Workflow — Pass 17
+# HoloVerse Fauna Preview Workflow — Pass 17/18
 
-This pass adds an assets-first workflow for improving HoloVerse fauna without vibe-coding directly into the main world.
+This workflow improves HoloVerse fauna with an assets-first loop instead of vibe-coding directly into the main world.
 
 ## Goal
 
 Create isolated Panda3D preview scenes for creature silhouettes, region identity, color accents, and simple idle motion before any fauna is promoted into the real HoloVerse project.
 
-## New tool
+## Preview tool
 
 ```bash
 python tools/holoverse_fauna_preview.py ./previews/holoverse_fauna_pass17 --force
@@ -59,14 +59,53 @@ Visual proof when Panda3D is installed:
 python main.py --screenshot-mode --screenshot-path screenshots/fauna_preview.png --proof-path reports/fauna_preview_scene_proof.json
 ```
 
+## Promotion gate
+
+Pass 18 adds a separate promotion gate. It reads a preview manifest, writes a promotion plan, and only writes an approved target manifest when `--apply` is passed.
+
+Dry-run plan, selects nothing:
+
+```bash
+python tools/holoverse_fauna_promote.py ./previews/holoverse_fauna_pass17
+```
+
+Approve every species into a preview-local approved manifest:
+
+```bash
+python tools/holoverse_fauna_promote.py ./previews/holoverse_fauna_pass17 --approve all --apply
+```
+
+Approve only selected species into a real HoloVerse fauna manifest:
+
+```bash
+python tools/holoverse_fauna_promote.py ./previews/holoverse_fauna_pass17 --approve hill_ridgeback_grazer,forest_vanta_moss_stag --target-manifest ../GX-Prototype-Lab/data/HoloVerse/assets/fauna/fauna_manifest.json --apply
+```
+
+Require screenshot/scene proof before promotion:
+
+```bash
+python tools/holoverse_fauna_promote.py ./previews/holoverse_fauna_pass17 --approve all --require-proof --apply
+```
+
+Promotion writes:
+
+```text
+reports/fauna_promotion_plan.json
+reports/fauna_promotion_plan.md
+```
+
+If `--target-manifest` is not supplied, the approved manifest is written inside the preview reports folder, not into HoloVerse.
+
 ## Safety rules
 
 - The generated preview is disposable until approved.
 - The preview generator does not modify main HoloVerse files.
+- The promotion gate is dry-run by default.
+- `--apply` is required before any target manifest is written.
 - Main HoloVerse protected routes remain: Urban/Sable, Metropolis/Archivist, points UI, ESC exit, and screenshots.
 - Do not copy an entire preview folder into HoloVerse.
 - Promote only approved species definitions, mesh ideas, animation ideas, or region decorator rules after screenshot review.
 
 ## Next upgrade
 
-Wire this into `bridge.py` as a first-class command named `fauna-preview`, then add a later `promote-fauna-preview` pass that copies only approved manifest entries into the HoloVerse asset database after regression checks.
+Wire these into `bridge.py` as first-class commands named `fauna-preview` and `promote-fauna-preview`, then add regression checks against the real HoloVerse project before promotion can write into a main project path.
