@@ -27,7 +27,7 @@ from validators.text_fit_validator import validate_text_fit
 from validators.ui_bounds_validator import validate_ui_bounds
 from maintenance.package_cleaner import analyze_package, clean_package_tree, create_lean_package_zip, render_package_audit_text
 
-BRIDGE_VERSION = "0.6.3-pass13"
+BRIDGE_VERSION = "0.6.4-pass14"
 DEFAULT_REPORT_DIR = "reports"
 EXCLUDED_DIRS = {".git", "__pycache__", ".mypy_cache", ".pytest_cache", "node_modules", "dist", "build"}
 PANDA3D_PROFILE_NAMES = {"panda3d", "holoverse", "codered", "code_red"}

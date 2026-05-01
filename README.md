@@ -1,4 +1,4 @@
-# GPT Game Generation Bridge v0.6.3-pass13
+# GPT Game Generation Bridge v0.6.4-pass14
 
 Private AI-facing validation harness for more disciplined game and app generation.
 
@@ -265,6 +265,16 @@ F12                backup screenshot
 ```
 
 The generated proof JSON records the controller model, camera distance, active character, and playable character state so AI edits can be checked without relying only on visual inspection.
+
+## Pass 14 — Local crash fix
+
+Fixed a generated-template crash found during route-proof testing: proof JSON could read the player jump state before `jump_was_down` had been initialized. The generated player controller now initializes that state and proof reporting reads it safely.
+
+Retest command:
+
+```bash
+python main.py --screenshot-mode --route-proof --screenshot-path screenshots/route.png --proof-path reports/route.json
+```
 
 ## Repository baseline
 

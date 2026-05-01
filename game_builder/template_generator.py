@@ -176,6 +176,7 @@ class GeneratedGame(ShowBase):
         self.vertical_velocity = 0.0
         self.ground_z = 0.05
         self.was_grounded = True
+        self.jump_was_down = False
         self.simulation_characters: list[dict] = []
         self.active_character_index = 0
         self.preview_actor = None
@@ -1032,7 +1033,7 @@ From the GPT Tool folder, run something like:
 - Press `Tab` to swap which character is playable.
 - Press `C` to cycle embedded imported-human animations when they are available.
 - Press `F12` or run `python main.py --screenshot-mode` to write a backup screenshot.
-- Improved controls include smoothed acceleration/friction, Shift sprint, Space jump/gravity, mouse-wheel camera zoom, and `R` camera reset.
+- Improved controls include smoothed acceleration/friction, Shift sprint, edge-triggered Space jump/gravity, mouse-wheel camera zoom, and `R` camera reset.
 - Run `python main.py --screenshot-mode --route-proof` to automatically move both testers, simulate a Tab swap, drop route markers, write proof JSON, and capture one backup screenshot.
 - Characters use non-placeholder silhouettes where possible.
 - The settings file is the source of truth for AI edits.
@@ -1129,7 +1130,7 @@ def generate_panda3d_template(output_dir: str | Path, settings: dict[str, Any], 
         "schema_version": "generated_template_manifest.v1",
         "generated_at": _now_iso(),
         "generator": "GPT Game Generation Bridge",
-        "template": "panda3d_playable_simulation_template.v4",
+        "template": "panda3d_playable_simulation_template.v5",
         "project_slug": slug,
         "settings_id": settings.get("settings_id"),
         "file_count": len([f for f in files if f.get("written")]),
