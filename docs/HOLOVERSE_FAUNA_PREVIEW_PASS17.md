@@ -1,10 +1,10 @@
-# HoloVerse Fauna Preview Workflow — Pass 17/18/19
+# HoloVerse Fauna Preview Workflow — Pass 17/18/19/20
 
 This workflow improves HoloVerse fauna with an assets-first loop instead of vibe-coding directly into the main world.
 
 ## Goal
 
-Create isolated Panda3D preview scenes for creature silhouettes, region identity, color accents, and simple idle motion before any fauna is promoted into the real HoloVerse project.
+Create isolated Panda3D preview scenes for creature silhouettes, region identity, color accents, simple idle motion, and imported model candidates before any fauna is promoted into the real HoloVerse project.
 
 ## Preview tool
 
@@ -19,6 +19,39 @@ python tools/holoverse_fauna_preview.py ./previews/hills_fauna --region hills --
 python tools/holoverse_fauna_preview.py ./previews/water_fauna --species water_solace_reef_glider --force
 python tools/holoverse_fauna_preview.py ./previews/fauna_small_set --limit 3 --force
 ```
+
+## Resource scanner
+
+Pass 20 adds a resource intake scanner for local backup/model folders. It searches for 3D model files and ranks likely fauna candidates before import.
+
+```bash
+python tools/holoverse_fauna_resource_scan.py /path/to/backup/models --output-dir reports/fauna_scan
+```
+
+Multiple roots are supported:
+
+```bash
+python tools/holoverse_fauna_resource_scan.py D:/Backups/Models D:/Apps/GLITCHED_MATRIX/assets --output-dir reports/fauna_scan
+```
+
+Scanned extensions:
+
+```text
+.glb .gltf .fbx .obj .dae .blend .bam .egg
+```
+
+The scan writes:
+
+```text
+reports/fauna_scan/fauna_resource_scan.json
+reports/fauna_scan/fauna_resource_scan.md
+```
+
+The scanner reports likely fauna score, region hints, glTF animation/skin counts when available, nearby README/LICENSE signals, and known GitHub reference candidates. Local candidates are still not approved until visual proof and license review are done.
+
+## Known external reference target
+
+The first reference target is `KhronosGroup/glTF-Sample-Models/2.0/Fox`, because it is a low-poly animated fox with Survey, Walk, and Run cycles. The model body is listed as CC0, while the rigging/animation is CC-BY 4.0, so attribution must be preserved before promotion.
 
 ## Generated preview contents
 
@@ -117,6 +150,7 @@ If `--target-manifest` is not supplied, the approved manifest is written inside 
 
 - The generated preview is disposable until approved.
 - The preview generator does not modify main HoloVerse files.
+- The resource scanner does not import or promote assets automatically.
 - The demo sheet does not count as Panda3D render proof.
 - The promotion gate is dry-run by default.
 - `--apply` is required before any target manifest is written.
@@ -126,4 +160,4 @@ If `--target-manifest` is not supplied, the approved manifest is written inside 
 
 ## Next upgrade
 
-Wire these into `bridge.py` as first-class commands named `fauna-preview`, `fauna-demo-sheet`, and `promote-fauna-preview`, then add regression checks against the real HoloVerse project before promotion can write into a main project path.
+Wire these into `bridge.py` as first-class commands named `fauna-preview`, `fauna-demo-sheet`, `fauna-resource-scan`, and `promote-fauna-preview`, then add a controlled import pass for the Khronos Fox and any valid local backup-folder candidates.
