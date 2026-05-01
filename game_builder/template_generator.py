@@ -165,8 +165,17 @@ class GeneratedGame(ShowBase):
         self.platform_chunks: dict[tuple[int, int], NodePath] = {}
         self.chunk_size = 36
         self.camera_yaw = 0.0
-        self.camera_distance = 24.0
-        self.camera_height = 8.0
+        self.camera_distance = 18.0
+        self.camera_target_distance = 18.0
+        self.camera_min_distance = 9.0
+        self.camera_max_distance = 42.0
+        self.camera_height = 6.8
+        self.camera_target_height = 6.8
+        self.camera_focus_smooth = Vec3(0, 0, 2.55)
+        self.velocity = Vec3(0, 0, 0)
+        self.vertical_velocity = 0.0
+        self.ground_z = 0.05
+        self.was_grounded = True
         self.simulation_characters: list[dict] = []
         self.active_character_index = 0
         self.preview_actor = None
@@ -182,6 +191,7 @@ class GeneratedGame(ShowBase):
         spawn = self.settings.get("world", {}).get("spawn", {}).get("position", [0, 0, 2])
         self.player.setPos(float(spawn[0]), float(spawn[1]), float(spawn[2]))
         self.camera_focus.setPos(self.player.getPos())
+        self.camera_focus_smooth = self.player.getPos() + Vec3(0, 0, 2.55)
         self._bind_controls()
         self._build_lights()
         self._build_world()
@@ -194,10 +204,13 @@ class GeneratedGame(ShowBase):
         self._install_smoke_capture()
 
     def _bind_controls(self) -> None:
-        for key in ["w", "a", "s", "d", "q", "e", "arrow_up", "arrow_down", "arrow_left", "arrow_right", "shift", "space", "escape"]:
+        for key in ["w", "a", "s", "d", "q", "e", "arrow_up", "arrow_down", "arrow_left", "arrow_right", "shift", "space", "escape", "r"]:
             self.accept(key, self._set_key, [key, True])
             self.accept(key + "-up", self._set_key, [key, False])
         self.accept("escape", sys.exit)
+        self.accept("wheel_up", self._adjust_camera_zoom, [-2.0])
+        self.accept("wheel_down", self._adjust_camera_zoom, [2.0])
+        self.accept("r", self._reset_camera)
         self.accept("tab", self._switch_character, [None])
         self.accept("f12", self._manual_screenshot)
         self.accept("[", self._cycle_human_asset, [-1])
@@ -559,7 +572,7 @@ class GeneratedGame(ShowBase):
         self.active_np.setColor(1.0, 0.96, 0.56, 1)
 
         self.help_node = TextNode("help")
-        self.help_node.setText("WASD move | Q/E rotate camera | Shift sprint | Tab swap | C anim | --route-proof backup test | F12 screenshot | Esc exit")
+        self.help_node.setText("WASD/Arrows move | Shift sprint | Space jump | Q/E rotate | Wheel zoom | R reset | Tab swap | C anim | F12 screenshot | Esc exit")
         self.help_node.setAlign(TextNode.ALeft)
         self.help_np = self.aspect2d.attachNewNode(self.help_node)
         self.help_np.setScale(0.031)
@@ -760,12 +773,23 @@ class GeneratedGame(ShowBase):
         return {
             "mode": "playable_character_edit_test",
             "controls": {
-                "move": "WASD/Arrow keys",
-                "camera": "Q/E or Arrow Left/Right",
+                "move": "WASD/Arrow keys with smoothed acceleration and friction",
+                "sprint": "Shift",
+                "jump": "Space with gravity return to safe ground",
+                "camera": "Q/E or Arrow Left/Right rotate; mouse wheel zoom; R reset",
                 "swap": "Tab",
                 "backup_screenshot": "F12 or --screenshot-mode",
                 "cycle_animation": "C",
                 "route_proof": "--route-proof",
+            },
+            "controller_model": {
+                "schema_version": "gptool_player_controller.v1",
+                "acceleration": float(self.settings.get("player", {}).get("acceleration", 26.0)),
+                "friction": float(self.settings.get("player", {}).get("friction", 18.0)),
+                "gravity": float(self.settings.get("player", {}).get("gravity", 24.0)),
+                "jump_strength": float(self.settings.get("player", {}).get("jump_strength", 8.0)),
+                "camera_distance": round(float(self.camera_distance), 3),
+                "camera_target_distance": round(float(self.camera_target_distance), 3),
             },
             "playable_character_count": len(self.simulation_characters),
             "active_character_id": active.get("id") if active else None,
@@ -857,14 +881,19 @@ class GeneratedGame(ShowBase):
         self.taskMgr.add(capture, "gpt_bridge_screenshot_capture")
 
     def _update(self, task):
-        dt = globalClock.getDt()
+        dt = min(0.05, max(0.0, globalClock.getDt()))
         if self.keys.get("q") or self.keys.get("arrow_left"):
-            self.camera_yaw += 90.0 * dt
+            self.camera_yaw += 112.0 * dt
         if self.keys.get("e") or self.keys.get("arrow_right"):
-            self.camera_yaw -= 90.0 * dt
-        speed = float(self.settings.get("player", {}).get("speed", 12.0))
-        if self.keys.get("shift"):
-            speed *= float(self.settings.get("player", {}).get("sprint_multiplier", 2.0))
+            self.camera_yaw -= 112.0 * dt
+        target = self.controlled_node or self.player
+        player_settings = self.settings.get("player", {})
+        base_speed = float(player_settings.get("speed", 12.0))
+        speed = base_speed * (float(player_settings.get("sprint_multiplier", 2.0)) if self.keys.get("shift") else 1.0)
+        acceleration = float(player_settings.get("acceleration", 26.0))
+        friction = float(player_settings.get("friction", 18.0))
+        gravity = float(player_settings.get("gravity", 24.0))
+        jump_strength = float(player_settings.get("jump_strength", 8.0))
         yaw_rad = math.radians(self.camera_yaw)
         forward = Vec3(math.sin(yaw_rad), math.cos(yaw_rad), 0)
         right = Vec3(math.cos(yaw_rad), -math.sin(yaw_rad), 0)
@@ -877,26 +906,63 @@ class GeneratedGame(ShowBase):
             move -= right
         if self.keys.get("d"):
             move += right
-        target = self.controlled_node or self.player
         moving = move.lengthSquared() > 0
+        desired_velocity = Vec3(0, 0, 0)
         if moving:
             move.normalize()
-            target.setPos(target.getPos() + move * speed * dt)
-            target.setH(math.degrees(math.atan2(-move.x, move.y)))
-            self.points += int(1 + speed * dt)
-        self._play_active_animation(moving)
+            desired_velocity = move * speed
+            blend = min(1.0, acceleration * dt)
+            self.velocity = self.velocity + (desired_velocity - self.velocity) * blend
+        else:
+            damp = max(0.0, 1.0 - friction * dt)
+            self.velocity = self.velocity * damp
+            if self.velocity.lengthSquared() < 0.0025:
+                self.velocity = Vec3(0, 0, 0)
+        grounded = target.getZ() <= self.ground_z + 0.02
+        if grounded:
+            target.setZ(self.ground_z)
+            self.vertical_velocity = max(0.0, self.vertical_velocity)
+            if self.keys.get("space") and not self.was_grounded:
+                # Prevent repeated jump triggering when landing with space still held.
+                pass
+            elif self.keys.get("space"):
+                self.vertical_velocity = jump_strength
+                grounded = False
+        if not grounded:
+            self.vertical_velocity -= gravity * dt
+        next_pos = target.getPos() + Vec3(self.velocity.x * dt, self.velocity.y * dt, self.vertical_velocity * dt)
+        if next_pos.z <= self.ground_z:
+            next_pos.z = self.ground_z
+            self.vertical_velocity = 0.0
+            grounded = True
+        target.setPos(next_pos)
+        self.was_grounded = grounded
+        if self.velocity.lengthSquared() > 0.04:
+            target.setH(math.degrees(math.atan2(-self.velocity.x, self.velocity.y)))
+            self.points += max(1, int(self.velocity.length() * dt * 1.8))
+        self._play_active_animation(self.velocity.lengthSquared() > 0.04)
         target_pos = target.getPos()
         self._ensure_platform_chunks(target_pos)
         focus = target_pos + Vec3(0, 0, 2.55)
-        self.camera_focus.setPos(focus)
+        focus_blend = min(1.0, 8.5 * dt)
+        self.camera_focus_smooth = self.camera_focus_smooth + (focus - self.camera_focus_smooth) * focus_blend
+        self.camera_focus.setPos(self.camera_focus_smooth)
+        self.camera_distance += (self.camera_target_distance - self.camera_distance) * min(1.0, 7.0 * dt)
+        self.camera_height += (self.camera_target_height - self.camera_height) * min(1.0, 7.0 * dt)
         cam_back = Vec3(math.sin(yaw_rad), math.cos(yaw_rad), 0)
         if getattr(self, "camera", None):
-            self.camera.setPos(focus.x - cam_back.x * self.camera_distance, focus.y - cam_back.y * self.camera_distance, focus.z + self.camera_height)
-            self.camera.lookAt(focus)
+            cam_pos = Vec3(
+                self.camera_focus_smooth.x - cam_back.x * self.camera_distance,
+                self.camera_focus_smooth.y - cam_back.y * self.camera_distance,
+                self.camera_focus_smooth.z + self.camera_height,
+            )
+            self.camera.setPos(cam_pos)
+            self.camera.lookAt(self.camera_focus_smooth)
         active = self._active_character()
         active_name = active.get("name") if active else "None"
+        movement_label = "SPRINT" if self.keys.get("shift") and self.velocity.lengthSquared() > 0.04 else ("MOVE" if self.velocity.lengthSquared() > 0.04 else "IDLE")
         self.points_node.setText(f"POINTS {self.points}")
-        self.active_node.setText(f"ACTIVE {active_name}")
+        self.active_node.setText(f"ACTIVE {active_name} | {movement_label} | ZOOM {self.camera_target_distance:.0f}")
         return Task.cont
 
 
@@ -966,6 +1032,7 @@ From the GPT Tool folder, run something like:
 - Press `Tab` to swap which character is playable.
 - Press `C` to cycle embedded imported-human animations when they are available.
 - Press `F12` or run `python main.py --screenshot-mode` to write a backup screenshot.
+- Improved controls include smoothed acceleration/friction, Shift sprint, Space jump/gravity, mouse-wheel camera zoom, and `R` camera reset.
 - Run `python main.py --screenshot-mode --route-proof` to automatically move both testers, simulate a Tab swap, drop route markers, write proof JSON, and capture one backup screenshot.
 - Characters use non-placeholder silhouettes where possible.
 - The settings file is the source of truth for AI edits.
@@ -1062,7 +1129,7 @@ def generate_panda3d_template(output_dir: str | Path, settings: dict[str, Any], 
         "schema_version": "generated_template_manifest.v1",
         "generated_at": _now_iso(),
         "generator": "GPT Game Generation Bridge",
-        "template": "panda3d_playable_simulation_template.v3",
+        "template": "panda3d_playable_simulation_template.v4",
         "project_slug": slug,
         "settings_id": settings.get("settings_id"),
         "file_count": len([f for f in files if f.get("written")]),

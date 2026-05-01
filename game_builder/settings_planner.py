@@ -239,7 +239,7 @@ def infer_game_settings(project_root: str | Path | None, profile: str, command: 
             "slug": slug,
             "engine": "panda3d",
             "python_minimum": "3.10",
-            "template_version": "panda3d_playable_simulation_template.v3",
+            "template_version": "panda3d_playable_simulation_template.v4",
         },
         "style": {
             "art_style": art_style,
@@ -265,6 +265,9 @@ def infer_game_settings(project_root: str | Path | None, profile: str, command: 
             "speed": 12.0,
             "sprint_multiplier": 2.0,
             "jump_strength": 8.0,
+            "acceleration": 26.0,
+            "friction": 18.0,
+            "gravity": 24.0,
         },
         "simulation": {
             "mode": "playable_character_edit_test",

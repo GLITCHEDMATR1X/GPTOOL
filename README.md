@@ -1,4 +1,4 @@
-# GPT Game Generation Bridge v0.6.2-pass12
+# GPT Game Generation Bridge v0.6.3-pass13
 
 Private AI-facing validation harness for more disciplined game and app generation.
 
@@ -248,6 +248,23 @@ python main.py --screenshot-mode --route-proof --screenshot-path screenshots/sim
 ```
 
 This automatically moves the male tester, simulates a Tab swap, moves the female tester, drops visible route markers, writes scene-proof JSON, and captures one backup screenshot.
+
+## Pass 13 — Smoother playable controls
+
+Generated Panda3D simulation templates now use a stronger third-person test controller:
+
+```text
+WASD / Arrow keys  smoothed movement
+Shift              sprint
+Space              jump with gravity return
+Q/E or ←/→         rotate camera
+Mouse wheel        zoom camera in/out
+R                  reset camera
+Tab                swap male/female tester
+F12                backup screenshot
+```
+
+The generated proof JSON records the controller model, camera distance, active character, and playable character state so AI edits can be checked without relying only on visual inspection.
 
 ## Repository baseline
 
