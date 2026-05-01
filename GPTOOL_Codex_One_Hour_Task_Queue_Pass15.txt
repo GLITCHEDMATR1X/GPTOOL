@@ -1,0 +1,418 @@
+GPTOOL / Codex One-Hour Task Queue
+Repo: https://github.com/GLITCHEDMATR1X/GPTOOL
+Current baseline: main, v0.6.4-pass14
+Primary branch to create: pass15-crash-ci-proof
+
+Purpose:
+Use this as the working queue for a focused Codex desktop session. Do the tasks in order. Do not jump ahead. Stop and commit after each stable milestone.
+
+================================================================================
+STARTUP CHECKS
+================================================================================
+
+Run these first:
+
+    git status
+    git pull origin main
+    python -S bridge.py --version
+    python -S bridge.py package-audit . --json
+
+Expected version:
+
+    GPT Game Generation Bridge 0.6.4-pass14
+
+Then create the branch:
+
+    git checkout -b pass15-crash-ci-proof
+
+If the branch already exists:
+
+    git checkout pass15-crash-ci-proof
+    git pull origin main
+
+================================================================================
+HOUR PLAN
+================================================================================
+
+This is enough for a strong hour. Do not try to finish every future feature. Finish Pass 15 cleanly.
+
+Priority order:
+
+    1. Crash diagnostics in generated templates
+    2. Stress-proof mode
+    3. Desktop Panda3D route/stress screenshot test
+    4. CI proof upgrade
+    5. Docs/changelog/test notes
+    6. Commit and push branch
+    7. Optional PR
+
+================================================================================
+TASK 1 — VERSION + TEMPLATE VERSION BUMP
+================================================================================
+
+Files:
+    bridge.py
+    game_builder/settings_planner.py
+    game_builder/template_generator.py
+    README.md
+    RUN_ME_FIRST.md
+    RELEASE_NOTES.md if present
+
+Do:
+    - Change bridge version:
+        0.6.4-pass14 -> 0.6.5-pass15
+
+    - Change generated template version:
+        panda3d_playable_simulation_template.v5
+        ->
+        panda3d_playable_simulation_template.v6
+
+Test:
+    python -S bridge.py --version
+
+Commit only after Task 2 or Task 3, not yet unless needed.
+
+================================================================================
+TASK 2 — GENERATED CRASH DIAGNOSTICS
+================================================================================
+
+Edit:
+    game_builder/template_generator.py
+
+Goal:
+Every generated Panda3D project should write useful logs when it crashes, especially during screenshot/proof mode.
+
+Add generated file outputs:
+    logs/crash_latest.txt
+    logs/runtime_latest.json
+    logs/last_controls_state.json
+    logs/last_scene_state.json
+
+Add safe generated helpers:
+    _safe_vec3_list(value)
+    _write_json_safely(path, payload)
+    _runtime_state_snapshot()
+    _controls_state_snapshot()
+    _scene_state_snapshot()
+    _write_runtime_diagnostics(reason)
+    _write_crash_log(exc, reason="runtime")
+
+Crash log should include:
+    - timestamp
+    - reason
+    - exception type
+    - exception message
+    - traceback
+    - sys.argv
+    - cwd
+    - Python version
+    - Panda3D version if available
+    - settings path
+    - screenshot path from env
+    - proof path from env
+    - route-proof requested true/false
+    - stress-proof requested true/false
+    - active character ID/name if available
+    - character positions if available
+    - points if available
+    - camera distance/height/yaw if available
+    - current controls/keys state if available
+
+Important:
+    - Diagnostics helpers must never crash themselves.
+    - Use try/except inside every diagnostics writer.
+    - Do not hide exceptions during development.
+    - In screenshot/proof mode, write crash log and exit nonzero.
+    - In normal interactive mode, write crash log and print the path.
+
+Suggested wrapping strategy:
+    - Keep the generated app simple.
+    - Wrap the main GeneratedGame startup/run block with a small top-level guarded entry.
+    - If an exception happens before app exists, still write a basic crash log.
+    - If app exists, include app state.
+
+Acceptance:
+    - For a normal proof run, no crash log should be written.
+    - For a forced synthetic crash, crash_latest.txt should be written.
+
+================================================================================
+TASK 3 — STRESS-PROOF MODE
+================================================================================
+
+Edit:
+    game_builder/template_generator.py
+
+Add generated CLI flag:
+    --stress-proof
+
+It should work with:
+    python main.py --screenshot-mode --route-proof --stress-proof --screenshot-path screenshots/stress.png --proof-path reports/stress.json
+
+Stress proof should simulate:
+    - male move
+    - camera rotate
+    - sprint
+    - jump
+    - Tab swap
+    - female move
+    - wheel/zoom equivalent by direct method call
+    - camera reset equivalent by direct method call
+    - route markers
+    - proof JSON write
+    - screenshot capture
+
+Proof JSON schema:
+    gptool_simulation_proof.v2
+
+Add fields:
+    status
+    template_version
+    generated_at
+    controller_model
+    playable_character_count
+    active_character
+    tab_swap_tested
+    jump_tested
+    sprint_tested
+    camera_zoom_tested
+    camera_reset_tested
+    route_markers
+    points
+    screenshot_exists
+    crash_log_exists
+    diagnostics_files
+
+Acceptance:
+    - Stress proof exits cleanly.
+    - Proof JSON shows all tested flags true.
+    - Screenshot exists.
+    - crash_log_exists is false unless intentionally forced.
+
+================================================================================
+TASK 4 — LOCAL DESKTOP TEST
+================================================================================
+
+Generate fresh probe:
+
+    python -S bridge.py generate-game ./GeneratedProbe --profile panda3d --command "make a playable simulation with two testers, smoother controls, crash diagnostics, stress proof, and points only"
+
+Check settings:
+
+    python -S ./GeneratedProbe/main.py --settings-check
+
+Check generated syntax:
+
+    python -S - << "PY"
+    from pathlib import Path
+    import ast
+    p = Path("GeneratedProbe/main.py")
+    ast.parse(p.read_text(encoding="utf-8"), filename=str(p))
+    print("Generated main.py AST syntax PASS")
+    PY
+
+Run Panda3D proof on desktop:
+
+    python ./GeneratedProbe/main.py --screenshot-mode --route-proof --stress-proof --screenshot-path GeneratedProbe/screenshots/pass15_stress.png --proof-path GeneratedProbe/reports/pass15_stress.json
+
+Check:
+    - GeneratedProbe/screenshots/pass15_stress.png exists
+    - GeneratedProbe/reports/pass15_stress.json exists
+    - GeneratedProbe/logs/crash_latest.txt does not exist or clearly says no crash
+
+Do not commit GeneratedProbe.
+
+================================================================================
+TASK 5 — CI PROOF UPGRADE
+================================================================================
+
+Edit:
+    .github/workflows/ci.yml
+
+Keep the current lightweight smoke job.
+
+Add a new job:
+    panda3d-generated-proof
+
+Suggested job:
+    - runs-on: ubuntu-latest
+    - setup Python 3.13
+    - pip install -r requirements.txt
+    - pip install panda3d==1.10.16
+    - generate a fresh project
+    - run settings-check
+    - run:
+        python ./GeneratedCI/main.py --screenshot-mode --route-proof --stress-proof --screenshot-path GeneratedCI/screenshots/ci_stress.png --proof-path GeneratedCI/reports/ci_stress.json
+
+Artifact upload:
+    use actions/upload-artifact@v4
+
+Upload:
+    GeneratedCI/screenshots/*.png
+    GeneratedCI/reports/*.json
+    GeneratedCI/logs/*.txt
+    GeneratedCI/logs/*.json
+
+Important:
+    - If Linux offscreen fails because of display/driver constraints, do not fake it.
+    - Prefer making it work with Panda3D offscreen/p3tinydisplay settings.
+    - If it truly cannot work, mark that job continue-on-error and document why.
+    - The source/generator smoke job must remain strict.
+
+================================================================================
+TASK 6 — SOURCE TESTS
+================================================================================
+
+Run:
+
+    python -S bridge.py --version
+    python -S bridge.py package-audit . --json
+
+Run source AST:
+
+    python -S - << "PY"
+    from pathlib import Path
+    import ast
+    count = 0
+    for p in sorted(Path(".").rglob("*.py")):
+        if any(part in {".git", "__pycache__", ".pytest_cache", "GeneratedProbe", "GeneratedCI"} for part in p.parts):
+            continue
+        ast.parse(p.read_text(encoding="utf-8"), filename=str(p))
+        count += 1
+    print(f"AST syntax PASS: {count} Python files")
+    PY
+
+Run generated probe checks again after final cleanup.
+
+================================================================================
+TASK 7 — DOCS
+================================================================================
+
+Add:
+    docs/CRASH_DIAGNOSTICS_PASS.md
+    logs/CHANGELOG_PASS15.md
+    logs/TESTED_PASS15.md
+
+Update README:
+    Add section:
+        Pass 15 — Crash diagnostics and stress proof
+
+README section should mention:
+    - crash_latest.txt
+    - runtime_latest.json
+    - --stress-proof
+    - CI artifact proof
+
+Update RUN_ME_FIRST / RELEASE_NOTES if present.
+
+================================================================================
+TASK 8 — CLEANUP BEFORE COMMIT
+================================================================================
+
+Run:
+    git status
+
+Remove from source tree before commit:
+    GeneratedProbe/
+    GeneratedCI/
+    screenshots/
+    proof artifacts
+    __pycache__/
+    .pytest_cache/
+    temporary helper scripts
+    temporary one-off workflows unless they are the real CI workflow
+
+Verify .gitignore protects:
+    Generated*/
+    screenshots/
+    reports/*.json generated output, unless logs/changelog docs are intended
+    local runtimes
+    build/dist
+    release zips
+
+Run:
+    python -S bridge.py package-audit . --json
+
+================================================================================
+TASK 9 — COMMIT + PUSH
+================================================================================
+
+Commit:
+
+    git add -A
+    git commit -m "Apply GPTOOL Pass 15 crash diagnostics and stress proof"
+    git push -u origin pass15-crash-ci-proof
+
+If user wants direct main push, only do it after all tests pass. Preferred is PR.
+
+================================================================================
+TASK 10 — FINAL REPORT TO USER
+================================================================================
+
+Report exactly:
+
+    Version:
+        0.6.5-pass15
+
+    Branch:
+        pass15-crash-ci-proof
+
+    Commit:
+        <sha>
+
+    Changed files:
+        <list>
+
+    Tests run:
+        <exact commands>
+
+    Panda3D proof:
+        screenshot path
+        proof JSON path
+        crash log status
+
+    CI:
+        workflow updated yes/no
+        artifact upload yes/no
+        limitation if any
+
+    Known limitations:
+        honest list
+
+================================================================================
+OPTIONAL IF TIME REMAINS
+================================================================================
+
+Only after Pass 15 is clean.
+
+Optional A:
+    Add a small tests/test_generated_template_static.py that verifies the generated
+    main.py contains diagnostics helpers and --stress-proof support.
+
+Optional B:
+    Add a generated forced-crash CLI:
+        --force-crash-test
+    It should intentionally raise after diagnostics are initialized so crash logging
+    can be tested. Do not run in normal CI except as a controlled test if stable.
+
+Optional C:
+    Add a docs/LOCAL_PANDA3D_TESTING.md file for Windows desktop testing.
+
+================================================================================
+IF TIME RUNS LOW
+================================================================================
+
+Minimum acceptable hour result:
+    - version bump
+    - generated crash diagnostics
+    - stress-proof flag
+    - local generated settings/syntax tests
+    - docs/changelog/tested notes
+    - branch commit
+
+Leave CI proof upgrade for next pass only if necessary.
+
+Do not partially break CI just to say it was touched.
+
+================================================================================
+END
+================================================================================
