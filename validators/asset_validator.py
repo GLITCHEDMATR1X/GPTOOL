@@ -8,9 +8,20 @@ from typing import Any
 
 ASSET_EXTS = {".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif", ".wav", ".ogg", ".mp3", ".flac", ".glb", ".gltf", ".bam", ".egg", ".obj", ".mtl"}
 STRING_RE = re.compile(r'["\']([^"\']+\.[A-Za-z0-9]{2,5})["\']')
+RUNTIME_OUTPUT_TOKENS = ("screenshot", "backup", "proof", "crash_latest", "runtime_latest", "last_controls_state", "last_scene_state")
 
 def _extract_asset_strings(text: str) -> set[str]:
     return {m.group(1) for m in STRING_RE.finditer(text)}
+
+def _is_runtime_output_reference(asset_ref: str) -> bool:
+    normalized = asset_ref.replace("\\", "/").lower()
+    if "{" in normalized or "}" in normalized:
+        return True
+    parts = [part for part in normalized.split("/") if part]
+    if any(part in {"screenshots", "reports", "logs"} for part in parts[:-1]):
+        return True
+    name = Path(normalized).name
+    return any(token in name for token in RUNTIME_OUTPUT_TOKENS)
 
 def validate_assets(project_root: Path) -> dict[str, Any]:
     project_root = project_root.resolve()
@@ -28,6 +39,8 @@ def validate_assets(project_root: Path) -> dict[str, Any]:
             if ext not in ASSET_EXTS:
                 continue
             normalized = asset_ref.replace("\\", "/")
+            if _is_runtime_output_reference(normalized):
+                continue
             if normalized.startswith(("./", "../")):
                 target = (py_path.parent / normalized).resolve()
             else:
@@ -48,7 +61,8 @@ def validate_assets(project_root: Path) -> dict[str, Any]:
         "missing_assets": missing[:200],
         "notes": [
             "This validator only checks string-discoverable asset references in Python source.",
-            "Runtime-generated paths and non-Python asset manifests are not fully covered."
+            "Runtime-generated paths and non-Python asset manifests are not fully covered.",
+            "Known screenshot/proof/log output paths are ignored because they are produced at runtime."
         ],
     }
 

@@ -1,4 +1,4 @@
-# GPT Game Generation Bridge v0.6.5-pass15
+# GPT Game Generation Bridge v0.6.6-pass16
 
 Private AI-facing validation harness for more disciplined game and app generation.
 
@@ -294,6 +294,14 @@ python main.py --screenshot-mode --route-proof --stress-proof --screenshot-path 
 ```
 
 The stress proof writes `gptool_simulation_proof.v2`. CI now includes a Panda3D generated-proof job that uploads the generated screenshot, proof JSON, and diagnostics artifacts.
+
+## Pass 16 - Broader model import proof
+
+Human asset scans now skip GPTOOL generated proof/output folders when scanning a broad backup root, so import tests do not re-ingest their own copied models or export bundles.
+
+Generated playable simulation characters now try imported human Actor meshes from `assets/characters/humans/human_manifest.json` before falling back to procedural bodies. Scene proof JSON reports `actor_loaded` for each playable character.
+
+The asset validator ignores known runtime-generated screenshot/proof/log outputs, avoiding false blockers for filenames produced by screenshot and diagnostics modes.
 
 ## Repository baseline
 

@@ -1,5 +1,13 @@
 # Release Notes
 
+## v0.6.6-pass16 - Broader Model Import Proof
+
+- Human asset scanning skips GPTOOL generated proof/output folders during broad-root scans.
+- Generated playable simulation characters now use imported human Actor meshes when a human manifest is present.
+- Scene proof JSON reports whether each playable character loaded an imported actor.
+- Asset validation ignores known runtime-generated screenshot/proof/log outputs.
+- Validated a broad import of 10 rigged GLB models and 12 FBX animation clips from the local backup tree.
+
 ## v0.6.5-pass15 - Crash Diagnostics and Stress Proof
 
 - Generated Panda3D templates write crash and runtime diagnostics under `logs/`.

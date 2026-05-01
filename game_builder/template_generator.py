@@ -329,6 +329,7 @@ if _window_type_hint == "offscreen":
     loadPrcFileData("", "audio-library-name null")
 elif _window_type_hint == "none":
     loadPrcFileData("", "audio-library-name null")
+loadPrcFileData("", "audio-library-name null")
 loadPrcFileData("", "win-size 1280 720")
 loadPrcFileData("", "window-title GPTOOL Playable Simulation Mode")
 loadPrcFileData("", "framebuffer-multisample 1")
@@ -462,6 +463,12 @@ class GeneratedGame(ShowBase):
         if requested:
             for asset in assets:
                 if asset.get("id") == requested:
+                    return asset
+        gender = str(char.get("gender_profile") or "").lower()
+        if gender in {"male", "female"}:
+            for asset in assets:
+                text = " ".join(str(asset.get(key) or "") for key in ("id", "label", "source_path", "relative_path")).lower()
+                if gender in text:
                     return asset
         return assets[index % len(assets)]
 
@@ -716,11 +723,21 @@ class GeneratedGame(ShowBase):
         for idx, char in enumerate(sim_chars[:2]):
             gender = str(char.get("gender_profile") or ("male" if idx == 0 else "female")).lower()
             color = palette.get(gender, [0.0, 0.85, 1.0, 1.0])
-            node = self._make_procedural_humanoid(str(char.get("id") or f"playable_{idx+1}"), str(char.get("name") or f"Simulation Tester {idx+1}"), gender, color)
+            char_id = str(char.get("id") or f"playable_{idx+1}")
+            name = str(char.get("name") or f"Simulation Tester {idx+1}")
+            actor = self._load_human_actor(char, idx)
+            if actor is not None:
+                node = self.render.attachNewNode(char_id)
+                actor.reparentTo(node)
+                self._fit_character_model(actor, target_height=3.25 if gender == "male" else 3.05)
+                self._make_marker_ring(node, f"{char_id}_ring", color)
+                self._add_label(node, name, pos=(0, 0, 4.3 if gender == "male" else 4.05), scale=0.43, color=color)
+            else:
+                node = self._make_procedural_humanoid(char_id, name, gender, color)
             spawn = char.get("spawn") or [idx * 4 - 2, 2, 0.05]
             node.setPos(float(spawn[0]), float(spawn[1]), float(spawn[2]))
             entry = dict(char)
-            entry.update({"node": node, "color": color, "gender_profile": gender, "actor": None})
+            entry.update({"node": node, "color": color, "gender_profile": gender, "actor": actor})
             self.simulation_characters.append(entry)
             if char.get("active_by_default"):
                 self.active_character_index = idx
@@ -1137,6 +1154,8 @@ class GeneratedGame(ShowBase):
                     "name": item.get("name"),
                     "gender_profile": item.get("gender_profile"),
                     "active": idx == self.active_character_index,
+                    "asset_manifest_id": item.get("asset_manifest_id"),
+                    "actor_loaded": bool(item.get("actor")),
                     "position": [round(float(v), 3) for v in item["node"].getPos()],
                 }
                 for idx, item in enumerate(self.simulation_characters)

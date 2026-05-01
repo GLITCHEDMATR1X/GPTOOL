@@ -67,6 +67,7 @@ EXCLUDED_PARTS = {
     "site-packages",
 }
 DEFAULT_EXPORT_FORMATS = ("glb", "obj", "fbx")
+GPTOOL_GENERATED_PREFIXES = ("generated",)
 
 
 def _now_iso() -> str:
@@ -101,6 +102,16 @@ def _is_under(path: Path, root: Path) -> bool:
         return True
     except Exception:
         return False
+
+
+def _is_gptool_generated_output(rel_parts: tuple[str, ...]) -> bool:
+    lower_parts = [part.lower() for part in rel_parts]
+    in_gptool_tree = any(part.startswith("gptool") for part in lower_parts)
+    if not in_gptool_tree:
+        return False
+    if "examples" in lower_parts:
+        return True
+    return any(part.startswith(GPTOOL_GENERATED_PREFIXES) for part in lower_parts)
 
 
 def _read_gltf_json(path: Path) -> dict[str, Any] | None:
@@ -232,8 +243,10 @@ def _iter_asset_files(search_root: Path, max_files: int) -> list[Path]:
             rel_parts = path.relative_to(search_root).parts
         except Exception:
             rel_parts = path.parts
+        if _is_gptool_generated_output(tuple(str(part) for part in rel_parts)):
+            continue
         lower_parts = [part.lower() for part in rel_parts]
-        if "gptool" in lower_parts and "examples" in lower_parts:
+        if any(part.startswith(GPTOOL_GENERATED_PREFIXES) and part not in {"generated"} for part in lower_parts):
             continue
         if any(part in EXCLUDED_PARTS for part in rel_parts):
             continue
