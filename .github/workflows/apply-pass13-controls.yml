@@ -1,0 +1,53 @@
+name: Apply GPTOOL Pass 13 Controls
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - tools/apply_pass13_controls.py
+      - .github/workflows/apply-pass13-controls.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply-pass13:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Apply Pass 13 controls patch
+        run: python tools/apply_pass13_controls.py
+
+      - name: Validate patched source
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import ast
+          count = 0
+          for p in sorted(Path('.').rglob('*.py')):
+              if any(part in {'.git', '__pycache__'} for part in p.parts):
+                  continue
+              ast.parse(p.read_text(encoding='utf-8'), filename=str(p))
+              count += 1
+          print(f'AST syntax PASS: {count} Python files')
+          PY
+          python bridge.py --version
+          python bridge.py generate-game ./GeneratedPass13CI --profile panda3d --command "make a playable simulation with two testers and smoother controls"
+          python ./GeneratedPass13CI/main.py --settings-check
+
+      - name: Commit Pass 13 source changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No Pass 13 changes to commit."
+          else
+            git commit -m "Apply GPTOOL Pass 13 playable controls"
+            git push
+          fi
