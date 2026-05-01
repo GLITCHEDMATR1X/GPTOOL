@@ -1,4 +1,4 @@
-# HoloVerse Fauna Preview Workflow — Pass 17/18
+# HoloVerse Fauna Preview Workflow — Pass 17/18/19
 
 This workflow improves HoloVerse fauna with an assets-first loop instead of vibe-coding directly into the main world.
 
@@ -59,6 +59,23 @@ Visual proof when Panda3D is installed:
 python main.py --screenshot-mode --screenshot-path screenshots/fauna_preview.png --proof-path reports/fauna_preview_scene_proof.json
 ```
 
+## Demo sheet fallback
+
+Pass 19 adds a dependency-free SVG demo sheet so the fauna direction can be shown even before a real Panda3D render is available.
+
+```bash
+python tools/holoverse_fauna_demo_sheet.py ./previews/holoverse_fauna_pass17
+```
+
+This writes:
+
+```text
+reports/fauna_demo_sheet.svg
+reports/fauna_demo_sheet_result.json
+```
+
+The SVG sheet is only a visual fallback. Panda3D screenshot proof is still required before promotion into HoloVerse.
+
 ## Promotion gate
 
 Pass 18 adds a separate promotion gate. It reads a preview manifest, writes a promotion plan, and only writes an approved target manifest when `--apply` is passed.
@@ -100,6 +117,7 @@ If `--target-manifest` is not supplied, the approved manifest is written inside 
 
 - The generated preview is disposable until approved.
 - The preview generator does not modify main HoloVerse files.
+- The demo sheet does not count as Panda3D render proof.
 - The promotion gate is dry-run by default.
 - `--apply` is required before any target manifest is written.
 - Main HoloVerse protected routes remain: Urban/Sable, Metropolis/Archivist, points UI, ESC exit, and screenshots.
@@ -108,4 +126,4 @@ If `--target-manifest` is not supplied, the approved manifest is written inside 
 
 ## Next upgrade
 
-Wire these into `bridge.py` as first-class commands named `fauna-preview` and `promote-fauna-preview`, then add regression checks against the real HoloVerse project before promotion can write into a main project path.
+Wire these into `bridge.py` as first-class commands named `fauna-preview`, `fauna-demo-sheet`, and `promote-fauna-preview`, then add regression checks against the real HoloVerse project before promotion can write into a main project path.
