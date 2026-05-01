@@ -239,7 +239,7 @@ def infer_game_settings(project_root: str | Path | None, profile: str, command: 
             "slug": slug,
             "engine": "panda3d",
             "python_minimum": "3.10",
-            "template_version": "panda3d_playable_simulation_template.v5",
+            "template_version": "panda3d_playable_simulation_template.v6",
         },
         "style": {
             "art_style": art_style,

@@ -1,4 +1,4 @@
-# GPT Game Generation Bridge v0.6.4-pass14
+# GPT Game Generation Bridge v0.6.6-pass16
 
 Private AI-facing validation harness for more disciplined game and app generation.
 
@@ -276,7 +276,33 @@ Retest command:
 python main.py --screenshot-mode --route-proof --screenshot-path screenshots/route.png --proof-path reports/route.json
 ```
 
+## Pass 15 - Crash diagnostics and stress proof
+
+Generated Panda3D templates now write crash and runtime diagnostics without hiding the original error:
+
+```text
+logs/crash_latest.txt
+logs/runtime_latest.json
+logs/last_controls_state.json
+logs/last_scene_state.json
+```
+
+Use stress proof to exercise movement, sprint, jump, Tab swapping, camera zoom/reset, route markers, proof JSON, and screenshot capture in one deterministic desktop run:
+
+```bash
+python main.py --screenshot-mode --route-proof --stress-proof --screenshot-path screenshots/stress.png --proof-path reports/stress.json
+```
+
+The stress proof writes `gptool_simulation_proof.v2`. CI now includes a Panda3D generated-proof job that uploads the generated screenshot, proof JSON, and diagnostics artifacts.
+
+## Pass 16 - Broader model import proof
+
+Human asset scans now skip GPTOOL generated proof/output folders when scanning a broad backup root, so import tests do not re-ingest their own copied models or export bundles.
+
+Generated playable simulation characters now try imported human Actor meshes from `assets/characters/humans/human_manifest.json` before falling back to procedural bodies. Scene proof JSON reports `actor_loaded` for each playable character.
+
+The asset validator ignores known runtime-generated screenshot/proof/log outputs, avoiding false blockers for filenames produced by screenshot and diagnostics modes.
+
 ## Repository baseline
 
 This tree is source-control-ready. Generated worlds, screenshots, release zips, local Panda3D runtimes, and build outputs are intentionally ignored. Use GitHub Releases for proof bundles and zipped pass deliveries. See `docs/REPOSITORY_SETUP.md` and `docs/GITHUB_RELEASE_GUIDE.md`.
-

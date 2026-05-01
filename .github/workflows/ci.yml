@@ -63,3 +63,70 @@ jobs:
           ast.parse(p.read_text(encoding='utf-8'), filename=str(p))
           print('Generated main.py AST syntax PASS')
           PY
+
+  panda3d-generated-proof:
+    name: Panda3D generated stress proof
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install Panda3D proof dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install panda3d==1.10.16
+
+      - name: Generate CI proof project
+        run: |
+          python bridge.py generate-game ./GeneratedCI --profile panda3d --command "make a playable simulation with two testers, smoother controls, crash diagnostics, stress proof, and points only"
+          python ./GeneratedCI/main.py --settings-check
+
+      - name: Run generated stress proof
+        run: |
+          python ./GeneratedCI/main.py --screenshot-mode --route-proof --stress-proof --window-type offscreen --screenshot-path GeneratedCI/screenshots/ci_stress.png --proof-path GeneratedCI/reports/ci_stress.json
+
+      - name: Validate stress proof artifacts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          proof = Path('GeneratedCI/reports/ci_stress.json')
+          screenshot = Path('GeneratedCI/screenshots/ci_stress.png')
+          data = json.loads(proof.read_text(encoding='utf-8'))
+          required_true = [
+              'tab_swap_tested',
+              'jump_tested',
+              'sprint_tested',
+              'camera_zoom_tested',
+              'camera_reset_tested',
+              'screenshot_exists',
+          ]
+          missing = [key for key in required_true if not data.get(key)]
+          if data.get('schema_version') != 'gptool_simulation_proof.v2':
+              raise SystemExit(f"Unexpected proof schema: {data.get('schema_version')}")
+          if data.get('crash_log_exists'):
+              raise SystemExit('Unexpected crash log during stress proof')
+          if missing:
+              raise SystemExit(f"Stress proof flags missing: {missing}")
+          if not screenshot.exists():
+              raise SystemExit(f"Missing screenshot: {screenshot}")
+          print('Generated CI stress proof PASS')
+          PY
+
+      - name: Upload generated proof artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: panda3d-generated-stress-proof
+          path: |
+            GeneratedCI/screenshots/*.png
+            GeneratedCI/reports/*.json
+            GeneratedCI/logs/*.txt
+            GeneratedCI/logs/*.json
+          if-no-files-found: ignore

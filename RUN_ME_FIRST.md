@@ -64,6 +64,22 @@ Use honest non-render fallback:
 python bridge.py full-pass /path/to/project --profile panda3d --runtime mock --smoke
 ```
 
+Generated project stress proof:
+
+```bash
+python main.py --screenshot-mode --route-proof --stress-proof --screenshot-path screenshots/stress.png --proof-path reports/stress.json
+```
+
+Generated templates also write crash diagnostics under `logs/crash_latest.txt`, `logs/runtime_latest.json`, `logs/last_controls_state.json`, and `logs/last_scene_state.json`.
+
+Broader imported-model proof:
+
+```bash
+python bridge.py scan-human-assets .. --rigged-only --prefer female male survivor character idle
+python bridge.py import-human-assets ./GeneratedModelImportPass16 --search-root .. --rigged-only --limit 10 --animation-limit 16 --export-formats glb obj fbx --clean --force
+python ./GeneratedModelImportPass16/main.py --screenshot-mode --route-proof --stress-proof --window-type default --screenshot-path GeneratedModelImportPass16/screenshots/import_stress.png --proof-path GeneratedModelImportPass16/reports/import_stress.json
+```
+
 ## 4. Read the report
 
 The pass writes:
