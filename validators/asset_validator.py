@@ -17,6 +17,7 @@ RUNTIME_OUTPUT_NAMES = {
     "scene.metadata.json",
     "scene.obj",
     "placeholder_loop.wav",
+    "panda_xr_vr_visual_proof.png",
 }
 
 def _extract_asset_strings(text: str) -> set[str]:

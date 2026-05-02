@@ -13,15 +13,26 @@ This extension brings the successful Panda XR builder features into GPTOOL as an
 - Recolor and shade objects through serializable materials that export into glTF/GLB.
 - Program runtime behavior through a safe dataflow model instead of arbitrary Python.
 - Keep VR performance predictable with stroke-point budgets, radial segment limits, and performance summaries.
+- Place editor panels as world-locked AR surfaces so tools, grid settings, and materials can be moved in the scene.
+- Maintain a persistent 3D grid with cell-size, dimensions, proximity radius, major lines, snap state, and fill-cell metadata.
 
 ## Proof Command
 
 ```powershell
 python bridge.py panda-xr-proof --output reports/panda_xr_vr_builder_proof --json
 python bridge.py panda-xr-quality reports/panda_xr_vr_builder_proof/scene.manifest.json --json
+python bridge.py panda-xr-visual-proof --output reports/panda_xr_vr_visual_proof --width 1600 --height 900 --seconds 3 --json
 ```
 
 The proof creates builder primitives, simulates VR edits, saves/reloads the scene, exports files, validates scene quality, validates export integrity, and writes `proof_result.json`.
+
+`panda-xr-visual-proof` runs a desktop-safe VR simulation, draws a new 3D spiral stroke object from simulated hand points, renders a few seconds at 16:9 with Panda3D offscreen when available, and writes `panda_xr_vr_visual_proof.png` plus `visual_proof_report.json`. It falls back to a deterministic software projection if offscreen rendering is unavailable.
+
+## AR Panels And 3D Grid
+
+The scene manifest now stores `editor_panels` and `grid` at the scene level. Panels are regular world-placed editor surfaces with a transform, size, opacity, content payload, and controls list. The grid stores a persistent lattice origin, cell size, dimensions, proximity radius, major-line interval, snap state, and render strategy.
+
+Snapped grid objects store `metadata.grid` with their cell, filled cell volume, snap group, and batch key. This lets the editor create voxel/pixel-art style objects or room blocks that fill the current grid gap exactly while still giving runtime exporters enough metadata to batch connected snapped objects instead of treating every filled cell as a separate expensive live object.
 
 ## Edit Operations
 
@@ -63,6 +74,8 @@ The proof writes a `behavior_preview_t1` block so CI can validate deterministic 
 - socket connection references
 - path node links and behavior targets
 - material color/shade data
+- editor panel ids, transforms, sizes, and opacity
+- persistent 3D grid settings, visible line budget, snapped cell placement, and occupied-cell budget
 - stroke point/radial segment performance budgets
 - mesh generation, finite vertices, and face index ranges
 - operation history sequencing

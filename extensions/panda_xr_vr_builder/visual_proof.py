@@ -9,7 +9,7 @@ from typing import Any
 
 from PIL import Image, ImageDraw
 
-from .core import BuilderObject, BuilderScene, Transform, _as_color, _triangulate_faces, create_vr_editing_proof_scene
+from .core import BuilderObject, BuilderScene, EditorPanel, Transform, _as_color, _triangulate_faces, create_vr_editing_proof_scene
 
 
 Vec3 = tuple[float, float, float]
@@ -89,6 +89,46 @@ def _object_color(obj: BuilderObject) -> tuple[int, int, int, int]:
     material = obj.metadata.get("material") or {}
     color = _as_color(material.get("base_color"), (0.75, 0.78, 0.82, 1.0))
     return tuple(int(max(0, min(255, round(value * 255)))) for value in color)  # type: ignore[return-value]
+
+
+def _grid_lines(scene: BuilderScene) -> list[tuple[Vec3, Vec3, bool]]:
+    grid = scene.grid
+    if not grid.enabled:
+        return []
+    x_count, y_count, z_count = grid.dimensions
+    sx, sy, sz = grid.origin
+    cell = grid.cell_size
+    max_x = sx + x_count * cell
+    max_y = sy + y_count * cell
+    max_z = sz + z_count * cell
+    lines: list[tuple[Vec3, Vec3, bool]] = []
+    for y in range(y_count + 1):
+        for z in range(z_count + 1):
+            major = y % grid.major_every == 0 or z % grid.major_every == 0
+            yy, zz = sy + y * cell, sz + z * cell
+            lines.append(((sx, yy, zz), (max_x, yy, zz), major))
+    for x in range(x_count + 1):
+        for z in range(z_count + 1):
+            major = x % grid.major_every == 0 or z % grid.major_every == 0
+            xx, zz = sx + x * cell, sz + z * cell
+            lines.append(((xx, sy, zz), (xx, max_y, zz), major))
+    for x in range(x_count + 1):
+        for y in range(y_count + 1):
+            major = x % grid.major_every == 0 or y % grid.major_every == 0
+            xx, yy = sx + x * cell, sy + y * cell
+            lines.append(((xx, yy, sz), (xx, yy, max_z), major))
+    return lines
+
+
+def _panel_corners(panel: EditorPanel) -> list[Vec3]:
+    px, py, pz = panel.transform.position
+    half_w, half_h = panel.size[0] / 2.0, panel.size[1] / 2.0
+    return [
+        (px - half_w, py, pz - half_h),
+        (px + half_w, py, pz - half_h),
+        (px + half_w, py, pz + half_h),
+        (px - half_w, py, pz + half_h),
+    ]
 
 
 def _image_metrics(path: Path, background: tuple[int, int, int] = GRAY_BG) -> dict[str, Any]:
@@ -174,6 +214,14 @@ def _software_render(scene: BuilderScene, screenshot_path: Path, width: int, hei
     draw.rectangle([0, int(height * 0.68), width, height], fill=(108, 110, 112, 255))
     draw.line([(0, int(height * 0.68)), (width, int(height * 0.68))], fill=(165, 168, 170, 255), width=2)
 
+    grid_color = tuple(int(value * 255) for value in scene.grid.color)
+    for start, end, major in _grid_lines(scene):
+        a = _project(start, width, height)
+        b = _project(end, width, height)
+        if a[2] > 0.11 and b[2] > 0.11:
+            alpha = int((0.18 if not major else 0.42) * 255)
+            draw.line([(a[0], a[1]), (b[0], b[1])], fill=(grid_color[0], grid_color[1], grid_color[2], alpha), width=2 if major else 1)
+
     triangles: list[tuple[float, list[tuple[int, int]], tuple[int, int, int, int]]] = []
     for obj in scene.objects:
         mesh = obj.world_mesh()
@@ -201,6 +249,13 @@ def _software_render(scene: BuilderScene, screenshot_path: Path, width: int, hei
         line = [(x, y) for x, y, depth in projected if depth > 0.11]
         if len(line) >= 2:
             draw.line(line, fill=_object_color(obj), width=max(4, int(width / 260)))
+
+    for panel in scene.editor_panels:
+        corners = [_project(point, width, height) for point in _panel_corners(panel)]
+        if all(point[2] > 0.11 for point in corners):
+            poly = [(point[0], point[1]) for point in corners]
+            draw.polygon(poly, fill=(24, 32, 38, int(panel.opacity * 210)), outline=(220, 235, 240, 220))
+            draw.text((poly[0][0] + 8, poly[0][1] + 8), panel.label, fill=(235, 245, 248, 235))
 
     screenshot_path.parent.mkdir(parents=True, exist_ok=True)
     image.save(screenshot_path)
@@ -235,9 +290,45 @@ def _build_panda_geom(obj: BuilderObject):
     return node
 
 
+def _build_panel_geom(panel: EditorPanel):
+    from panda3d.core import Geom, GeomNode, GeomTriangles, GeomVertexData, GeomVertexFormat, GeomVertexWriter
+
+    vertex_data = GeomVertexData(panel.id, GeomVertexFormat.getV3c4(), Geom.UHStatic)
+    vertex = GeomVertexWriter(vertex_data, "vertex")
+    color = GeomVertexWriter(vertex_data, "color")
+    fill = (0.08, 0.11, 0.13, max(0.2, min(0.95, panel.opacity)))
+    for corner in _panel_corners(panel):
+        vertex.addData3(*corner)
+        color.addData4(*fill)
+    tris = GeomTriangles(Geom.UHStatic)
+    tris.addVertices(0, 1, 2)
+    tris.addVertices(0, 2, 3)
+    geom = Geom(vertex_data)
+    geom.addPrimitive(tris)
+    node = GeomNode(panel.id)
+    node.addGeom(geom)
+    return node
+
+
+def _attach_grid_lines(parent, scene: BuilderScene) -> None:
+    from panda3d.core import LineSegs, TransparencyAttrib
+
+    segs = LineSegs("panda-xr-3d-grid")
+    color = scene.grid.color
+    for start, end, major in _grid_lines(scene):
+        alpha = scene.grid.opacity * (1.0 if major else 0.45)
+        segs.setThickness(1.7 if major else 0.75)
+        segs.setColor(color[0], color[1], color[2], alpha)
+        segs.moveTo(*start)
+        segs.drawTo(*end)
+    grid_np = parent.attach_new_node(segs.create())
+    grid_np.set_transparency(TransparencyAttrib.MAlpha)
+    grid_np.set_light_off(1)
+
+
 def _panda3d_render(scene: BuilderScene, screenshot_path: Path, width: int, height: int, seconds: float) -> dict[str, Any]:
     from direct.showbase.ShowBase import ShowBase
-    from panda3d.core import AmbientLight, AntialiasAttrib, DirectionalLight, Filename, PerspectiveLens, Vec3, Vec4, load_prc_file_data
+    from panda3d.core import AmbientLight, AntialiasAttrib, DirectionalLight, Filename, PerspectiveLens, TextNode, TransparencyAttrib, Vec3, Vec4, load_prc_file_data
 
     load_prc_file_data(
         "panda-xr-visual-proof",
@@ -274,11 +365,32 @@ def _panda3d_render(scene: BuilderScene, screenshot_path: Path, width: int, heig
         base.render.set_antialias(AntialiasAttrib.MAuto)
 
         root = base.render.attach_new_node("panda-xr-vr-simulation-scene")
+        _attach_grid_lines(root, scene)
         for obj in scene.objects:
             np = root.attach_new_node(_build_panda_geom(obj))
             np.set_two_sided(True)
             if obj.kind == "stroke":
                 np.set_light_off(1)
+        for panel in scene.editor_panels:
+            panel_np = root.attach_new_node(_build_panel_geom(panel))
+            panel_np.set_transparency(TransparencyAttrib.MAlpha)
+            panel_np.set_light_off(1)
+            panel_np.set_two_sided(True)
+            panel_np.set_depth_test(False)
+            panel_np.set_depth_write(False)
+            panel_np.set_bin("fixed", 20)
+            label = TextNode(f"{panel.id}_label")
+            label.setText(panel.label)
+            label.setTextColor(0.9, 0.97, 1.0, 0.95)
+            label.setAlign(TextNode.ALeft)
+            label_np = root.attach_new_node(label)
+            label_np.set_pos(panel.transform.position[0] - panel.size[0] * 0.45, panel.transform.position[1] - 0.01, panel.transform.position[2] + panel.size[1] * 0.22)
+            label_np.set_scale(0.09)
+            label_np.set_hpr(0.0, 0.0, 0.0)
+            label_np.set_billboard_point_eye()
+            label_np.set_depth_test(False)
+            label_np.set_depth_write(False)
+            label_np.set_bin("fixed", 21)
 
         frames = max(1, int(round(seconds * 60.0)))
         start = time.monotonic()
@@ -351,7 +463,10 @@ def run_vr_visual_proof(
         "drawn_object": DRAWN_OBJECT_ID,
         "drawn_point_count": len(_visual_points()),
         "object_count": len(scene.objects),
+        "editor_panel_count": len(scene.editor_panels),
         "operation_count": len(scene.operation_history),
+        "grid": scene.grid.to_dict(),
+        "grid_occupancy": scene.grid_occupancy_summary(),
         "scene_quality": scene.validate_scene(),
         "image_metrics": image_metrics,
         "outputs": {

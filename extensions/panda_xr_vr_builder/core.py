@@ -9,8 +9,12 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Iterable
 
-SCHEMA_VERSION = "gptool-panda-xr-vr-builder-scene-v2"
-SUPPORTED_SCHEMAS = {"gptool-panda-xr-vr-builder-scene-v1", SCHEMA_VERSION}
+SCHEMA_VERSION = "gptool-panda-xr-vr-builder-scene-v3"
+SUPPORTED_SCHEMAS = {
+    "gptool-panda-xr-vr-builder-scene-v1",
+    "gptool-panda-xr-vr-builder-scene-v2",
+    SCHEMA_VERSION,
+}
 ALLOWED_BEHAVIOR_TYPES = {"spin", "bob", "pulse_color", "follow_path", "orbit"}
 ALLOWED_MATERIAL_SHADES = {"matte", "satin", "gloss", "emissive", "unlit"}
 Vec3 = tuple[float, float, float]
@@ -70,6 +74,13 @@ def _as_vec3(value: Iterable[float], default: Vec3 = (0.0, 0.0, 0.0)) -> Vec3:
     while len(items) < 3:
         items.append(0.0)
     return (_r(items[0]), _r(items[1]), _r(items[2]))
+
+
+def _as_int3(value: Iterable[int] | Iterable[float] | None, default: tuple[int, int, int] = (1, 1, 1)) -> tuple[int, int, int]:
+    items = list(value) if value is not None else list(default)
+    while len(items) < 3:
+        items.append(1)
+    return (max(1, int(items[0])), max(1, int(items[1])), max(1, int(items[2])))
 
 
 def _write_text_atomic(path: Path, text: str) -> None:
@@ -208,6 +219,126 @@ class Transform:
 
 
 @dataclass
+class EditorPanel:
+    id: str
+    label: str
+    transform: Transform = field(default_factory=Transform)
+    size: tuple[float, float] = (0.62, 0.38)
+    opacity: float = 0.86
+    pinned: bool = True
+    content: dict[str, Any] = field(default_factory=dict)
+    controls: list[dict[str, Any]] = field(default_factory=list)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "id": self.id,
+            "label": self.label,
+            "transform": asdict(self.transform),
+            "size": [_r(self.size[0]), _r(self.size[1])],
+            "opacity": _r(max(0.0, min(1.0, self.opacity))),
+            "pinned": bool(self.pinned),
+            "content": self.content,
+            "controls": self.controls,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "EditorPanel":
+        size = list(data.get("size", (0.62, 0.38)))
+        while len(size) < 2:
+            size.append(0.38)
+        return cls(
+            id=str(data["id"]),
+            label=str(data.get("label", data["id"])),
+            transform=Transform.from_dict(data.get("transform", {})),
+            size=(_r(size[0]), _r(size[1])),
+            opacity=float(data.get("opacity", 0.86)),
+            pinned=bool(data.get("pinned", True)),
+            content=dict(data.get("content", {})),
+            controls=list(data.get("controls", [])),
+        )
+
+
+@dataclass
+class Grid3DSettings:
+    id: str = "main_grid"
+    enabled: bool = True
+    origin: Vec3 = (-3.0, -2.0, 0.0)
+    cell_size: float = 0.25
+    dimensions: tuple[int, int, int] = (24, 16, 10)
+    proximity_radius: float = 4.0
+    major_every: int = 4
+    opacity: float = 0.28
+    snap_enabled: bool = True
+    fill_mode: str = "cell_volume"
+    render_strategy: str = "proximity_chunked_lines"
+    color: tuple[float, float, float, float] = (0.42, 0.72, 1.0, 0.32)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "id": self.id,
+            "enabled": bool(self.enabled),
+            "origin": list(self.origin),
+            "cell_size": _r(self.cell_size),
+            "dimensions": list(self.dimensions),
+            "proximity_radius": _r(self.proximity_radius),
+            "major_every": max(1, int(self.major_every)),
+            "opacity": _r(max(0.0, min(1.0, self.opacity))),
+            "snap_enabled": bool(self.snap_enabled),
+            "fill_mode": self.fill_mode,
+            "render_strategy": self.render_strategy,
+            "color": list(_as_color(self.color)),
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any] | None) -> "Grid3DSettings":
+        data = dict(data or {})
+        return cls(
+            id=str(data.get("id", "main_grid")),
+            enabled=bool(data.get("enabled", True)),
+            origin=_as_vec3(data.get("origin", (-3.0, -2.0, 0.0))),
+            cell_size=max(0.01, float(data.get("cell_size", 0.25))),
+            dimensions=_as_int3(data.get("dimensions", (24, 16, 10)), (24, 16, 10)),
+            proximity_radius=max(0.25, float(data.get("proximity_radius", 4.0))),
+            major_every=max(1, int(data.get("major_every", 4))),
+            opacity=max(0.0, min(1.0, float(data.get("opacity", 0.28)))),
+            snap_enabled=bool(data.get("snap_enabled", True)),
+            fill_mode=str(data.get("fill_mode", "cell_volume")),
+            render_strategy=str(data.get("render_strategy", "proximity_chunked_lines")),
+            color=_as_color(data.get("color"), (0.42, 0.72, 1.0, 0.32)),
+        )
+
+    def snap_position(self, position: Vec3) -> Vec3:
+        return tuple(
+            _r(self.origin[index] + round((position[index] - self.origin[index]) / self.cell_size) * self.cell_size)
+            for index in range(3)
+        )  # type: ignore[return-value]
+
+    def cell_min(self, cell: tuple[int, int, int]) -> Vec3:
+        return (
+            _r(self.origin[0] + cell[0] * self.cell_size),
+            _r(self.origin[1] + cell[1] * self.cell_size),
+            _r(self.origin[2] + cell[2] * self.cell_size),
+        )
+
+    def cell_center(self, cell: tuple[int, int, int], fill: tuple[int, int, int] = (1, 1, 1)) -> Vec3:
+        return (
+            _r(self.origin[0] + (cell[0] + fill[0] / 2.0) * self.cell_size),
+            _r(self.origin[1] + (cell[1] + fill[1] / 2.0) * self.cell_size),
+            _r(self.origin[2] + (cell[2] + fill[2] / 2.0) * self.cell_size),
+        )
+
+    def nearest_cell(self, position: Vec3) -> tuple[int, int, int]:
+        return tuple(
+            int(math.floor((position[index] - self.origin[index]) / self.cell_size))
+            for index in range(3)
+        )  # type: ignore[return-value]
+
+    def line_count(self) -> int:
+        x, y, z = self.dimensions
+        return (y + 1) * (z + 1) + (x + 1) * (z + 1) + (x + 1) * (y + 1)
+
+
+@dataclass
 class BuilderObject:
     id: str
     kind: str
@@ -306,7 +437,11 @@ class BuilderScene:
         "max_stroke_radial_segments": 8,
         "target_frame_rate": 90,
         "recommended_draw_call_groups": 48,
+        "max_grid_visible_lines": 2400,
+        "max_grid_occupied_cells": 4096,
     })
+    editor_panels: list[EditorPanel] = field(default_factory=list)
+    grid: Grid3DSettings = field(default_factory=Grid3DSettings)
     metadata: dict[str, Any] = field(default_factory=dict)
     units: str = "meters"
 
@@ -325,6 +460,144 @@ class BuilderScene:
         self.objects.append(obj)
         self.record("create_object", object=obj.id, kind=obj.kind)
         return obj
+
+    def panel_by_id(self, panel_id: str) -> EditorPanel:
+        for panel in self.editor_panels:
+            if panel.id == panel_id:
+                return panel
+        raise KeyError(f"No Panda XR editor panel named {panel_id!r}")
+
+    def add_editor_panel(
+        self,
+        panel_id: str,
+        label: str,
+        position: Vec3,
+        rotation: Vec3 = (0.0, 0.0, 0.0),
+        size: tuple[float, float] = (0.62, 0.38),
+        *,
+        content: dict[str, Any] | None = None,
+        controls: list[dict[str, Any]] | None = None,
+        opacity: float = 0.86,
+        pinned: bool = True,
+    ) -> EditorPanel:
+        if any(panel.id == panel_id for panel in self.editor_panels):
+            raise ValueError(f"Duplicate Panda XR editor panel id: {panel_id}")
+        panel = EditorPanel(
+            panel_id,
+            label,
+            Transform(position=_as_vec3(position), rotation=_as_vec3(rotation), scale=(1.0, 1.0, 1.0)),
+            size=(_r(size[0]), _r(size[1])),
+            opacity=max(0.0, min(1.0, opacity)),
+            pinned=pinned,
+            content=dict(content or {}),
+            controls=list(controls or []),
+        )
+        self.editor_panels.append(panel)
+        self.record("add_editor_panel", panel=panel_id, position=panel.transform.position, size=panel.size)
+        return panel
+
+    def move_editor_panel(self, panel_id: str, position: Vec3, rotation: Vec3 | None = None, smoothing: float = 1.0) -> None:
+        panel = self.panel_by_id(panel_id)
+        amount = max(0.0, min(1.0, smoothing))
+        panel.transform.position = _vlerp(panel.transform.position, _as_vec3(position), amount)
+        if rotation is not None:
+            panel.transform.rotation = _vlerp(panel.transform.rotation, _as_vec3(rotation), amount)
+        self.record("move_editor_panel", panel=panel_id, position=panel.transform.position, rotation=panel.transform.rotation, smoothing=amount)
+
+    def configure_grid_3d(
+        self,
+        *,
+        origin: Vec3 | None = None,
+        cell_size: float | None = None,
+        dimensions: tuple[int, int, int] | None = None,
+        proximity_radius: float | None = None,
+        major_every: int | None = None,
+        opacity: float | None = None,
+        snap_enabled: bool | None = None,
+    ) -> None:
+        current = self.grid
+        self.grid = Grid3DSettings(
+            id=current.id,
+            enabled=current.enabled,
+            origin=_as_vec3(origin, current.origin) if origin is not None else current.origin,
+            cell_size=max(0.01, float(cell_size if cell_size is not None else current.cell_size)),
+            dimensions=_as_int3(dimensions, current.dimensions) if dimensions is not None else current.dimensions,
+            proximity_radius=max(0.25, float(proximity_radius if proximity_radius is not None else current.proximity_radius)),
+            major_every=max(1, int(major_every if major_every is not None else current.major_every)),
+            opacity=max(0.0, min(1.0, float(opacity if opacity is not None else current.opacity))),
+            snap_enabled=current.snap_enabled if snap_enabled is None else bool(snap_enabled),
+            fill_mode=current.fill_mode,
+            render_strategy=current.render_strategy,
+            color=current.color,
+        )
+        self.record("configure_grid_3d", grid=self.grid.to_dict())
+
+    def snap_position_to_grid(self, position: Vec3) -> Vec3:
+        return self.grid.snap_position(_as_vec3(position))
+
+    def create_grid_block(
+        self,
+        object_id: str,
+        cell: tuple[int, int, int],
+        fill_cells: tuple[int, int, int] = (1, 1, 1),
+        color: tuple[float, float, float, float] = (0.78, 0.86, 1.0, 1.0),
+        snap_group: str = "grid_art",
+    ) -> BuilderObject:
+        cell = tuple(int(value) for value in cell)  # type: ignore[assignment]
+        fill = _as_int3(fill_cells)
+        center = self.grid.cell_center(cell, fill)
+        obj = BuilderObject(
+            object_id,
+            "cube",
+            {"size": self.grid.cell_size, "subdivisions": 1},
+            Transform(position=center, scale=(float(fill[0]), float(fill[1]), float(fill[2]))),
+            collision={"type": "box", "deformed": False, "grid_fill": list(fill)},
+            metadata={
+                "material": {"base_color": list(_as_color(color)), "shade": "satin", "roughness": 0.5},
+                "grid": {
+                    "grid_id": self.grid.id,
+                    "cell": list(cell),
+                    "fill_cells": list(fill),
+                    "snapped": True,
+                    "snap_group": snap_group,
+                    "batch_key": f"{self.grid.id}:{snap_group}:{_as_color(color)}",
+                },
+                "smoothing": {"enabled": True, "level": 0.35, "edge_preserve": True},
+                "performance": {"batchable": True, "render_strategy": "instanced_or_merged_by_batch_key"},
+            },
+        )
+        self.create_object(obj)
+        self.record("create_grid_block", object=object_id, cell=cell, fill_cells=fill, snap_group=snap_group)
+        return obj
+
+    def snap_object_to_grid(self, object_id: str, fill_cells: tuple[int, int, int] = (1, 1, 1), snap_group: str = "objects") -> None:
+        obj = self.object_by_id(object_id)
+        fill = _as_int3(fill_cells)
+        cell = self.grid.nearest_cell(obj.transform.position)
+        obj.transform.position = self.grid.cell_center(cell, fill)
+        if obj.kind == "cube":
+            obj.params["size"] = self.grid.cell_size
+            obj.transform.scale = (float(fill[0]), float(fill[1]), float(fill[2]))
+        obj.metadata["grid"] = {
+            "grid_id": self.grid.id,
+            "cell": list(cell),
+            "fill_cells": list(fill),
+            "snapped": True,
+            "snap_group": snap_group,
+            "batch_key": f"{self.grid.id}:{snap_group}:{obj.kind}",
+        }
+        obj.metadata.setdefault("performance", {})["batchable"] = True
+        self.record("snap_object_to_grid", object=object_id, cell=cell, fill_cells=fill, snap_group=snap_group)
+
+    def set_object_smoothing(self, object_id: str, level: float = 0.5, edge_preserve: bool = True) -> None:
+        obj = self.object_by_id(object_id)
+        obj.metadata["smoothing"] = {
+            "enabled": True,
+            "level": _r(max(0.0, min(1.0, level))),
+            "edge_preserve": bool(edge_preserve),
+            "mode": "editor_preview_and_export_hint",
+        }
+        self.record("set_object_smoothing", object=object_id, level=obj.metadata["smoothing"]["level"], edge_preserve=edge_preserve)
 
     def two_hand_resize(self, object_id: str, start_a: Vec3, start_b: Vec3, end_a: Vec3, end_b: Vec3) -> None:
         obj = self.object_by_id(object_id)
@@ -502,6 +775,9 @@ class BuilderScene:
                 stroke_points += len((obj.metadata.get("stroke") or {}).get("points", []))
         vertices = sum(item["vertex_count"] for item in summaries)
         faces = sum(item["face_count"] for item in summaries)
+        grid_objects = [obj for obj in self.objects if (obj.metadata.get("grid") or {}).get("snapped")]
+        batch_keys = {str((obj.metadata.get("grid") or {}).get("batch_key", obj.kind)) for obj in grid_objects}
+        occupied_cells = self.grid_occupancy_summary()
         return {
             "object_count": len(self.objects),
             "stroke_object_count": sum(1 for obj in self.objects if obj.kind == "stroke"),
@@ -509,13 +785,58 @@ class BuilderScene:
             "vertex_count": vertices,
             "face_count": faces,
             "triangle_estimate": sum(len(_triangulate_faces(obj.world_mesh().faces)) for obj in self.objects),
+            "editor_panel_count": len(self.editor_panels),
+            "grid": self.grid_summary(),
+            "grid_snapped_object_count": len(grid_objects),
+            "grid_occupied_cell_count": occupied_cells["occupied_cell_count"],
+            "grid_batch_count": len(batch_keys),
             "budget": self.performance_budget,
             "recommendations": [
                 "batch stroke meshes by material shade",
                 "prefer radial_segments <= 8 for VR paint",
                 "resample dynamic strokes before export",
                 "run behavior programs as dataflow updates, not arbitrary Python",
+                "render the 3D grid as proximity-chunked lines, not one object per cell",
+                "batch snapped grid fills by batch_key before runtime export",
             ],
+        }
+
+    def grid_summary(self) -> dict[str, Any]:
+        x, y, z = self.grid.dimensions
+        visible_lines = self.grid.line_count() if self.grid.enabled else 0
+        return {
+            "id": self.grid.id,
+            "enabled": self.grid.enabled,
+            "cell_size": self.grid.cell_size,
+            "dimensions": [x, y, z],
+            "proximity_radius": self.grid.proximity_radius,
+            "major_every": self.grid.major_every,
+            "visible_line_count": visible_lines,
+            "render_strategy": self.grid.render_strategy,
+            "snap_enabled": self.grid.snap_enabled,
+            "integrity": "persistent_lattice_origin_cell_size_dimensions",
+        }
+
+    def grid_occupancy_summary(self) -> dict[str, Any]:
+        occupied: set[tuple[int, int, int]] = set()
+        overlaps = 0
+        for obj in self.objects:
+            grid = obj.metadata.get("grid") or {}
+            if not grid.get("snapped"):
+                continue
+            cell = tuple(int(value) for value in grid.get("cell", (0, 0, 0)))
+            fill = _as_int3(grid.get("fill_cells", (1, 1, 1)))
+            for ix in range(cell[0], cell[0] + fill[0]):
+                for iy in range(cell[1], cell[1] + fill[1]):
+                    for iz in range(cell[2], cell[2] + fill[2]):
+                        coord = (ix, iy, iz)
+                        if coord in occupied:
+                            overlaps += 1
+                        occupied.add(coord)
+        return {
+            "occupied_cell_count": len(occupied),
+            "overlap_count": overlaps,
+            "max_occupied_cell_budget": int(self.performance_budget.get("max_grid_occupied_cells", 4096)),
         }
 
     def validate_scene(self) -> dict[str, Any]:
@@ -645,6 +966,46 @@ class BuilderScene:
                     if str(node_id) not in path_ids:
                         issue(errors, "behavior_path_node_missing", f"Follow-path behavior references missing node {node_id!r}.", path)
 
+        panel_ids: set[str] = set()
+        for index, panel in enumerate(self.editor_panels):
+            path = f"editor_panels[{index}]"
+            if not panel.id:
+                issue(errors, "panel_id_empty", "Editor panel id is required.", path)
+            if panel.id in panel_ids:
+                issue(errors, "panel_id_duplicate", f"Duplicate editor panel id {panel.id!r}.", path)
+            panel_ids.add(panel.id)
+            if panel.size[0] <= 0 or panel.size[1] <= 0:
+                issue(errors, "panel_size_invalid", "Editor panel size must stay positive.", path)
+            if not (_finite_vec(panel.transform.position) and _finite_vec(panel.transform.rotation)):
+                issue(errors, "panel_transform_non_finite", "Editor panel transform contains non-finite values.", path)
+            if not 0.0 <= panel.opacity <= 1.0:
+                issue(errors, "panel_opacity_range", "Editor panel opacity must be in 0..1.", path)
+
+        if self.grid.enabled:
+            if self.grid.cell_size <= 0:
+                issue(errors, "grid_cell_size_invalid", "3D grid cell size must be positive.", "grid.cell_size")
+            if any(value <= 0 for value in self.grid.dimensions):
+                issue(errors, "grid_dimensions_invalid", "3D grid dimensions must be positive.", "grid.dimensions")
+            if not _finite_vec(self.grid.origin):
+                issue(errors, "grid_origin_non_finite", "3D grid origin contains non-finite values.", "grid.origin")
+            if self.grid.line_count() > int(self.performance_budget.get("max_grid_visible_lines", 2400)):
+                issue(warnings, "grid_line_budget_high", "3D grid visible line count is high; shrink proximity or dimensions.", "grid")
+            occupancy = self.grid_occupancy_summary()
+            if occupancy["occupied_cell_count"] > occupancy["max_occupied_cell_budget"]:
+                issue(warnings, "grid_occupied_cell_budget_high", "Grid occupied-cell count is high for live VR editing.", "grid")
+            if occupancy["overlap_count"]:
+                issue(warnings, "grid_cell_overlap", "Multiple snapped objects occupy the same 3D grid cells.", "grid")
+
+        for obj in self.objects:
+            grid = obj.metadata.get("grid") or {}
+            if not grid.get("snapped"):
+                continue
+            cell = tuple(int(value) for value in grid.get("cell", (0, 0, 0)))
+            fill = _as_int3(grid.get("fill_cells", (1, 1, 1)))
+            expected = self.grid.cell_center(cell, fill)
+            if _distance(obj.transform.position, expected) > max(0.0001, self.grid.cell_size * 0.01):
+                issue(errors, "grid_snap_position_mismatch", f"Snapped object {obj.id!r} is not at the persisted grid cell center.", f"objects.{obj.id}.metadata.grid")
+
         expected_indices = list(range(len(self.operation_history)))
         observed_indices = [item.get("index") for item in self.operation_history]
         if observed_indices != expected_indices:
@@ -676,6 +1037,8 @@ class BuilderScene:
             "behaviors": self.behaviors,
             "operation_history": self.operation_history,
             "performance_budget": self.performance_budget,
+            "editor_panels": [panel.to_dict() for panel in self.editor_panels],
+            "grid": self.grid.to_dict(),
             "metadata": self.metadata,
         }
 
@@ -697,7 +1060,11 @@ class BuilderScene:
                 "max_stroke_radial_segments": 8,
                 "target_frame_rate": 90,
                 "recommended_draw_call_groups": 48,
+                "max_grid_visible_lines": 2400,
+                "max_grid_occupied_cells": 4096,
             },
+            editor_panels=[EditorPanel.from_dict(item) for item in data.get("editor_panels", [])],
+            grid=Grid3DSettings.from_dict(data.get("grid", {})),
             metadata=dict(data.get("metadata", {})),
         )
 
@@ -724,6 +1091,8 @@ class BuilderScene:
                 "collision": obj.collision,
                 "sockets": obj.sockets,
                 "material": _object_material(obj),
+                "grid": obj.metadata.get("grid"),
+                "smoothing": obj.metadata.get("smoothing"),
             })
         return summaries
 
@@ -759,6 +1128,9 @@ class BuilderScene:
             "behaviors": self.behaviors,
             "operation_history": self.operation_history,
             "behavior_preview_t1": self.evaluate_behaviors(1.0),
+            "editor_panels": [panel.to_dict() for panel in self.editor_panels],
+            "grid": self.grid.to_dict(),
+            "grid_occupancy": self.grid_occupancy_summary(),
             "performance": self.performance_summary(),
             "scene_metadata": self.metadata,
         }
@@ -838,6 +1210,9 @@ class BuilderScene:
                     "behaviors": self.behaviors,
                     "operation_history": self.operation_history,
                     "behavior_preview_t1": self.evaluate_behaviors(1.0),
+                    "editor_panels": [panel.to_dict() for panel in self.editor_panels],
+                    "grid": self.grid.to_dict(),
+                    "grid_occupancy": self.grid_occupancy_summary(),
                     "performance": self.performance_summary(),
                     "scene_metadata": self.metadata,
                 },
@@ -1056,6 +1431,32 @@ def _default_socket(socket_id: str, position: Vec3, normal: Vec3) -> dict[str, A
 
 def create_vr_editing_proof_scene() -> BuilderScene:
     scene = BuilderScene(name="GPTOOL Panda XR VR Builder Proof", metadata={"plugin": "panda_xr_vr_builder", "proof": True})
+    scene.configure_grid_3d(origin=(-2.75, -1.85, 0.0), cell_size=0.25, dimensions=(24, 14, 10), proximity_radius=3.75, major_every=4, opacity=0.18, snap_enabled=True)
+    scene.add_editor_panel(
+        "panel_tools",
+        "Create Tools",
+        (-1.55, -1.72, 2.25),
+        rotation=(68.0, 0.0, 0.0),
+        content={"mode": "create", "active_tool": "grid_block", "brush": "smooth_cube"},
+        controls=[{"type": "button", "id": "cube"}, {"type": "button", "id": "sphere"}, {"type": "button", "id": "stroke"}],
+    )
+    scene.add_editor_panel(
+        "panel_grid",
+        "3D Grid",
+        (0.15, -1.82, 2.38),
+        rotation=(62.0, 0.0, 0.0),
+        content={"cell_size": 0.25, "snap": True, "fill_mode": "cell_volume", "proximity_radius": 3.75},
+        controls=[{"type": "slider", "id": "cell_size", "min": 0.1, "max": 1.0}, {"type": "toggle", "id": "snap"}],
+    )
+    scene.add_editor_panel(
+        "panel_materials",
+        "Materials",
+        (1.85, -1.72, 2.18),
+        rotation=(58.0, 0.0, -8.0),
+        content={"shade": "satin", "palette": ["skin", "hair", "clothes", "grid_glass"]},
+        controls=[{"type": "swatch", "id": "base_color"}, {"type": "slider", "id": "roughness"}],
+    )
+    scene.move_editor_panel("panel_grid", (0.12, -1.78, 2.34), rotation=(64.0, 0.0, 0.0), smoothing=0.5)
     scene.create_object(BuilderObject("floor_01", "floor", {"width": 7.0, "depth": 5.0, "thickness": 0.12, "subdivisions": 2}, Transform(position=(0.0, 0.0, -0.06)), collision={"type": "box", "deformed": False}, sockets=[_default_socket("north_wall", (0, 2.5, 0.06), (0, 1, 0))]))
     scene.create_object(BuilderObject("wall_01", "wall", {"width": 4.0, "height": 2.4, "thickness": 0.16, "subdivisions": 2}, Transform(position=(0.0, 2.5, 1.2)), collision={"type": "box", "deformed": False}, sockets=[_default_socket("floor_mount", (0, -0.08, -1.2), (0, -1, 0))]))
     scene.create_object(BuilderObject("cube_01", "cube", {"size": 1.2, "subdivisions": 4}, Transform(position=(-1.25, -0.2, 0.65)), collision={"type": "box", "deformed": True}, sockets=[_default_socket("top", (0, 0, 0.8), (0, 0, 1))]))
@@ -1076,6 +1477,10 @@ def create_vr_editing_proof_scene() -> BuilderScene:
     scene.set_material("wall_01", (0.34, 0.37, 0.40, 1.0), shade="matte", roughness=0.78)
     scene.set_material("cube_01", (0.95, 0.52, 0.22, 1.0), shade="satin", roughness=0.44)
     scene.set_material("sphere_01", (0.32, 0.82, 0.96, 1.0), shade="gloss", roughness=0.28)
+    scene.set_object_smoothing("cube_01", 0.45, edge_preserve=True)
+    scene.set_object_smoothing("sphere_01", 0.82, edge_preserve=False)
+    scene.set_object_smoothing("cylinder_01", 0.62, edge_preserve=True)
+    scene.set_object_smoothing("capsule_01", 0.72, edge_preserve=False)
     scene.two_hand_resize("cube_01", (-0.6, 0, 0), (0.6, 0, 0), (-0.85, 0, 0), (0.85, 0, 0))
     scene.squeeze_morph("sphere_01", (0.9, -0.4, 1.15), (1.35, -0.1, 0.85), amount=0.35, radius=0.75)
     scene.two_hand_twist("cylinder_01", (2.0, 0.2, 0.9), (2.7, 0.2, 0.9), (2.05, 0.05, 0.9), (2.68, 0.55, 0.9))
@@ -1091,6 +1496,16 @@ def create_vr_editing_proof_scene() -> BuilderScene:
     scene.program_behavior("sphere_live_bob", "sphere_01", "bob", {"amplitude": 0.16, "frequency": 0.65})
     scene.program_behavior("cylinder_spin", "cylinder_01", "spin", {"axis": "z", "degrees_per_second": 36.0})
     scene.program_behavior("capsule_path_follow", "capsule_01", "follow_path", {"path": ["path_start", "path_mid", "path_end"], "nodes_per_second": 0.5})
+    scene.create_grid_block("grid_art_core", (9, 2, 2), (2, 2, 2), (0.96, 0.22, 0.36, 1.0), snap_group="pixel_room")
+    scene.create_grid_block("grid_art_left", (7, 3, 3), (2, 1, 1), (0.22, 0.86, 1.0, 1.0), snap_group="pixel_room")
+    scene.create_grid_block("grid_art_right", (11, 3, 3), (2, 1, 1), (0.22, 0.86, 1.0, 1.0), snap_group="pixel_room")
+    scene.create_grid_block("grid_art_top", (10, 3, 4), (1, 1, 2), (1.0, 0.9, 0.26, 1.0), snap_group="pixel_room")
+    scene.metadata["editor_mode"] = {
+        "style": "augmented_reality_world_editor",
+        "grid_editing": "persistent_resizable_3d_grid_with_snap_fill",
+        "panel_placement": "world_locked_moveable_panels",
+        "connected_object_performance": "batch snapped fills by grid batch_key",
+    }
     return scene
 
 
@@ -1189,9 +1604,12 @@ def run_vr_editing_proof(output_dir: Path) -> dict[str, Any]:
         "path_node_count": len(loaded.path_nodes),
         "animation_count": len(loaded.animations),
         "behavior_count": len(loaded.behaviors),
+        "editor_panel_count": len(loaded.editor_panels),
         "operation_count": len(loaded.operation_history),
         "objects": loaded.mesh_summaries(),
         "behavior_preview_t1": loaded.evaluate_behaviors(1.0),
+        "grid": loaded.grid.to_dict(),
+        "grid_occupancy": loaded.grid_occupancy_summary(),
         "performance": loaded.performance_summary(),
         "scene_quality": scene_quality,
         "export_quality": export_quality,

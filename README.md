@@ -102,6 +102,7 @@ python bridge.py import-human-assets /path/to/generated_project --search-root ..
 python bridge.py panda-xr-proof --output reports/panda_xr_vr_builder_proof --json
 python bridge.py panda-xr-quality reports/panda_xr_vr_builder_proof/scene.manifest.json --json
 python bridge.py panda-xr-export reports/panda_xr_vr_builder_proof/scene.manifest.json --output reports/panda_xr_vr_builder_export_check --json
+python bridge.py panda-xr-visual-proof --output reports/panda_xr_vr_visual_proof --width 1600 --height 900 --seconds 3 --json
 ```
 
 ## Install
@@ -217,11 +218,14 @@ The Panda XR VR Builder extension is intentionally isolated from the original `V
 python bridge.py panda-xr-proof --output reports/panda_xr_vr_builder_proof --json
 python bridge.py panda-xr-quality reports/panda_xr_vr_builder_proof/scene.manifest.json --json
 python bridge.py panda-xr-export reports/panda_xr_vr_builder_proof/scene.manifest.json --output reports/panda_xr_vr_builder_export_check --json
+python bridge.py panda-xr-visual-proof --output reports/panda_xr_vr_visual_proof --width 1600 --height 900 --seconds 3 --json
 ```
 
-The proof creates floors, walls, cubes, spheres, cylinders, capsules, and hand-drawn 3D stroke ribbons; simulates VR-style two-hand resize, twist, squeeze/morph, grab/move, smooth resize, socket connections, material editing, path nodes, animation metadata, and safe realtime behavior programs; saves/reloads a manifest; runs a quality gate; and exports OBJ, glTF, GLB, and JSON metadata. OpenXR is optional and is not imported by the proof path.
+The proof creates floors, walls, cubes, spheres, cylinders, capsules, grid-filled voxel blocks, moveable AR editor panels, a persistent see-through 3D grid, and hand-drawn 3D stroke ribbons; simulates VR-style two-hand resize, twist, squeeze/morph, grab/move, smooth resize, socket connections, material editing, grid snap/fill placement, path nodes, animation metadata, and safe realtime behavior programs; saves/reloads a manifest; runs a quality gate; and exports OBJ, glTF, GLB, and JSON metadata. OpenXR is optional and is not imported by the proof path.
 
-The quality gate checks broken references, invalid behavior targets, material data, stroke budgets, mesh integrity, operation history, and VR-facing performance metrics before a scene is treated as proof-quality.
+The visual proof runs the same extension in desktop-safe VR simulation mode, simulates a hand-drawn 3D spiral stroke object, renders the moveable panels and see-through 3D grid through Panda3D offscreen when available, and writes a 16:9 screenshot plus `visual_proof_report.json`.
+
+The quality gate checks broken references, invalid behavior targets, material data, panel placement, grid integrity, snapped object placement, stroke budgets, mesh integrity, operation history, and VR-facing performance metrics before a scene is treated as proof-quality.
 
 ## Pass 9 — Lean package maintenance
 
