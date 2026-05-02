@@ -1,0 +1,81 @@
+{
+  "schema_version": "gptool_profile.v1",
+  "profile_id": "antiheroes",
+  "display_name": "The Anti-Heroes",
+  "engine": "panda3d",
+  "source_repo": "GLITCHEDMATR1X/GX-Prototype-Lab",
+  "expected_project_path_hints": [
+    "data/Prototype Lab/3D - Third Person/The Anti-Heroes",
+    "data/Prototype Lab",
+    "The Anti-Heroes",
+    "Anti Heroes",
+    "AntiHeroes"
+  ],
+  "purpose": "Guardrail profile for improving the GX Prototype Lab Anti-Heroes third-person city sandbox without replacing working game code with a generic template.",
+  "design_contract": {
+    "must_preserve": [
+      "The Anti-Heroes remains a third-person Panda3D prototype, not a detached launcher or web-only demo.",
+      "Ground traversal is the default player route; flight or high-speed movement must be explicit/toggle-based.",
+      "Existing combat, menu, editor, city, NPC, and imported-body systems must not be removed during validation passes.",
+      "The player-visible route must be tested, not only an isolated proof scene.",
+      "HUD stays edge-oriented and readable with no center-screen debug clutter."
+    ],
+    "must_improve_toward": [
+      "Readable city districts with clear avenue route spines and landmarks.",
+      "Hero/villain stance state that can influence reputation, faction response, and mission routing.",
+      "District control, contract board, vendor/rearm, and safehouse/service-room anchors.",
+      "Street-level traversal with stable spawn, camera, collision, and readable ground surfaces.",
+      "Destruction aftermath and faction/NPC pressure that can be validated from state data or screenshots."
+    ],
+    "must_not_do": [
+      "Do not replace Anti-Heroes with a newly generated starter template.",
+      "Do not add broad unrelated features before route stability and proof hooks exist.",
+      "Do not claim visual/gameplay success without a screenshot or scene-proof JSON when a Panda3D runtime is available.",
+      "Do not hide crashes behind silent fallback behavior.",
+      "Do not move the player to the wrong HoloVerse region while validating Anti-Heroes."
+    ]
+  },
+  "validation_targets": {
+    "preferred_entry_files": [
+      "main.py",
+      "main_v48_npc_territory_routes1.py"
+    ],
+    "expected_support_files": [
+      "city_flagship_playbook.json",
+      "learning_notes.json"
+    ],
+    "proof_outputs": [
+      "reports/latest_report.json",
+      "reports/latest_report.md",
+      "reports/antiheroes_profile_manifest.json",
+      "reports/antiheroes_work_order.json",
+      "reports/antiheroes_work_order.md",
+      "screenshots/antiheroes_gptool_probe.png"
+    ],
+    "state_terms_to_prefer": [
+      "district",
+      "reputation",
+      "stance",
+      "contract",
+      "safehouse",
+      "vendor",
+      "faction",
+      "npc",
+      "city",
+      "third_person"
+    ],
+    "runtime_checks": [
+      "syntax/import validation across Anti-Heroes Python files",
+      "asset-reference validation for local Anti-Heroes assets",
+      "Panda3D runtime smoke when system, portable, or packaged runtime is present",
+      "screenshot proof when runtime can render",
+      "regression comparison against a baseline when a baseline tree is provided"
+    ]
+  },
+  "recommended_work_order_command": "improve The Anti-Heroes as a third-person city sandbox: preserve existing combat/editor/menu systems, make districts and street traversal more readable, add hero-villain stance and service anchors only where safe, and verify with Panda3D proof instead of placeholders",
+  "recommended_commands": [
+    "python tools/run_antiheroes_pass.py --gx-root ../GX-Prototype-Lab --runtime auto",
+    "python bridge.py plan-command <antiheroes_project> --profile panda3d --command-file reports/antiheroes_command.txt --output reports/antiheroes_work_order.json",
+    "python bridge.py full-pass <antiheroes_project> --profile panda3d --work-order reports/antiheroes_work_order.json --runtime auto --smoke --entry main.py --screenshot-path screenshots/antiheroes_gptool_probe.png --require-screenshot"
+  ]
+}
