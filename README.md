@@ -25,6 +25,7 @@ This release keeps the one-command workflow and adds a Panda3D runtime provider 
 - Imported human assets can write export bundles for GLB, OBJ, and FBX copy-through where supported.
 - Human import supports `--prefer`, `--require`, `--rigged-only`, and `--clean` for targeted, uncluttered builds.
 - Generated human projects now include camera-relative third-person movement and a streaming procedural gray grid for open-world traversal tests.
+- Panda XR VR Builder is available as an isolated extension under `extensions/panda_xr_vr_builder`, with desktop-safe proof, VR-compatible edit operations, dynamic 3D art strokes, safe realtime behavior programs, manifests, and OBJ/glTF/GLB export.
 - Audits GPTOOL bundle size and identifies safe cleanup candidates before packaging.
 - Builds lean source zips without optional examples, caches, build output, or old generated run reports.
 
@@ -98,6 +99,10 @@ python bridge.py regression /path/to/candidate /path/to/baseline
 python bridge.py report reports/latest_report.json
 python bridge.py scan-human-assets ..
 python bridge.py import-human-assets /path/to/generated_project --search-root .. --prefer female survivor --require female --rigged-only --clean --limit 8 --export-formats glb obj fbx
+python bridge.py panda-xr-proof --output reports/panda_xr_vr_builder_proof --json
+python bridge.py panda-xr-quality reports/panda_xr_vr_builder_proof/scene.manifest.json --json
+python bridge.py panda-xr-export reports/panda_xr_vr_builder_proof/scene.manifest.json --output reports/panda_xr_vr_builder_export_check --json
+python bridge.py panda-xr-visual-proof --output reports/panda_xr_vr_visual_proof --width 1600 --height 900 --seconds 3 --json
 ```
 
 ## Install
@@ -204,6 +209,23 @@ Esc    exit
 The gray platform streams in procedural chunks around the controlled player, so movement can continue outward for open-world testing without a fixed floor edge.
 
 Exports are written under `assets/characters/humans/exports/`. GLB copies from rigged GLB sources preserve the rig. OBJ exports are static geometry. FBX export is copy-through only when the imported source is already FBX; GLB-to-FBX writing is reported as skipped because this Python pipeline does not have a rig-safe FBX writer.
+
+## Panda XR VR Builder extension
+
+The Panda XR VR Builder extension is intentionally isolated from the original `VR/` prototype. It provides a deterministic operation model that desktop controls or OpenXR controller events can call later without editing Panda3D nodes directly.
+
+```bash
+python bridge.py panda-xr-proof --output reports/panda_xr_vr_builder_proof --json
+python bridge.py panda-xr-quality reports/panda_xr_vr_builder_proof/scene.manifest.json --json
+python bridge.py panda-xr-export reports/panda_xr_vr_builder_proof/scene.manifest.json --output reports/panda_xr_vr_builder_export_check --json
+python bridge.py panda-xr-visual-proof --output reports/panda_xr_vr_visual_proof --width 1600 --height 900 --seconds 3 --json
+```
+
+The proof creates floors, walls, cubes, spheres, cylinders, capsules, grid-filled voxel blocks, moveable AR editor panels, a persistent see-through 3D grid, and hand-drawn 3D stroke ribbons; simulates VR-style two-hand resize, twist, squeeze/morph, grab/move, smooth resize, socket connections, material editing, grid snap/fill placement, path nodes, animation metadata, and safe realtime behavior programs; saves/reloads a manifest; runs a quality gate; and exports OBJ, glTF, GLB, and JSON metadata. OpenXR is optional and is not imported by the proof path.
+
+The visual proof runs the same extension in desktop-safe VR simulation mode, simulates a hand-drawn 3D spiral stroke object, renders the moveable panels and see-through 3D grid through Panda3D offscreen when available, and writes a 16:9 screenshot plus `visual_proof_report.json`.
+
+The quality gate checks broken references, invalid behavior targets, material data, panel placement, grid integrity, snapped object placement, stroke budgets, mesh integrity, operation history, and VR-facing performance metrics before a scene is treated as proof-quality.
 
 ## Pass 9 — Lean package maintenance
 

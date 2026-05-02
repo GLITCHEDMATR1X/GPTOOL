@@ -1,0 +1,523 @@
+GPTOOL / Codex Next Instructions — Infinite World Generation + Crash-Safe Actor Hotfix
+Repo: https://github.com/GLITCHEDMATR1X/GPTOOL
+Current GitHub baseline observed: main, GPT Game Generation Bridge v0.6.6-pass16
+Prepared for: GLITCHEDMATR1X / Codex desktop session
+Date: 2026-05-01
+
+================================================================================
+MISSION
+================================================================================
+
+The user wants the next major direction to be "perfected" infinite world generation
+for generated Panda3D projects.
+
+IMPORTANT: Do not start by adding more flashy infinite-world features if the current
+Pass 16 generated project still crashes on the user's desktop. First stabilize the
+local crash path, then build the infinite-world system.
+
+This repo should become:
+
+    command -> settings -> generate -> playable Panda3D infinite world
+    -> route/stress proof -> screenshot/proof JSON -> no crash log
+
+================================================================================
+CURRENT REPO STATE
+================================================================================
+
+Current main:
+    0.6.6-pass16
+
+Recent commits:
+    - Apply GPTOOL Pass 15 crash diagnostics and stress proof
+    - Apply GPTOOL Pass 16 model import proof hardening
+
+Codex pushed these quickly. GitHub CI passed, including Panda3D generated stress proof,
+but the user reports a desktop crash. The likely difference is local imported model
+assets / human_manifest behavior.
+
+Pass 16 changed generated playable simulation characters to try imported human Actor
+meshes from:
+
+    assets/characters/humans/human_manifest.json
+
+before falling back to procedural bodies.
+
+That means local crashes are likely coming from:
+    - Actor() load mismatch
+    - bad/corrupt GLB/GLTF
+    - skeleton/animation mismatch
+    - bounds/scaling edge case
+    - missing source file from manifest
+    - Direct/Actor exception not fully isolated
+    - one model works in Codex local tree but not on user's desktop
+
+================================================================================
+ABSOLUTE FIRST STEP — PULL + REPRODUCE
+================================================================================
+
+Run from repo root:
+
+    git status
+    git pull origin main
+    python -S bridge.py --version
+    python -S bridge.py package-audit . --json
+
+Expected:
+    GPT Game Generation Bridge 0.6.6-pass16
+
+Then generate a fresh crash test project:
+
+    python -S bridge.py generate-game ./GeneratedCrashProbe --profile panda3d --command "make a playable simulation with two testers, imported actors if available, crash diagnostics, stress proof, and points only" --force
+
+Run settings and syntax:
+
+    python -S ./GeneratedCrashProbe/main.py --settings-check
+
+    python -S - << "PY"
+    from pathlib import Path
+    import ast
+    p = Path("GeneratedCrashProbe/main.py")
+    ast.parse(p.read_text(encoding="utf-8"), filename=str(p))
+    print("GeneratedCrashProbe main.py AST PASS")
+    PY
+
+Run normal generated project if Panda3D is installed:
+
+    python ./GeneratedCrashProbe/main.py
+
+Run proof:
+
+    python ./GeneratedCrashProbe/main.py --screenshot-mode --route-proof --stress-proof --screenshot-path GeneratedCrashProbe/screenshots/crash_probe.png --proof-path GeneratedCrashProbe/reports/crash_probe.json
+
+If it crashes, inspect:
+
+    GeneratedCrashProbe/logs/crash_latest.txt
+    GeneratedCrashProbe/logs/runtime_latest.json
+    GeneratedCrashProbe/logs/last_scene_state.json
+    GeneratedCrashProbe/logs/last_controls_state.json
+
+If the user's existing generated project crashes, inspect the same logs there too.
+
+================================================================================
+PASS 17 — HOTFIX: SAFE IMPORTED ACTOR QUARANTINE
+================================================================================
+
+Branch:
+    git checkout -b pass17-safe-actor-quarantine
+
+Goal:
+    Stop imported model failures from crashing the generated game. Bad models should be
+    rejected and logged; generated projects must always fall back to procedural testers.
+
+Version:
+    0.6.6-pass16 -> 0.6.7-pass17
+
+Generated template:
+    panda3d_playable_simulation_template.v6 -> panda3d_playable_simulation_template.v7
+
+Required generated CLI flags:
+    --no-imported-actors
+    --actor-proof
+    --quarantine-bad-actors
+
+Behavior:
+    - If --no-imported-actors is present, ignore human_manifest.json and use procedural bodies.
+    - If --actor-proof is present, test-load all candidate base_assets in human_manifest.json and
+      write a report before assigning any to player characters.
+    - If --quarantine-bad-actors is present, failed actor assets should be logged and skipped.
+    - If a model fails Actor(...), try loader.loadModel(...).
+    - If both fail, reject the asset and fall back.
+    - If bounds cannot be read, do not crash. Use default scale.
+    - If animations mismatch, do not crash. Load static or use procedural fallback.
+    - Never let a single bad male/female model crash the whole generated project.
+
+Add generated outputs:
+    reports/actor_import_proof.json
+    reports/rejected_human_assets.json
+
+Proof JSON should include per-character:
+    actor_loaded
+    actor_source_path
+    actor_load_mode: actor | static_model | procedural_fallback
+    actor_load_errors: []
+    rejected_asset_count
+
+Acceptance:
+    - With no human_manifest: generated project runs.
+    - With human_manifest but --no-imported-actors: generated project runs.
+    - With human_manifest and bad fake path: generated project runs, rejects bad path.
+    - With human_manifest and real models: generated project runs or falls back safely.
+    - Stress proof writes screenshot and proof JSON.
+    - No crash_latest.txt for safe failures.
+    - Bad actor list is written when failures occur.
+
+Test commands:
+
+    python -S bridge.py generate-game ./GeneratedActorSafeProbe --profile panda3d --command "make a playable simulation with safe imported actors and actor proof" --force
+
+    python ./GeneratedActorSafeProbe/main.py --screenshot-mode --route-proof --stress-proof --actor-proof --quarantine-bad-actors --screenshot-path GeneratedActorSafeProbe/screenshots/actor_safe.png --proof-path GeneratedActorSafeProbe/reports/actor_safe.json
+
+Emergency user test:
+
+    python ./GeneratedActorSafeProbe/main.py --no-imported-actors
+
+Do not move to infinite world generation until this is stable.
+
+================================================================================
+PASS 18 — INFINITE WORLD GENERATION CORE
+================================================================================
+
+Branch:
+    git checkout -b pass18-infinite-world-core
+
+Goal:
+    Replace the current small streaming platform with a true deterministic chunk/sector
+    streaming system for generated Panda3D templates.
+
+Version:
+    0.6.7-pass17 -> 0.6.8-pass18
+
+Generated template:
+    panda3d_playable_simulation_template.v7 -> panda3d_infinite_world_template.v1
+
+Core design:
+    - Use deterministic chunk coordinates.
+    - Active chunk grid follows controlled player.
+    - Chunks generate around player.
+    - Chunks unload behind player.
+    - Same seed + same chunk coordinates = same world.
+    - No duplicate chunks.
+    - No uncontrolled node buildup.
+    - Object/prop budget per chunk.
+    - Region/biome rules decide what each chunk contains.
+    - Route proof verifies movement across multiple chunks.
+
+Settings additions:
+    settings/game_settings.json:
+
+    "world_streaming": {
+      "enabled": true,
+      "schema_version": "gptool_world_streaming.v1",
+      "seed": 12345,
+      "chunk_size": 48,
+      "active_radius": 2,
+      "preload_radius": 2,
+      "unload_radius": 3,
+      "max_active_chunks": 49,
+      "object_budget_per_chunk": 24,
+      "terrain_mode": "procedural_mesh_grid",
+      "height_mode": "deterministic_noise",
+      "biome_mode": "region_weighted",
+      "proof_route_chunks": 8
+    }
+
+Implement generated classes or helpers:
+    DeterministicNoise
+    BiomeResolver
+    WorldChunk
+    WorldStreamer
+    ChunkObjectSpawner
+    InfiniteWorldProofRunner
+
+Chunk coordinate logic:
+    chunk_x = floor(player_x / chunk_size)
+    chunk_y = floor(player_y / chunk_size)
+
+Active set:
+    all chunks in radius around current chunk.
+
+Unload:
+    chunks with distance > unload_radius.
+
+Proof metrics:
+    active_chunk_count
+    max_active_chunk_count
+    generated_chunk_count
+    unloaded_chunk_count
+    reused_chunk_count
+    duplicate_chunk_count
+    object_count
+    max_object_count
+    player_chunk_start
+    player_chunk_end
+    visited_chunks
+    biome_counts
+    no_crash_log
+
+Generated proof command:
+
+    python main.py --screenshot-mode --route-proof --stress-proof --world-stream-proof --screenshot-path screenshots/world_stream.png --proof-path reports/world_stream.json
+
+Proof JSON schema:
+    gptool_world_stream_proof.v1
+
+Acceptance:
+    - proof route crosses at least 8 unique chunks
+    - active chunks stay <= max_active_chunks
+    - duplicate_chunk_count == 0
+    - generated_chunk_count >= active chunks
+    - unloaded_chunk_count > 0 after long route
+    - screenshot exists
+    - no crash log
+    - generated project still runs interactively
+
+================================================================================
+PASS 18 WORLD CONTENT RULES
+================================================================================
+
+Do not make a blank infinite plane. Each chunk needs readable generated identity.
+
+Use existing HoloVerse region concepts as biome families:
+    hub
+    flat
+    hill / green_hills
+    desert
+    ice
+    water / mushroom / aqua
+    urban
+    metropolis
+    forest
+    space / orbit
+
+Chunk content examples:
+    hub:
+        marker rings, pedestals, clean grid, safe spawn
+    flat:
+        open test grid, low obstacles
+    hill:
+        rolling low hills, simple animals/placeholders, green/cyan tones
+    desert:
+        smooth dunes, pyramid-aligned landmarks, red/pink sky hint
+    ice:
+        cubes, track markers, hover path loops
+    water:
+        blue tint plane, coral/bioluminescent markers, underwater-ish palette
+    urban:
+        broken cover blocks, fog-gray palette, combat-test cover shapes
+    metropolis:
+        taller structures, lab markers, robot creation nodes
+    forest:
+        vertical trunks, canopy markers
+    space:
+        void tiles, orbital rings, distant Dyson-style wire sphere marker
+
+Keep generated assets procedural-first. No heavy asset downloads.
+
+================================================================================
+PASS 19 — INFINITE TERRAIN ELEVATION + LOD
+================================================================================
+
+Only after Pass 18 is stable.
+
+Goal:
+    Improve terrain shape/performance without breaking proof.
+
+Options:
+    A. Procedural mesh grid per chunk with deterministic heights.
+    B. Panda3D GeoMipTerrain experiments for larger heightfield chunks.
+    C. Hybrid: simple mesh chunks for gameplay + optional GeoMipTerrain mode.
+
+Important research:
+    Panda3D GeoMipTerrain uses heightfields and supports LOD around a focal point.
+    But do not force GeoMipTerrain into the generator until it passes proof and does
+    not cause update stutter or collision issues.
+
+Add settings:
+    "terrain_lod": {
+      "enabled": false,
+      "mode": "mesh_chunks",
+      "near": 40,
+      "far": 140,
+      "height_scale": 8.0,
+      "collision_mode": "sampled_height"
+    }
+
+Acceptance:
+    - Can toggle back to flat/procedural mesh mode.
+    - Terrain heights are deterministic.
+    - Player has safe ground sampling.
+    - No falling forever.
+    - Proof checks min/max sampled height and player z stability.
+
+================================================================================
+PASS 20 — INFINITE WORLD OBJECTS + PERSISTENCE
+================================================================================
+
+Goal:
+    Make the infinite world feel alive but still testable.
+
+Add:
+    - deterministic prop placement
+    - chunk-local NPC placeholder spawns
+    - chunk-local pickups
+    - points from pickups
+    - save visited chunks summary
+    - save discovered landmarks
+
+Generated files:
+    saves/world_progress.json
+    reports/world_stream_proof.json
+
+Do not save every generated object forever. Save only compact progress:
+    seed
+    visited_chunk_keys
+    collected_pickups
+    discovered_landmarks
+    active_character
+    points
+
+Acceptance:
+    - progress file stays small
+    - revisiting same chunk is stable
+    - collected pickup does not respawn if marked collected
+    - proof route collects at least one pickup
+    - no unbounded memory growth
+
+================================================================================
+GITHUB / EXTERNAL RESOURCES TO INSPECT
+================================================================================
+
+Use as research only. Do not copy code blindly. Check license first.
+
+1. Panda3D GeoMipTerrain docs:
+    https://docs.panda3d.org/1.10/python/reference/panda3d.core.GeoMipTerrain
+
+2. Panda3D geometrical mipmapping docs:
+    https://docs.panda3d.org/1.10/cpp/programming/terrain/geometrical-mipmapping
+
+3. Craig-Macomber/Panda3D-Terrain-System:
+    https://github.com/Craig-Macomber/Panda3D-Terrain-System
+
+4. Craig-Macomber/infiniteRalph:
+    https://github.com/Craig-Macomber/infiniteRalph
+
+5. Schwarzbaer/panda3d-terrain:
+    https://github.com/Schwarzbaer/panda3d-terrain
+
+Research goals:
+    - chunk management ideas
+    - terrain height sampling
+    - LOD/focal point handling
+    - collision strategy
+    - performance pitfalls
+    - what not to put into GPTOOL
+
+Do not make the repo depend on these projects unless the license is compatible and
+the dependency is minimal. Prefer learning concepts and writing clean GPTOOL-native code.
+
+================================================================================
+LOCAL FOLDER / OUR SOURCE RESEARCH
+================================================================================
+
+Search local folders for useful patterns before coding:
+
+    rg -n "chunk|sector|stream|terrain|biome|height|GeoMip|noise|seed|world_stream|infinite" .
+    rg -n "chunk|sector|stream|terrain|biome|height|GeoMip|noise|seed|world_stream|infinite" D:\Apps
+
+Known useful internal references:
+    - GPTOOL earlier generated world already included hub, hill, desert, ice, water,
+      urban, metropolis, and space region metadata.
+    - HoloVerse website branch had an infinite satellite survey pattern:
+      infinite sector streaming, WASD/Arrow pan, Shift speed, wheel zoom, clickable
+      districts/cores.
+    - Prototype Lab generation_bridge.py has useful concepts:
+      source profile scanning, donor selection, generation standards, validation targets,
+      and mechanics list including playtest_world_and_grid, animation_state_machine,
+      model_import_export_and_validation, and QA/performance/shipping.
+
+Do not directly merge unrelated website code into GPTOOL. Extract ideas:
+    sector key
+    deterministic generation
+    active sector set
+    unload sectors
+    clickable/info metadata idea
+    proof metrics
+
+================================================================================
+INFINITE WORLD ACCEPTANCE CHECKLIST
+================================================================================
+
+Do not call it "perfected" until this checklist passes:
+
+Functional:
+    - player can move indefinitely in all horizontal directions
+    - no visible hard edge near active route
+    - no crash after long route
+    - chunks unload and reload deterministically
+    - same seed creates same chunk layout
+    - Tab character swap still works
+    - imported actors can be disabled safely
+    - procedural fallback always works
+
+Performance:
+    - active chunks bounded
+    - active object count bounded
+    - generated proof records peak chunk/object count
+    - no obvious frame-killing build spikes in proof path
+
+Proof:
+    - world_stream_proof JSON exists
+    - screenshot exists
+    - no crash_latest.txt
+    - visited chunk count >= 8
+    - duplicate_chunk_count == 0
+    - active_chunk_count <= max_active_chunks
+    - at least 3 biome types observed on a long proof route
+
+Repo hygiene:
+    - no generated worlds committed
+    - no screenshots committed
+    - no cache/build artifacts committed
+    - docs/changelog/tested notes included
+    - CI still passes
+    - package-audit passes
+
+================================================================================
+COMMANDS FOR GENERATED INFINITE WORLD PROOF
+================================================================================
+
+After changes:
+
+    python -S bridge.py --version
+
+    python -S bridge.py generate-game ./GeneratedInfiniteProbe --profile panda3d --command "make an infinite HoloVerse-style world with chunk streaming, green hills, desert, ice, water, urban, metropolis, space, two playable testers, crash diagnostics, stress proof, and points only" --force
+
+    python -S ./GeneratedInfiniteProbe/main.py --settings-check
+
+    python -S - << "PY"
+    from pathlib import Path
+    import ast
+    p = Path("GeneratedInfiniteProbe/main.py")
+    ast.parse(p.read_text(encoding="utf-8"), filename=str(p))
+    print("GeneratedInfiniteProbe main.py AST PASS")
+    PY
+
+    python ./GeneratedInfiniteProbe/main.py --screenshot-mode --route-proof --stress-proof --world-stream-proof --screenshot-path GeneratedInfiniteProbe/screenshots/world_stream.png --proof-path GeneratedInfiniteProbe/reports/world_stream.json
+
+Check:
+    GeneratedInfiniteProbe/screenshots/world_stream.png
+    GeneratedInfiniteProbe/reports/world_stream.json
+    GeneratedInfiniteProbe/logs/crash_latest.txt should not exist
+
+================================================================================
+REPORT BACK TO USER
+================================================================================
+
+Report:
+    - version
+    - branch
+    - commits
+    - changed files
+    - exact tests run
+    - screenshot path
+    - proof JSON path
+    - crash log status
+    - current limitations
+    - whether infinite world is:
+        prototype
+        stable route proof
+        or ready for deeper gameplay
+
+================================================================================
+END
+================================================================================

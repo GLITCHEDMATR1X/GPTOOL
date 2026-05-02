@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "chamelionpixels-xr-openxr-lab"
+version = "0.2.6"
+dependencies = [
+  "PyOpenGL >= 3.0.0",
+  "panda3d >= 1.10.0",
+]
+requires-python = ">=3.8"
+authors = [
+  {name = "Laurent Deru", email = "laurent.deru@gmail.com"},
+]
+description = "ChamelionPixels XR testing bridge for Panda3D and OpenXR"
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Topic :: Multimedia :: Graphics :: 3D Rendering",
+  "License :: OSI Approved :: Apache Software License",
+]
+
+[project.urls]
+Repository = "https://github.com/el-dee/panda3d-openxr"
+"Bug Tracker" = "https://github.com/el-dee/panda3d-openxr/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["p3dopenxr"]
+
+[project.scripts]
+chamelionpixels-xr-lab = "p3dopenxr.app:main"
+panda-xr-proof = "p3dopenxr.builder_core:main"
+
+[project.optional-dependencies]
+xr = [
+  "pyopenxr >= 1.1.0",
+]

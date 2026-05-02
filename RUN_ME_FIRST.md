@@ -80,6 +80,17 @@ python bridge.py import-human-assets ./GeneratedModelImportPass16 --search-root 
 python ./GeneratedModelImportPass16/main.py --screenshot-mode --route-proof --stress-proof --window-type default --screenshot-path GeneratedModelImportPass16/screenshots/import_stress.png --proof-path GeneratedModelImportPass16/reports/import_stress.json
 ```
 
+Panda XR VR Builder extension proof:
+
+```bash
+python bridge.py panda-xr-proof --output reports/panda_xr_vr_builder_proof --json
+python bridge.py panda-xr-quality reports/panda_xr_vr_builder_proof/scene.manifest.json --json
+python bridge.py panda-xr-export reports/panda_xr_vr_builder_proof/scene.manifest.json --output reports/panda_xr_vr_builder_export_check --json
+python bridge.py panda-xr-visual-proof --output reports/panda_xr_vr_visual_proof --width 1600 --height 900 --seconds 3 --json
+```
+
+This extension is under `extensions/panda_xr_vr_builder` and does not require OpenXR for desktop validation. The proof includes dynamic 3D stroke drawing, grab/move, smooth resizing, material color/shading edits, moveable AR editor panels, a persistent see-through 3D snap/fill grid, safe realtime behavior programs, a scene-quality gate, and a Panda3D offscreen visual screenshot path.
+
 ## 4. Read the report
 
 The pass writes:

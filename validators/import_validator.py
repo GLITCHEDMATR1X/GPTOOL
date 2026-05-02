@@ -18,6 +18,7 @@ STDLIB_HINTS = {
     "tkinter", "http", "urllib", "email", "html", "xml", "unittest", "typing_extensions",
 }
 EXCLUDED_DIRS = {".git", "__pycache__", ".mypy_cache", ".pytest_cache", "node_modules", "dist", "build"}
+PROJECT_MARKERS = {"pyproject.toml", "setup.py", "setup.cfg"}
 
 @lru_cache(maxsize=1)
 def stdlib_roots() -> set[str]:
@@ -70,6 +71,30 @@ def local_import_roots(project_root: Path | None) -> set[str]:
     return set(_local_import_roots_cached(str(project_root.resolve())))
 
 
+def file_local_import_roots(path: Path, project_root: Path | None) -> set[str]:
+    roots = local_import_roots(project_root or path.parent)
+    if project_root is None:
+        return roots
+
+    try:
+        base = project_root.resolve()
+        cursor = path.resolve().parent
+        cursor.relative_to(base)
+    except Exception:
+        return roots
+
+    while True:
+        if any((cursor / marker).exists() for marker in PROJECT_MARKERS):
+            roots.update(local_import_roots(cursor))
+        if cursor == base:
+            break
+        parent = cursor.parent
+        if parent == cursor:
+            break
+        cursor = parent
+    return roots
+
+
 def iter_python_files(path: Path) -> list[Path]:
     path = path.resolve()
     if path.is_file() or not path.exists():
@@ -98,7 +123,7 @@ def validate_imports(path: Path, project_root: Path | None = None) -> dict[str, 
         "ok": False,
         "imports": [],
         "missing": [],
-        "local_roots": sorted(local_import_roots(project_root)),
+        "local_roots": [],
         "error": None,
     }
     if not path.exists():
@@ -109,7 +134,8 @@ def validate_imports(path: Path, project_root: Path | None = None) -> dict[str, 
         roots = sorted(imported_roots(path))
         result["imports"] = roots
         missing = []
-        local_roots = local_import_roots(project_root or path.parent)
+        local_roots = file_local_import_roots(path, project_root or path.parent)
+        result["local_roots"] = sorted(local_roots)
         stdlib_names = stdlib_roots()
         for root in roots:
             if root in stdlib_names:

@@ -20,9 +20,9 @@ def run_bridge(*args: str) -> subprocess.CompletedProcess[str]:
     )
 
 
-def test_version_reports_pass12() -> None:
+def test_version_reports_current_pass() -> None:
     result = run_bridge("--version")
-    assert "0.6.2-pass12" in result.stdout
+    assert "0.6.6-pass16" in result.stdout
 
 
 def test_package_audit_runs() -> None:

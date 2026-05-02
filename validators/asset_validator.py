@@ -9,6 +9,16 @@ from typing import Any
 ASSET_EXTS = {".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif", ".wav", ".ogg", ".mp3", ".flac", ".glb", ".gltf", ".bam", ".egg", ".obj", ".mtl"}
 STRING_RE = re.compile(r'["\']([^"\']+\.[A-Za-z0-9]{2,5})["\']')
 RUNTIME_OUTPUT_TOKENS = ("screenshot", "backup", "proof", "crash_latest", "runtime_latest", "last_controls_state", "last_scene_state")
+RUNTIME_OUTPUT_NAMES = {
+    "scene.bin",
+    "scene.glb",
+    "scene.gltf",
+    "scene.manifest.json",
+    "scene.metadata.json",
+    "scene.obj",
+    "placeholder_loop.wav",
+    "panda_xr_vr_visual_proof.png",
+}
 
 def _extract_asset_strings(text: str) -> set[str]:
     return {m.group(1) for m in STRING_RE.finditer(text)}
@@ -18,9 +28,13 @@ def _is_runtime_output_reference(asset_ref: str) -> bool:
     if "{" in normalized or "}" in normalized:
         return True
     parts = [part for part in normalized.split("/") if part]
+    if normalized.startswith("/mnt/data/"):
+        return True
     if any(part in {"screenshots", "reports", "logs"} for part in parts[:-1]):
         return True
     name = Path(normalized).name
+    if name in RUNTIME_OUTPUT_NAMES:
+        return True
     return any(token in name for token in RUNTIME_OUTPUT_TOKENS)
 
 def validate_assets(project_root: Path) -> dict[str, Any]:
