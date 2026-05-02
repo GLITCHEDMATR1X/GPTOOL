@@ -34,7 +34,6 @@ from panda3d.core import (
     load_prc_file_data,
 )
 
-from .p3dopenxr import P3DOpenXR
 from .version import __version__
 
 APP_NAME = 'Etchline XR World Walk'
@@ -277,7 +276,8 @@ def ensure_dirs() -> None:
 
 def _is_runtime_unavailable(exc: BaseException) -> bool:
     names = {exc.__class__.__name__, exc.__class__.__qualname__}
-    return 'RuntimeUnavailableError' in names or ('runtime' in str(exc).lower() and 'unavailable' in str(exc).lower())
+    missing_xr_module = exc.__class__.__name__ == 'ModuleNotFoundError' and getattr(exc, 'name', '') == 'xr'
+    return missing_xr_module or 'RuntimeUnavailableError' in names or ('runtime' in str(exc).lower() and 'unavailable' in str(exc).lower())
 
 
 
@@ -466,6 +466,7 @@ class XRWorldWalk(ShowBase):
         self._setup_music()
 
         try:
+            from .p3dopenxr import P3DOpenXR
             self.xr = P3DOpenXR(self)
             self.xr.init(mirroring=1, mirror_mode=self.user_config.get('mirror_mode', 'average'), near=0.03, far=float(self.user_config.get('max_view_distance', 620.0)))
             self._build_claws()

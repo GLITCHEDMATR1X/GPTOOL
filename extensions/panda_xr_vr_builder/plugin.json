@@ -1,0 +1,28 @@
+{
+  "id": "panda_xr_vr_builder",
+  "name": "Panda XR VR Builder",
+  "version": "0.2.0",
+  "entry_module": "extensions.panda_xr_vr_builder",
+  "description": "Self-contained Panda3D/OpenXR-compatible scene editing extension with deterministic desktop proof and game-ready exports.",
+  "capabilities": [
+    "desktop_safe_proof",
+    "vr_edit_operation_model",
+    "dynamic_3d_art_strokes",
+    "safe_realtime_behaviors",
+    "material_color_shading",
+    "performance_budgeting",
+    "scene_quality_gate",
+    "export_integrity_validation",
+    "deformable_primitives",
+    "scene_manifest",
+    "obj_export",
+    "gltf_export",
+    "glb_export",
+    "metadata_export"
+  ],
+  "requires_openxr_for_proof": false,
+  "optional_runtime_dependencies": [
+    "panda3d",
+    "pyopenxr"
+  ]
+}

@@ -28,6 +28,10 @@ GENERATED_REPORT_NAMES = {
     "latest_report.md",
     "human_asset_scan.json",
 }
+GENERATED_REPORT_DIR_NAMES = {
+    "panda_xr_vr_visual_proof",
+    "panda_xr_vr_builder_proof",
+}
 KEEP_LOG_NAMES = {"README.md"}
 KEEP_LOG_PREFIXES = ("CHANGELOG_", "TESTED_")
 
@@ -95,6 +99,14 @@ def _is_generated_report(path: Path, root: Path) -> bool:
     return bool(rel.parts and rel.parts[0] == "reports" and path.name in GENERATED_REPORT_NAMES)
 
 
+def _is_generated_report_dir(path: Path, root: Path) -> bool:
+    try:
+        rel = path.relative_to(root)
+    except ValueError:
+        return False
+    return bool(len(rel.parts) == 2 and rel.parts[0] == "reports" and path.name in GENERATED_REPORT_DIR_NAMES)
+
+
 def _is_candidate_file(path: Path, root: Path, *, include_generated_logs: bool) -> tuple[str, str] | None:
     name = path.name.lower()
     if name.endswith((".pyc", ".pyo")):
@@ -130,6 +142,11 @@ def _walk_candidates(root: Path, *, include_examples: bool, include_generated_lo
             if child.name in OPTIONAL_HEAVY_DIR_NAMES and not include_examples:
                 size, count = _path_size(child)
                 candidates.append(Candidate(_safe_rel(child, root), "optional_examples", "proof/demo worlds and copied assets are optional artifacts", size, count))
+                seen.update(p for p in child.rglob("*"))
+                continue
+            if _is_generated_report_dir(child, root):
+                size, count = _path_size(child)
+                candidates.append(Candidate(_safe_rel(child, root), "generated_report_dir", "proof output should be regenerated per project", size, count))
                 seen.update(p for p in child.rglob("*"))
                 continue
         elif child.is_file():
@@ -206,7 +223,7 @@ def render_package_audit_text(report: dict[str, Any]) -> str:
     if candidates:
         lines.extend(["", "Largest cleanup candidates:"])
         for item in candidates[:TEXT_SUMMARY_LIMIT]:
-            lines.append(f"- [{item.get('category')}] {item.get('path')}: {mb(item.get('size_bytes', 0))} — {item.get('reason')}")
+            lines.append(f"- [{item.get('category')}] {item.get('path')}: {mb(item.get('size_bytes', 0))} - {item.get('reason')}")
     missing = report.get("required_core_missing") or []
     if missing:
         lines.extend(["", "Missing required core files:"])
@@ -257,6 +274,8 @@ def _should_include_for_zip(path: Path, root: Path, *, include_examples: bool, i
     if any(part in BUILD_DIR_NAMES for part in parts):
         return False
     if not include_pycache and any(part in CACHE_DIR_NAMES for part in parts):
+        return False
+    if len(parts) >= 2 and parts[0] == "reports" and parts[1] in GENERATED_REPORT_DIR_NAMES:
         return False
     if path.is_file():
         marker = _is_candidate_file(path, root, include_generated_logs=include_generated_logs)

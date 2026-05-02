@@ -17,6 +17,7 @@ from command_bridge.verifier import render_command_verification_markdown, verify
 from game_builder.human_asset_importer import import_human_assets, scan_human_asset_sources
 from game_builder.settings_planner import infer_game_settings, render_game_settings_markdown
 from game_builder.template_generator import generate_panda3d_template, render_generation_result_markdown
+from extensions.panda_xr_vr_builder.commands import command_panda_xr_export, command_panda_xr_proof, command_panda_xr_quality, command_panda_xr_visual_proof
 from diagnostics.env_probe import build_probe, finalize_probe
 from diagnostics.regression_checker import compare_snapshots
 from scanners.project_scanner import scan_project
@@ -1143,6 +1144,32 @@ def build_parser() -> argparse.ArgumentParser:
     human_import.add_argument("--output", help="Import report path. Defaults to <project>/reports/human_asset_import.json.")
     human_import.add_argument("--json", action="store_true")
     human_import.set_defaults(func=command_import_human_assets)
+
+    panda_xr = sub.add_parser("panda-xr-proof", help="Run the isolated Panda XR VR builder extension proof.")
+    panda_xr.add_argument("--output", default=str(ROOT / "reports" / "panda_xr_vr_builder_proof"), help="Output folder for proof manifest, exports, and proof_result.json.")
+    panda_xr.add_argument("--json", action="store_true")
+    panda_xr.set_defaults(func=command_panda_xr_proof)
+
+    panda_xr_export = sub.add_parser("panda-xr-export", help="Export a Panda XR VR builder manifest to OBJ, glTF, GLB, and metadata.")
+    panda_xr_export.add_argument("manifest")
+    panda_xr_export.add_argument("--output", required=True, help="Output folder for exported scene files.")
+    panda_xr_export.add_argument("--json", action="store_true")
+    panda_xr_export.set_defaults(func=command_panda_xr_export)
+
+    panda_xr_quality = sub.add_parser("panda-xr-quality", help="Validate a Panda XR VR builder manifest for references, geometry, behaviors, materials, and VR performance budgets.")
+    panda_xr_quality.add_argument("manifest")
+    panda_xr_quality.add_argument("--output", help="Optional JSON quality report path.")
+    panda_xr_quality.add_argument("--json", action="store_true")
+    panda_xr_quality.set_defaults(func=command_panda_xr_quality)
+
+    panda_xr_visual = sub.add_parser("panda-xr-visual-proof", help="Run a desktop-safe VR simulation draw pass and capture a 16:9 screenshot.")
+    panda_xr_visual.add_argument("--output", default=str(ROOT / "reports" / "panda_xr_vr_visual_proof"), help="Output folder for visual proof screenshot, manifest, exports, and visual_proof_report.json.")
+    panda_xr_visual.add_argument("--width", type=int, default=1600)
+    panda_xr_visual.add_argument("--height", type=int, default=900)
+    panda_xr_visual.add_argument("--seconds", type=float, default=3.0)
+    panda_xr_visual.add_argument("--backend", choices=("auto", "panda3d", "software"), default="auto")
+    panda_xr_visual.add_argument("--json", action="store_true")
+    panda_xr_visual.set_defaults(func=command_panda_xr_visual_proof)
 
     plan = sub.add_parser("plan-command", help="Turn a natural-language game request into an AI work order.")
     plan.add_argument("project")

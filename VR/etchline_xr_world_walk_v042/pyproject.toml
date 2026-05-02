@@ -6,7 +6,6 @@ build-backend = "hatchling.build"
 name = "chamelionpixels-xr-openxr-lab"
 version = "0.2.6"
 dependencies = [
-  "pyopenxr >= 1.1.0",
   "PyOpenGL >= 3.0.0",
   "panda3d >= 1.10.0",
 ]
@@ -33,3 +32,9 @@ packages = ["p3dopenxr"]
 
 [project.scripts]
 chamelionpixels-xr-lab = "p3dopenxr.app:main"
+panda-xr-proof = "p3dopenxr.builder_core:main"
+
+[project.optional-dependencies]
+xr = [
+  "pyopenxr >= 1.1.0",
+]
