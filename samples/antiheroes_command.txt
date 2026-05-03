@@ -1,1 +1,0 @@
-improve The Anti-Heroes as a third-person city sandbox: preserve existing combat/editor/menu systems, make districts and street traversal more readable, add hero-villain stance and service anchors only where safe, and verify with Panda3D proof instead of placeholders
