@@ -1,0 +1,15 @@
+Optional cleanup list. These are generated or stale files and are not required by the app:
+
+__pycache__/main.cpython-313.pyc
+config.json
+logs/latest.log
+screenshots/idle_packaged_fixed_aspect.png
+screenshots/character_world_strong_pass_final.png
+screenshots/character_world_strong_pass_wireframe.png
+screenshots/character_world_strong_pass_final.txt
+screenshots/character_world_recovered_fullbody.png
+screenshots/character_world_recovered_fullbody.txt
+screenshots/character_world_recovered_clean.png
+screenshots/character_world_recovered_clean.txt
+screenshots/character_world_recovered_wireframe.png
+screenshots/character_world_recovered_wireframe.txt

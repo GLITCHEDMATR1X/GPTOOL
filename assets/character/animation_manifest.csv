@@ -1,0 +1,11 @@
+clip,file,size_bytes,panda3d_actor_status,panda3d_anim_name,joint_count,notes
+"Dying Backwards","Dying Backwards.fbx",17011776,"OK","Ch45",52,"Loaded in Panda3D 1.10.16 as FBX Actor; used by Play Body mode"
+"Getting Up","Getting Up.fbx",17333072,"OK","Ch45",52,"Loaded in Panda3D 1.10.16 as FBX Actor; used by Play Body mode"
+"Head Hit","Head Hit.fbx",16711168,"OK","Ch45",52,"Loaded in Panda3D 1.10.16 as FBX Actor; used by Play Body mode"
+"Idle","Idle.fbx",16798384,"OK","Ch45",52,"Loaded in Panda3D 1.10.16 as FBX Actor; used by Play Body mode"
+"Jumping","Jumping.fbx",16791552,"OK","Ch45",52,"Loaded in Panda3D 1.10.16 as FBX Actor; used by Play Body mode"
+"Punching","Punching.fbx",16679184,"OK","Ch45",52,"Loaded in Panda3D 1.10.16 as FBX Actor; used by Play Body mode"
+"Roundhouse Kick","Roundhouse Kick.fbx",16880112,"OK","Ch45",52,"Loaded in Panda3D 1.10.16 as FBX Actor; used by Play Body mode"
+"Sprint","Sprint.fbx",16650752,"OK","Ch45",52,"Loaded in Panda3D 1.10.16 as FBX Actor; used by Play Body mode"
+"Sweep Fall","Sweep Fall.fbx",16880112,"OK","Ch45",52,"Loaded in Panda3D 1.10.16 as FBX Actor; used by Play Body mode"
+"Walking","Walking.fbx",16711552,"OK","Ch45",52,"Loaded in Panda3D 1.10.16 as FBX Actor; used by Play Body mode"

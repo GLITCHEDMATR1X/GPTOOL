@@ -1,0 +1,35 @@
+FBX Gib Loader - Animation Body Patch Bundle
+
+Baseline expected:
+  fbx_gib_loader_recovered_fullbody_pass
+
+This bundle is patch-only. It does not include the full app or the large GLB/FBX assets.
+
+Files included:
+  fbx_animation_body_pass.patch
+  assets/character/animation_manifest.csv
+  cleanup_optional.txt
+
+How to apply from the root of your existing fbx_gib_loader folder:
+
+  python -m py_compile main.py
+  git apply --reject --whitespace=fix fbx_animation_body_pass.patch
+  copy assets\character\animation_manifest.csv assets\character\animation_manifest.csv
+  python -m py_compile main.py
+
+If using Unix/Git Bash patch instead of git apply:
+
+  patch -p1 < fbx_animation_body_pass.patch
+
+Controls added by the patch:
+  P       toggle Edit Mesh / Play Body mode
+  Space   pause or resume animation
+  1-0     select animation clip
+  [ / ]   previous / next animation clip
+  W/S     move body forward/backward in Play Body mode
+  A/D     turn body in Play Body mode
+  Shift   sprint movement speed
+
+Important:
+  The FBX clips must already be present in assets/character/animations/.
+  This patch does not add or replace the large FBX/GLB files.

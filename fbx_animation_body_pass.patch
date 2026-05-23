@@ -1,0 +1,535 @@
+--- a/main.py
++++ b/main.py
+@@ -10,6 +10,7 @@
+ ASSETS_DIR = BASE_DIR / "assets"
+ CHARACTER_DIR = ASSETS_DIR / "character"
+ CHARACTER_MESH = CHARACTER_DIR / "Idle.glb"
++ANIMATIONS_DIR = CHARACTER_DIR / "animations"
+ SCREENSHOTS_DIR = BASE_DIR / "screenshots"
+ EXPORTS_DIR = BASE_DIR / "exports"
+ LOGS_DIR = BASE_DIR / "logs"
+@@ -24,6 +25,8 @@
+     parser.add_argument("--scene", default="character_world", choices=["character_world", "terrain", "room"], help="Startup scene.")
+     parser.add_argument("--wireframe", action="store_true", help="Start with wireframe overlay enabled.")
+     parser.add_argument("--clean-shot", action="store_true", help="Hide editor panels before the CLI screenshot so mesh/world framing is easier to inspect.")
++    parser.add_argument("--play-body", action="store_true", help="Start in animated play-body preview mode for screenshots/testing.")
++    parser.add_argument("--animation", default="Walking", help="Animation clip name to load for play-body screenshot/testing.")
+     return parser.parse_args()
+ 
+ 
+@@ -40,6 +43,7 @@
+ 
+ try:
+     from direct.showbase.ShowBase import ShowBase
++    from direct.actor.Actor import Actor
+     from direct.gui.DirectGui import DirectButton, DirectFrame, DirectLabel, DGG
+     from direct.task import Task
+     from panda3d.core import (
+@@ -97,6 +101,8 @@
+     "show-frame-rate-meter 0",
+     "texture-anisotropic-degree 8",
+     "audio-library-name null",
++    "notify-level-assimp fatal",
++    "notify-level-gobj fatal",
+ ]
+ if ARGS.headless or ARGS.screenshot:
+     _prc_lines.append("window-type offscreen")
+@@ -312,6 +318,8 @@
+         "- Character World scene starts with the editable character plus an editable world floor.\n"
+         "- Recovered the full-body character authoring camera after the strong pass cropped the mesh in screenshots.\n"
+         "- Added F11 panel hide/show and --clean-shot for clearer visual proof screenshots.\n"
++        "- Added Play Body mode: Panda3D loads the packaged FBX clips as animated Actors in the same editable world.\n"
++        "- Added animation controls: P play/edit mode, Space pause, 1-0 clip select, [/] cycle clips, WASD body movement, Shift sprint.\n"
+         "- Added screenshot proof path, F12 capture, OBJ export, mesh quality report, and cached bounds for faster picking.\n"
+         "- Separate Mesh Editor folder is no longer needed in this pass.\n",
+         encoding="utf-8",
+@@ -320,13 +328,14 @@
+     readme.write_text(
+         "Character mesh source for Unified Character World Studio.\n\n"
+         "Idle.glb is loaded into editable geometry when root main.py starts.\n"
+-        "FBX clips remain source animation references; this pass focuses on editable mesh/world authoring.\n"
++        "The FBX clips in assets/character/animations are now used directly by Panda3D as animated Actor previews.\n"
++        "Play Body mode hides the editable mesh and shows the animated FBX body on the same editable world floor.\n"
++        "Controls: P play/edit mode, Space pause, 1-0 select clips, [/] cycle clips, WASD move/turn, Shift sprint.\n"
+         "Use F12 or --screenshot to create proof screenshots. Add --clean-shot for panel-free proof.\n"
+         "Use Save Active OBJ to export the active edited mesh.\n",
+         encoding="utf-8",
+     )
+ 
+-
+ def _safe_name(text):
+     keep = []
+     for char in str(text):
+@@ -575,6 +584,32 @@
+             self.node.clearRenderMode(); self.node.setTwoSided(self.two_sided_visual)
+ 
+ 
++
++
++def discover_animation_clips():
++    clips = []
++    if ANIMATIONS_DIR.exists():
++        for path in sorted(ANIMATIONS_DIR.glob("*.fbx")):
++            clips.append({"name": path.stem, "path": path, "kind": "fbx"})
++    # The GLB base has an embedded idle animation. Keep it as a backup source, but
++    # prefer the FBX Idle clip when present so the numbered clip set stays consistent.
++    if CHARACTER_MESH.exists() and not any(c["name"].lower() == "idle" for c in clips):
++        clips.insert(0, {"name": "Idle", "path": CHARACTER_MESH, "kind": "glb"})
++    return clips
++
++
++def _clip_matches(requested, clip_name):
++    a = str(requested or "").strip().lower().replace("_", " ").replace("-", " ")
++    b = str(clip_name or "").strip().lower().replace("_", " ").replace("-", " ")
++    return a == b or a in b or b in a
++
++
++def _actor_tight_bounds(actor):
++    bounds = actor.getTightBounds()
++    if not bounds or bounds[0] is None or bounds[1] is None:
++        return None, None
++    return Vec3(bounds[0]), Vec3(bounds[1])
++
+ class ClayWorldStudio(ShowBase):
+     def __init__(self):
+         _ensure_workspace_files()
+@@ -582,13 +617,16 @@
+         self.scene_order = ["character_world", "terrain", "room"]; self.scene_display_names = {"character_world": "Character World", "terrain": "World Terrain", "room": "3D Room"}
+         self.brush_radius = 0.34; self.brush_strength = 1.0; self.sculpt_direction = 0; self.orbiting = False; self.last_mouse = None; self.cam_distance = 8.0; self.wireframe = bool(ARGS.wireframe); self.help_visible = False; self.ui_visible = True; self.hover_mesh = None; self.hover_hit = None; self.hover_normal = None; self._last_window_size = None; self.left_ui_mouse_limit = -0.60; self.right_ui_mouse_limit = 0.60; self.select_all = False; self.scene_mode = ARGS.scene if ARGS.scene in self.scene_order else "character_world"
+         self.character_import_status = "No character import attempted yet."; self.last_screenshot_path = None
++        self.animation_clips = discover_animation_clips(); self.current_clip_index = 0; self.body_mode = False; self.body_root = None; self.body_actor = None; self.body_anim_name = None; self.body_clip_status = "No animation clip loaded yet."; self.body_move_speed = 2.6; self.body_turn_speed = 135.0; self.body_heading = 180.0; self.shift_down = False; self.body_paused = False; self.autoplay_locomotion = not bool(ARGS.screenshot)
+         self.arrow_state = {"left": False, "right": False, "up": False, "down": False}; self.move_state = {"w": False, "a": False, "s": False, "d": False}; self.arrow_turn_speed = 110.0; self.arrow_pitch_speed = 85.0; self.pan_speed = 8.5
+         self.scene_meshes = {name: [] for name in self.scene_order}; self.scene_roots = {name: self.render.attachNewNode(f"{name}_root") for name in self.scene_order}; self.active_mesh_index_by_scene = {name: 0 for name in self.scene_order}; self.terrain_tiles = {}; self.terrain_tile_size = 10.0; self.terrain_seg = 30; self.terrain_auto_expand = False; self.scene_object_counter = 0
+         self.undo_stack = []; self.redo_stack = []; self.pending_stroke_state = None; self.max_history = 80
+         self._build_character_world_scene(); self._build_terrain_scene(); self._build_room_scene()
+         for scene_name, root in self.scene_roots.items():
+             if scene_name != self.scene_mode: root.hide()
+-        self._setup_camera(); self._setup_lights(); self._setup_ui(); self._setup_cursor(); self._bind_events(); self._apply_mesh_highlights(); self.focus_on_mesh(self.active_mesh, reset_angles=True); self.taskMgr.add(self._update, "update_task"); self.status("Ready: editable character mesh loaded into editable world."); self._refresh_info_labels()
++        self._setup_camera(); self._setup_lights(); self._setup_ui(); self._setup_cursor(); self._setup_animation_body(); self._bind_events(); self._apply_mesh_highlights(); self.focus_on_mesh(self.active_mesh, reset_angles=True); self.taskMgr.add(self._update, "update_task"); self.status("Ready: editable character mesh, animated body preview, and editable world loaded."); self._refresh_info_labels()
++        if ARGS.play_body:
++            self.enable_body_mode(True, requested_clip=ARGS.animation)
+         if ARGS.screenshot:
+             self.taskMgr.doMethodLater(max(1, ARGS.frames) / 60.0, self._delayed_cli_screenshot, "cli_screenshot_task")
+ 
+@@ -692,6 +730,226 @@
+         key = DirectionalLight("key"); key.setColor((0.96, 0.93, 0.90, 1.0)); key_np = self.render.attachNewNode(key); key_np.setHpr(-48, -28, 0); self.render.setLight(key_np)
+         rim = DirectionalLight("rim"); rim.setColor((0.32, 0.37, 0.46, 1.0)); rim_np = self.render.attachNewNode(rim); rim_np.setHpr(132, -8, 0); self.render.setLight(rim_np)
+ 
++
++    def _setup_animation_body(self):
++        self.body_root = self.scene_roots["character_world"].attachNewNode("animated_body_root")
++        self.body_root.setPos(0, 0, 0)
++        self.body_root.setH(self.body_heading)
++        self.body_root.hide()
++        if self.animation_clips:
++            idle_index = self._clip_index_for_name("Idle")
++            if idle_index >= 0:
++                self.current_clip_index = idle_index
++            self.body_clip_status = f"Animation clips ready: {len(self.animation_clips)} found. Toggle Play Body or press 1-0 to load."
++            if ARGS.play_body:
++                self.load_body_clip(ARGS.animation, announce=False)
++        else:
++            self.body_clip_status = "No FBX/GLB animation clips found in assets/character/animations."
++            _write_log(self.body_clip_status)
++
++    def _clip_index_for_name(self, requested):
++        if not self.animation_clips:
++            return -1
++        for index, clip in enumerate(self.animation_clips):
++            if _clip_matches(requested, clip["name"]):
++                return index
++        return 0
++
++    def _body_clip_number_text(self):
++        if not self.animation_clips:
++            return "No animation clips found."
++        parts = []
++        for idx, clip in enumerate(self.animation_clips[:10]):
++            key = "0" if idx == 9 else str(idx + 1)
++            parts.append(f"{key}:{clip['name']}")
++        return "  ".join(parts)
++
++    def _normalize_actor_to_body_root(self, actor, clip_kind):
++        # Mixamo FBX files import with the height on Panda Y. Roll them upright,
++        # then fit the body to the same authoring height as the editable GLB mesh.
++        actor.setHpr(0, 0, 90 if clip_kind == "fbx" else 0)
++        actor.setScale(1.0)
++        self.graphicsEngine.renderFrame()
++        min_v, max_v = _actor_tight_bounds(actor)
++        if min_v is None:
++            actor.setScale(1.0)
++            actor.setPos(0, 0, 0)
++            return
++        extent = max_v - min_v
++        max_extent = max(extent.x, extent.y, extent.z, 0.001)
++        actor.setScale(3.25 / max_extent)
++        self.graphicsEngine.renderFrame()
++        min_v, max_v = _actor_tight_bounds(actor)
++        if min_v is None:
++            return
++        center = (min_v + max_v) * 0.5
++        actor.setPos(-center.x, -center.y, -min_v.z)
++
++    def _style_body_actor(self, actor):
++        actor.clearTexture()
++        actor.setColor(0.88, 0.78, 0.62, 1.0)
++        mat = Material()
++        mat.setDiffuse((0.88, 0.78, 0.62, 1.0))
++        mat.setAmbient((0.55, 0.47, 0.36, 1.0))
++        mat.setSpecular((0.18, 0.16, 0.14, 1.0))
++        mat.setShininess(18.0)
++        actor.setMaterial(mat, 1)
++
++    def load_body_clip(self, requested=None, announce=True):
++        if not self.animation_clips:
++            self.body_clip_status = "No animation clips are available."
++            if announce:
++                self.status(self.body_clip_status)
++            return False
++        index = self._clip_index_for_name(requested) if not isinstance(requested, int) else int(requested) % len(self.animation_clips)
++        if index < 0:
++            return False
++        clip = self.animation_clips[index]
++        if self.body_actor is not None:
++            try:
++                self.body_actor.stop()
++                self.body_actor.cleanup()
++            except Exception:
++                pass
++            self.body_actor.removeNode()
++            self.body_actor = None
++        try:
++            actor = Actor(str(clip["path"]))
++            actor.reparentTo(self.body_root)
++            self._normalize_actor_to_body_root(actor, clip["kind"])
++            self._style_body_actor(actor)
++            names = actor.getAnimNames()
++            self.body_anim_name = names[0] if names else None
++            if self.body_anim_name:
++                actor.loop(self.body_anim_name)
++            self.body_actor = actor
++            self.current_clip_index = index
++            joint_count = len(actor.getJoints())
++            self.body_clip_status = f"Animated body: {clip['name']} ({clip['kind'].upper()}, {joint_count} joints)"
++            _write_log(self.body_clip_status)
++            if announce:
++                self.status(self.body_clip_status)
++            return True
++        except Exception as exc:
++            self.body_clip_status = f"Animation clip load failed for {clip['name']}: {exc}"
++            _write_log(self.body_clip_status)
++            if announce:
++                self.status(self.body_clip_status)
++            return False
++
++    def set_body_clip_by_index(self, index):
++        self.load_body_clip(index, announce=True)
++        if not self.body_mode:
++            self.enable_body_mode(True)
++        self._refresh_info_labels()
++
++    def cycle_body_clip(self, direction=1):
++        if not self.animation_clips:
++            self.status("No animation clips to cycle.")
++            return
++        self.set_body_clip_by_index((self.current_clip_index + direction) % len(self.animation_clips))
++
++    def _set_editable_character_visible(self, visible):
++        for mesh in self.scene_meshes.get("character_world", []):
++            if mesh.mesh_type == "character":
++                mesh.node.show() if visible else mesh.node.hide()
++
++    def enable_body_mode(self, enabled=True, requested_clip=None):
++        self.body_mode = bool(enabled)
++        if self.body_mode:
++            if requested_clip and (self.body_actor is None or not _clip_matches(requested_clip, self.animation_clips[self.current_clip_index]["name"])):
++                self.load_body_clip(requested_clip, announce=False)
++            elif self.body_actor is None:
++                self.load_body_clip("Idle", announce=False)
++            self.scene_roots[self.scene_mode].hide()
++            self.scene_mode = "character_world"
++            self.scene_roots["character_world"].show()
++            self._set_editable_character_visible(False)
++            if self.body_root is not None:
++                self.body_root.show()
++            self.cam_pivot.setPos(self.body_root.getPos() + Vec3(0, 0, 1.45))
++            self.cam_distance = 7.5
++            self.camera.setPos(0, -self.cam_distance, 1.15)
++            self.cam_heading.setH(self.body_heading + 180.0)
++            self.cam_pitch.setP(-9.0)
++            self.status(f"Play Body mode ON. {self.body_clip_status}")
++        else:
++            if self.body_root is not None:
++                self.body_root.hide()
++            self._set_editable_character_visible(True)
++            self.focus_on_mesh(self.active_mesh, reset_angles=True)
++            self.status("Play Body mode OFF. Editable character mesh restored.")
++        self._apply_mesh_highlights()
++        self._refresh_info_labels()
++
++    def toggle_body_mode(self):
++        self.enable_body_mode(not self.body_mode)
++
++    def pause_resume_body_animation(self):
++        if not self.body_actor or not self.body_anim_name:
++            self.status("No body animation loaded.")
++            return
++        self.body_paused = not self.body_paused
++        if self.body_paused:
++            self.body_actor.stop(self.body_anim_name)
++            self.status("Body animation paused.")
++        else:
++            self.body_actor.loop(self.body_anim_name)
++            self.status("Body animation resumed.")
++
++    def _try_autoplay_locomotion_clip(self, moving):
++        if (not self.autoplay_locomotion) or (not self.body_mode) or (not self.animation_clips):
++            return
++        current = self.animation_clips[self.current_clip_index]["name"].lower()
++        desired = None
++        if moving:
++            desired = "Sprint" if self.shift_down else "Walking"
++        elif current in ("walking", "sprint"):
++            desired = "Idle"
++        if desired and not _clip_matches(desired, self.animation_clips[self.current_clip_index]["name"]):
++            idx = self._clip_index_for_name(desired)
++            if idx >= 0:
++                self.load_body_clip(idx, announce=False)
++
++    def _do_body_controls(self, dt):
++        if not self.body_mode or self.body_root is None:
++            return False
++        turn = 0.0
++        if self.move_state["a"]:
++            turn += self.body_turn_speed * dt
++        if self.move_state["d"]:
++            turn -= self.body_turn_speed * dt
++        if turn:
++            self.body_heading += turn
++            self.body_root.setH(self.body_heading)
++        forward_amount = (1.0 if self.move_state["w"] else 0.0) - (1.0 if self.move_state["s"] else 0.0)
++        moving = abs(forward_amount) > 0.01
++        if moving:
++            speed = self.body_move_speed * (1.85 if self.shift_down else 1.0)
++            heading_rad = math.radians(self.body_heading)
++            step = Vec3(-math.sin(heading_rad), math.cos(heading_rad), 0) * (forward_amount * speed * dt)
++            pos = self.body_root.getPos() + step
++            pos.z = 0.0
++            self.body_root.setPos(pos)
++        self._try_autoplay_locomotion_clip(moving)
++        # Third-person follow camera. Mouse/arrow orbit still rotates the camera rig.
++        target = self.body_root.getPos() + Vec3(0, 0, 1.45)
++        current = self.cam_pivot.getPos()
++        self.cam_pivot.setPos(current + ((target - current) * clamp(dt * 8.0, 0.0, 1.0)))
++        return True
++
++    def _animation_text(self):
++        mode = "ON" if self.body_mode else "OFF"
++        clip = self.animation_clips[self.current_clip_index]["name"] if self.animation_clips else "None"
++        return (
++            f"Play Body: {mode}\n"
++            f"Clip: {clip}\n"
++            f"P toggles body, Space pauses\n"
++            f"1-0 clips, [/] cycles\n"
++            f"W/S move, A/D turn, Shift sprint\n"
++            f"{self._body_clip_number_text()}"
++        )
++
+     def _button_scale_for_text(self, text):
+         length = len(text)
+         if length <= 10: return 0.036
+@@ -714,7 +972,7 @@
+         self._add_small_button(self.left_panel, 0.20, 0.12, "-", self.decrease_strength); self._add_small_button(self.left_panel, 0.40, 0.12, "+", self.increase_strength)
+         self.fov_label = DirectLabel(parent=self.left_panel, text="", text_fg=(0.96, 0.97, 1.0, 1.0), text_scale=0.030, text_align=TextNode.ALeft, frameColor=(0, 0, 0, 0), pos=(left_pad, 0, 0.01), textMayChange=1)
+         self._add_small_button(self.left_panel, 0.20, -0.07, "-", self.decrease_fov); self._add_small_button(self.left_panel, 0.40, -0.07, "+", self.increase_fov)
+-        self.help_label = DirectLabel(parent=self.left_panel, text="H toggles this help\nLMB hold: raise selected mesh\nRMB hold: lower selected mesh\nMMB drag: orbit camera\nArrow keys: rotate view\nWASD: pan camera\nMouse wheel: zoom\nTab: Character World -> Terrain -> Room\nF11: hide/show panels\nF12: screenshot proof\nCtrl+Z: undo    Ctrl+Y: redo", text_fg=(0.79, 0.85, 0.93, 1.0), text_scale=0.024, text_align=TextNode.ALeft, text_wordwrap=22, frameColor=(0, 0, 0, 0), pos=(left_pad, 0, -0.30)); self.help_label.hide()
++        self.help_label = DirectLabel(parent=self.left_panel, text="H toggles this help\nLMB hold: raise selected mesh\nRMB hold: lower selected mesh\nMMB drag: orbit camera\nArrow keys: rotate view\nWASD: pan camera\nMouse wheel: zoom\nTab: Character World -> Terrain -> Room\nP: play/edit body mode\nSpace: pause body animation\n1-0: animation clips\n[ / ]: previous/next clip\nF11: hide/show panels\nF12: screenshot proof\nCtrl+Z: undo    Ctrl+Y: redo", text_fg=(0.79, 0.85, 0.93, 1.0), text_scale=0.024, text_align=TextNode.ALeft, text_wordwrap=22, frameColor=(0, 0, 0, 0), pos=(left_pad, 0, -0.30)); self.help_label.hide()
+         self.status_label = DirectLabel(parent=self.left_panel, text="", text_fg=(0.98, 0.90, 0.72, 1.0), text_scale=0.023, text_align=TextNode.ALeft, text_wordwrap=22, frameColor=(0, 0, 0, 0), pos=(left_pad, 0, -0.82), textMayChange=1)
+         DirectLabel(parent=self.right_panel, text="TOOLS", text_fg=(0.97, 0.98, 1.0, 1.0), text_scale=0.040, text_align=TextNode.ACenter, frameColor=(0, 0, 0, 0), pos=(right_center, 0, 0.90))
+         cl, cr = -0.47, -0.17; rows = [0.80, 0.70, 0.60, 0.50, 0.40, 0.30, 0.20, 0.10, 0.00, -0.10, -0.20, -0.30, -0.40]
+@@ -730,7 +988,7 @@
+         self._add_panel_button(self.right_panel, cl, rows[9], "Add Cylinder", self.add_cylinder_here); self._add_panel_button(self.right_panel, cr, rows[9], "Add Cone", self.add_cone_here)
+         self._add_panel_button(self.right_panel, cl, rows[10], "Save Active OBJ", self.save_active_obj); self._add_panel_button(self.right_panel, cr, rows[10], "Screenshot F12", self.capture_timestamped_screenshot)
+         self._add_panel_button(self.right_panel, cl, rows[11], "Reset Camera", self.reset_camera_view); self._add_panel_button(self.right_panel, cr, rows[11], "Reset Scene", self.reset_current_scene)
+-        self._add_panel_button(self.right_panel, cl, rows[12], "Toggle Help (H)", self.toggle_help); self._add_panel_button(self.right_panel, cr, rows[12], "Focus Active", self.focus_active_mesh)
++        self._add_panel_button(self.right_panel, cl, rows[12], "Play Body (P)", self.toggle_body_mode); self._add_panel_button(self.right_panel, cr, rows[12], "Next Anim", self.cycle_body_clip)
+         self.texture_label = DirectLabel(parent=self.right_panel, text="", text_fg=(0.76, 0.82, 0.90, 1.0), text_scale=0.024, text_align=TextNode.ALeft, text_wordwrap=24, frameColor=(0, 0, 0, 0), pos=(right_left, 0, -0.60), textMayChange=1)
+         self.view_label = DirectLabel(parent=self.right_panel, text="", text_fg=(0.76, 0.82, 0.90, 1.0), text_scale=0.024, text_align=TextNode.ALeft, text_wordwrap=24, frameColor=(0, 0, 0, 0), pos=(right_left, 0, -0.78), textMayChange=1)
+         self.terrain_label = DirectLabel(parent=self.right_panel, text="", text_fg=(0.76, 0.82, 0.90, 1.0), text_scale=0.024, text_align=TextNode.ALeft, text_wordwrap=24, frameColor=(0, 0, 0, 0), pos=(right_left, 0, -0.93), textMayChange=1)
+@@ -762,7 +1020,10 @@
+         self.accept("arrow_left", lambda: self._set_arrow_state("left", True)); self.accept("arrow_left-up", lambda: self._set_arrow_state("left", False)); self.accept("arrow_right", lambda: self._set_arrow_state("right", True)); self.accept("arrow_right-up", lambda: self._set_arrow_state("right", False)); self.accept("arrow_up", lambda: self._set_arrow_state("up", True)); self.accept("arrow_up-up", lambda: self._set_arrow_state("up", False)); self.accept("arrow_down", lambda: self._set_arrow_state("down", True)); self.accept("arrow_down-up", lambda: self._set_arrow_state("down", False))
+         for key in "wasd":
+             self.accept(key, lambda k=key: self._set_move_state(k, True)); self.accept(f"{key}-up", lambda k=key: self._set_move_state(k, False))
+-        self.accept("tab", self.cycle_scene_mode); self.accept("shift-tab", lambda: self.cycle_scene_mode(-1)); self.accept("h", self.toggle_help); self.accept("f11", self.toggle_ui_panels); self.accept("f12", self.capture_timestamped_screenshot); self.accept("control-z", self.undo); self.accept("control-y", self.redo); self.accept("escape", self.userExit)
++        self.accept("tab", self.cycle_scene_mode); self.accept("shift-tab", lambda: self.cycle_scene_mode(-1)); self.accept("h", self.toggle_help); self.accept("p", self.toggle_body_mode); self.accept("space", self.pause_resume_body_animation); self.accept("[", lambda: self.cycle_body_clip(-1)); self.accept("]", lambda: self.cycle_body_clip(1)); self.accept("shift", lambda: setattr(self, "shift_down", True)); self.accept("shift-up", lambda: setattr(self, "shift_down", False)); self.accept("f11", self.toggle_ui_panels); self.accept("f12", self.capture_timestamped_screenshot); self.accept("control-z", self.undo); self.accept("control-y", self.redo); self.accept("escape", self.userExit)
++        number_keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
++        for idx, key in enumerate(number_keys):
++            self.accept(key, lambda i=idx: self.set_body_clip_by_index(i))
+ 
+     def _set_arrow_state(self, key_name, is_down):
+         self.arrow_state[key_name] = is_down
+@@ -827,7 +1088,7 @@
+             tex_name = os.path.basename(self.active_mesh.texture_path) if (self.active_mesh and self.active_mesh.texture_path) else "None"; texture_text = f"Texture on {self.active_mesh.name if self.active_mesh else 'None'}:\n{tex_name}"
+         side_mode = "inside-only room editing" if self.scene_mode == "room" else "outside surface editing"
+         import_line = self.character_import_status if self.scene_mode == "character_world" else "Character stays editable in Character World."
+-        self.texture_label["text"] = texture_text; self.view_label["text"] = f"View: {'Wireframe' if self.wireframe else 'Solid'}\nFocused mesh: {self.active_mesh.name if self.active_mesh else 'None'}\nAuto-expand: {'On' if self.terrain_auto_expand else 'Off'}\nEdit side: {side_mode}\n{import_line}"; self.terrain_label["text"] = self._scene_stats_text(); self.select_all_button["text"] = "Select All: On" if self.select_all else "Select All: Off"; self.auto_expand_button["text"] = f"Auto Expand: {'On' if self.terrain_auto_expand else 'Off'}"; terrain_mode = self.scene_mode == "terrain"; self.expand_button["state"] = DGG.NORMAL if terrain_mode else DGG.DISABLED; self.auto_expand_button["state"] = DGG.NORMAL if terrain_mode else DGG.DISABLED
++        self.texture_label["text"] = texture_text; self.view_label["text"] = f"View: {'Wireframe' if self.wireframe else 'Solid'}\nFocused mesh: {self.active_mesh.name if self.active_mesh else 'None'}\nAuto-expand: {'On' if self.terrain_auto_expand else 'Off'}\nEdit side: {side_mode}\n{import_line}\n\n{self._animation_text()}"; self.terrain_label["text"] = self._scene_stats_text(); self.select_all_button["text"] = "Select All: On" if self.select_all else "Select All: Off"; self.auto_expand_button["text"] = f"Auto Expand: {'On' if self.terrain_auto_expand else 'Off'}"; terrain_mode = self.scene_mode == "terrain"; self.expand_button["state"] = DGG.NORMAL if terrain_mode else DGG.DISABLED; self.auto_expand_button["state"] = DGG.NORMAL if terrain_mode else DGG.DISABLED
+ 
+     def status(self, text): self.status_label["text"] = text
+ 
+@@ -916,6 +1177,8 @@
+         self.select_all = not self.select_all; self._apply_mesh_highlights(); self._refresh_info_labels(); self.status("All meshes in the current scene selected." if self.select_all else f"Only {self.active_mesh.name if self.active_mesh else 'None'} selected.")
+ 
+     def cycle_scene_mode(self, direction=1):
++        if self.body_mode:
++            self.enable_body_mode(False)
+         self.sculpt_direction = 0; current_index = self.scene_order.index(self.scene_mode); next_index = (current_index + direction) % len(self.scene_order); new_scene = self.scene_order[next_index]
+         self.scene_roots[self.scene_mode].hide(); self.scene_mode = new_scene; self.scene_roots[self.scene_mode].show()
+         if self.active_mesh is None and self.meshes: self.active_mesh_index = 0
+@@ -1087,7 +1350,7 @@
+         if pitch_delta: self.cam_pitch.setP(clamp(self.cam_pitch.getP() + pitch_delta, -88.0, 88.0))
+ 
+     def _do_pan(self, dt):
+-        if self.orbiting: return
++        if self.body_mode or self.orbiting: return
+         right = self.cam_heading.getQuat(self.render).getRight(); forward = self.cam_heading.getQuat(self.render).getForward(); right.z = 0.0; forward.z = 0.0
+         if right.length_squared() > 1e-12: right.normalize()
+         if forward.length_squared() > 1e-12: forward.normalize()
+@@ -1100,7 +1363,7 @@
+             move.normalize(); self.cam_pivot.setPos(self.cam_pivot.getPos() + (move * self.pan_speed * dt))
+ 
+     def _do_sculpt(self, dt):
+-        if self.sculpt_direction == 0 or (not self.mouseWatcherNode.hasMouse()) or self._mouse_over_ui(): return
++        if self.body_mode or self.sculpt_direction == 0 or (not self.mouseWatcherNode.hasMouse()) or self._mouse_over_ui(): return
+         ray_origin, ray_dir = self._mouse_ray()
+         if ray_origin is None: return
+         mesh, hit, normal = self._pick_edit_target(ray_origin, ray_dir)
+@@ -1168,7 +1431,8 @@
+             f"Triangles: {len(mesh.triangles):,}\n"
+             f"Bounds: X {extent.x:.2f} / Y {extent.y:.2f} / Z {extent.z:.2f}\n"
+             f"Scene: {self.scene_display_names.get(self.scene_mode, self.scene_mode)}\n"
+-            f"Character import: {self.character_import_status}"
++            f"Character import: {self.character_import_status}\n"
++            f"{self._animation_text()}"
+         )
+ 
+     def save_active_obj(self):
+@@ -1229,14 +1493,22 @@
+         self.graphicsEngine.renderFrame(); self.graphicsEngine.renderFrame()
+         target = Path(ARGS.screenshot)
+         self.capture_screenshot(target)
+-        self.userExit()
++        if self.body_actor is not None:
++            try:
++                self.body_actor.stop()
++            except Exception:
++                pass
++        # Some binary FBX/Assimp combinations can abort during full Panda shutdown in
++        # offscreen proof mode. The screenshot has already been saved, so leave the
++        # CLI path clean and deterministic without touching normal interactive exit.
++        sys.stdout.flush(); sys.stderr.flush(); os._exit(0)
+         return Task.done
+ 
+     def _update(self, task):
+         dt = globalClock.getDt()
+         if self.mouseWatcherNode is not None:
+             self._refresh_mouse_limits(); self._do_orbit(); self._do_sculpt(dt); self._update_cursor()
+-        self._do_arrow_orbit(dt); self._do_pan(dt); self._refresh_info_labels(); return Task.cont
++        self._do_arrow_orbit(dt); self._do_body_controls(dt); self._do_pan(dt); self._refresh_info_labels(); return Task.cont
+ 
+ 
+ if __name__ == "__main__":
+--- a/README.txt
++++ b/README.txt
+@@ -4,30 +4,54 @@
+ Run:
+   python main.py
+ 
+-This pass uses one root app file. The editable character mesh and the editable world floor live together in the Character World scene.
++This is now one root Panda3D app file. The editable character mesh, editable world floor, editable terrain scene, editable room scene, and animated body preview live in the same tool.
++
++Core modes:
++  Edit Mesh Mode     Idle.glb is imported as editable geometry for sculpting and OBJ export.
++  Play Body Mode     The packaged FBX clips load as Panda3D Actor animations on the same world floor.
+ 
+ Controls:
+-  LMB hold       Raise selected mesh geometry
+-  RMB hold       Lower selected mesh geometry
+-  MMB drag       Orbit camera
+-  WASD           Pan camera
+-  Mouse wheel    Zoom
+-  Tab            Cycle Character World / World Terrain / 3D Room
+-  Prev/Next Mesh Switch active editable target
+-  F11            Hide/show editor panels for clean inspection
+-  F12            Save screenshot proof to screenshots/
+-  Ctrl+Z/Y       Undo / Redo
+-  Esc            Exit
++  LMB hold           Raise selected mesh geometry
++  RMB hold           Lower selected mesh geometry
++  MMB drag           Orbit camera
++  WASD               Pan camera in edit mode / move-turn body in Play Body mode
++  Shift              Sprint while moving in Play Body mode
++  Mouse wheel        Zoom
++  Tab                Cycle Character World / World Terrain / 3D Room
++  P                  Toggle Play Body mode
++  Space              Pause/resume body animation
++  1-0                Select animation clips
++  [ / ]              Previous / next animation clip
++  Prev/Next Mesh     Switch active editable target
++  F11                Hide/show editor panels for clean inspection
++  F12                Save screenshot proof to screenshots/
++  Ctrl+Z/Y           Undo / Redo
++  Esc                Exit
++
++Animation clips:
++  1 Dying Backwards
++  2 Getting Up
++  3 Head Hit
++  4 Idle
++  5 Jumping
++  6 Punching
++  7 Roundhouse Kick
++  8 Sprint
++  9 Sweep Fall
++  0 Walking
+ 
+ Buttons:
+   Save Active OBJ exports the active edited mesh into exports/.
+   Add Orb/Block/Cylinder/Cone creates editable world objects in the current scene.
+   Select All lets brush operations affect all meshes in the current scene.
++  Play Body (P) toggles the animated body preview.
++  Next Anim cycles the active FBX animation clip.
+ 
+ Headless proof commands:
+-  python main.py --headless --screenshot screenshots/proof.png --frames 8
+-  python main.py --headless --clean-shot --screenshot screenshots/clean_proof.png --frames 8
++  python main.py --headless --screenshot screenshots/edit_proof.png --frames 45 --clean-shot
++  python main.py --headless --play-body --animation Walking --screenshot screenshots/walking_proof.png --frames 45 --clean-shot
+ 
+ Notes:
+   Idle.glb is imported as editable geometry: 87,036 vertices and 29,012 triangles.
+-  FBX clips are still kept as source animation references. Animation retargeting/conversion is the next separate pass.
++  The FBX clips are not retargeted onto the editable GLB mesh yet. They are loaded directly as animated FBX Actor bodies for preview/play mode.
++  Long-term goal: one editable/skinned body that can receive the animation set after a dedicated retargeting pass.
+--- a/patch_notes.txt
++++ b/patch_notes.txt
+@@ -4,5 +4,7 @@
+ - Character World scene starts with the editable character plus an editable world floor.
+ - Recovered the full-body character authoring camera after the strong pass cropped the mesh in screenshots.
+ - Added F11 panel hide/show and --clean-shot for clearer visual proof screenshots.
++- Added Play Body mode: Panda3D loads the packaged FBX clips as animated Actors in the same editable world.
++- Added animation controls: P play/edit mode, Space pause, 1-0 clip select, [/] cycle clips, WASD body movement, Shift sprint.
+ - Added screenshot proof path, F12 capture, OBJ export, mesh quality report, and cached bounds for faster picking.
+ - Separate Mesh Editor folder is no longer needed in this pass.
+--- a/assets/character/README.txt
++++ b/assets/character/README.txt
+@@ -1,6 +1,8 @@
+ Character mesh source for Unified Character World Studio.
+ 
+ Idle.glb is loaded into editable geometry when root main.py starts.
+-FBX clips remain source animation references; this pass focuses on editable mesh/world authoring.
++The FBX clips in assets/character/animations are now used directly by Panda3D as animated Actor previews.
++Play Body mode hides the editable mesh and shows the animated FBX body on the same editable world floor.
++Controls: P play/edit mode, Space pause, 1-0 select clips, [/] cycle clips, WASD move/turn, Shift sprint.
+ Use F12 or --screenshot to create proof screenshots. Add --clean-shot for panel-free proof.
+ Use Save Active OBJ to export the active edited mesh.
