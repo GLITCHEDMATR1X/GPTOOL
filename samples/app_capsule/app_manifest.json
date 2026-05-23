@@ -1,0 +1,18 @@
+{
+  "id": "sample_capsule",
+  "title": "Sample Capsule",
+  "kind": "panda3d_same_window",
+  "entry": "capsule.py",
+  "contract": "app_capsule.v1",
+  "owns": {
+    "camera": false,
+    "audio": false,
+    "window": false,
+    "mouse_lock": false,
+    "ui_layer": true,
+    "tasks": true
+  },
+  "exit_keys": ["escape", "0"],
+  "return_mode": "host_hub",
+  "validators": []
+}
