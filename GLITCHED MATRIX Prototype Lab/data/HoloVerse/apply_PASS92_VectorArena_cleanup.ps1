@@ -5,7 +5,6 @@ param(
 $ErrorActionPreference = "Stop"
 $root = Resolve-Path $ProjectRoot
 $targets = @(
-    "Dimensions/HoloUtopia",
     "Dimensions/Etch-Line",
     "logs/latest.log",
     "logs/mode_gateway_audit.json",

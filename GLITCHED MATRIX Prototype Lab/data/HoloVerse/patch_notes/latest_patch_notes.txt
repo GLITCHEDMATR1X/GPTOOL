@@ -1,6 +1,6 @@
 HoloVerse // MatrixCore Observatory
 Version: 0.10.99-cinematic-tab-reclaimed
-Generated: 2026-05-21T16:20:28.767977
+Generated: 2026-05-24T13:35:56.870246
 
 Patch Notes
 - v0.10.45 UI / Persistence / Terrain Polish: Removed the FPS corner box, replaced it with a small transparent total-points readout, reduced UI panel opacity, tightened offscreen-prone runtime panels, made Green Hills animals spawn as grown saved animals, mirrored Hills and Mushroom region saves into canonical shared data, and brightened Urban terrain colors without adding new geometry.

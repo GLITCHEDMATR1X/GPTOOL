@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "version": "0.10.99-cinematic-tab-reclaimed",
-  "updated_at": "2026-05-21 16:21:20",
-  "event_count": 87,
+  "updated_at": "2026-05-24 13:36:34",
+  "event_count": 94,
   "events": [
     {
       "time": "2026-05-15 14:14:39",
@@ -1295,6 +1295,110 @@
       "version": "0.10.99-cinematic-tab-reclaimed",
       "extra": {
         "count": "1"
+      }
+    },
+    {
+      "time": "2026-05-24 13:36:13",
+      "event": "transition_begin",
+      "mode": "Vector Arena",
+      "mode_id": "vector_arena",
+      "label": "Vector Arena Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1779654973055_vector_arena",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:1",
+        "context_keys": "artifact_id,artifact_mode_id,artifact_name,doorway"
+      }
+    },
+    {
+      "time": "2026-05-24 13:36:13",
+      "event": "mode_route_launch",
+      "mode": "Vector Arena",
+      "mode_id": "vector_arena",
+      "label": "Vector Arena",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "source": "artifact:1",
+        "entry": "D:\\Apps\\GPTOOL\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Arena\\main.py",
+        "context_keys": "['HOLOVERSE_ARTIFACT_ID', 'HOLOVERSE_ARTIFACT_MODE_ID', 'HOLOVERSE_GATEWAY_SOURCE', 'HOLOVERSE_MODE_ID', 'HOLOVERSE_MODE_LAUNCH_TYPE', 'HOLOVERSE_MODE_MANIFEST', 'HOLOVERSE_MODE_PANEL_SUPPORTED', 'HOLOVERSE_MODE_SOURCE_KIND', 'HOLOVERSE_MODE_TITLE', 'HOLOVERSE_TRANSITION_ACTIVE', 'HOLOVERSE_TRANSITION_CONTEXT', 'HOLOVERSE_TRANSITION_ID', 'HOLOVERSE_TRANSITION_MODE_ID', 'HOLOVERSE_TRANSITION_MODE_LABEL', 'HOLOVERSE_TRANSITION_ROUTE', 'HOLOVERSE_TRANSITION_SOURCE', 'HOLOVERSE_TRANSITION_STAGE', 'MATRIX_CORE_MODE_FOLDER', 'MATRIX_CORE_MODE_NAME']"
+      }
+    },
+    {
+      "time": "2026-05-24 13:36:13",
+      "event": "native_adapter_begin",
+      "mode": "Vector Arena",
+      "mode_id": "vector_arena",
+      "label": "Vector Arena",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1779654973169_vector_arena_native",
+        "entry": "D:\\Apps\\GPTOOL\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Arena\\main.py",
+        "adapter": "D:\\Apps\\GPTOOL\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Arena\\holoverse_native_adapter.py",
+        "source": "artifact:1"
+      }
+    },
+    {
+      "time": "2026-05-24 13:36:13",
+      "event": "native_begin",
+      "mode": "Vector Arena",
+      "mode_id": "vector_arena",
+      "label": "Vector Arena",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed"
+    },
+    {
+      "time": "2026-05-24 13:36:13",
+      "event": "native_adapter_active",
+      "mode": "Vector Arena",
+      "mode_id": "vector_arena",
+      "label": "Vector Arena",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1779654973169_vector_arena_native",
+        "adapter": "D:\\Apps\\GPTOOL\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Arena\\holoverse_native_adapter.py",
+        "entry": "D:\\Apps\\GPTOOL\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Arena\\main.py"
+      }
+    },
+    {
+      "time": "2026-05-24 13:36:13",
+      "event": "transition_dispatched",
+      "mode": "Vector Arena",
+      "mode_id": "vector_arena",
+      "label": "Vector Arena Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1779654973055_vector_arena",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:1",
+        "result": "ok"
+      }
+    },
+    {
+      "time": "2026-05-24 13:36:34",
+      "event": "native_return",
+      "mode": "Vector Arena",
+      "mode_id": "vector_arena",
+      "label": "Vector Arena",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "reason": "escape",
+        "elapsed": "21.03"
       }
     }
   ]

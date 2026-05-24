@@ -1,0 +1,53 @@
+{
+  "schema": "app_capsule.v1",
+  "id": "holoutopia",
+  "title": "HoloUtopia",
+  "role": "living_civilization_life_sim",
+  "kind": "panda3d_same_window",
+  "entry": "capsule.py",
+  "standalone_entry": "main.py",
+  "source_runtime": "data/HoloUtopia/holoutopia_game_runtime.py",
+  "description": "HoloUtopia is mounted as a GPTOOL app capsule: a living city / Sims-like simulation layer connected to HoloVerse without merging standalone code into HoloVerse main.py.",
+  "contract": {
+    "lifecycle": ["prepare", "enter", "update", "exit", "cleanup", "get_result"],
+    "host_owns": ["window", "render_loop", "audio", "camera_services", "input_services", "transitions", "result_collection"],
+    "capsule_owns": ["scene_root", "ui_root", "runtime_instance", "dimension_status_line"],
+    "exit_keys": ["escape", "0"],
+    "return_target": "holoverse_hub"
+  },
+  "host_services": {
+    "requires_render_root": true,
+    "requires_ui_root": true,
+    "requires_task_manager": true,
+    "uses_host_audio": true,
+    "uses_host_camera": true,
+    "owns_window": false,
+    "owns_process": false,
+    "allows_child_window": false
+  },
+  "integration": {
+    "holoVerse_dimension_id": "holoutopia",
+    "launch_type": "native_panda",
+    "adapter": "holoverse_native_adapter.py",
+    "adapter_kind": "thin_capsule_translator",
+    "artifact_slot": "unassigned_optional_capsule",
+    "active_gameplay_role": "utopia_life_sim_first_person_city_layer"
+  },
+  "result_contract": {
+    "score_delta": "citizen_count when available",
+    "completed": true,
+    "signal": "holoutopia_live_city_capsule_ready",
+    "memory_fragment": "HoloUtopia connected through a capsule contract instead of fake adapter glue.",
+    "summary_fields": ["citizen_count", "district_count", "task_queue_count", "residential_capacity"]
+  },
+  "validators": [
+    "python tools/validate_holoutopia_capsule_contract.py",
+    "python tools/validate_holoutopia_game_runtime.py",
+    "python tools/validate_holoutopia_world_integration.py"
+  ],
+  "notes": [
+    "Standalone HoloUtopia remains intact for direct testing.",
+    "The same-window adapter delegates to capsule.py and should stay thin.",
+    "Future passes should move host input/camera/audio calls behind explicit host service objects."
+  ]
+}

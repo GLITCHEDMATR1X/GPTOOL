@@ -5,13 +5,7 @@ VR_REQUESTED=False
 VR_DISABLED=False
 VR_ALLOWED=False
 audio_backend=panda
-interaction_probe source=e target=artifact looked=1 pedestal=3 world_id=3 score=2.725 dot=0.925
-artifact_dimension_launch source=e pedestal=3 mode_id=holo_campaign label=Holo Campaign Dimension route=native_panda
-native_mode_begin label=Holo Campaign
-native_mode_return label=Holo Campaign reason=escape elapsed=2.80
-interaction_probe source=e target=artifact looked=1 pedestal=5 world_id=5 score=2.127 dot=0.895
-artifact_dimension_launch source=e pedestal=5 mode_id=vector_wars label=Vector Wars Dimension route=native_panda
-native_mode_begin label=Vector Wars
-native_mode_return label=Vector Wars reason=escape elapsed=3.14
-interaction_probe source=e target=artifact looked=1 pedestal=1 world_id=1 score=2.453 dot=0.916
-artifact_dimension_launch source=e pedestal=1 mode_id=holoutopia label=HoloUtopia Live City route=native_panda
+interaction_probe source=e target=artifact looked=1 pedestal=1 world_id=1 score=1.253 dot=0.984
+artifact_dimension_launch source=e pedestal=1 mode_id=vector_arena label=Vector Arena Dimension route=native_panda
+native_mode_begin label=Vector Arena
+native_mode_return label=Vector Arena reason=escape elapsed=21.03

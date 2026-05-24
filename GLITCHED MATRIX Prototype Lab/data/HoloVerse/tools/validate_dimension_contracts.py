@@ -101,8 +101,9 @@ def main() -> int:
                     errors.append(f"{dim_id}: HoloCore same-window entry missing {record.get('entry')!r}")
                 if not manifest_same_window_only:
                     errors.append(f"{dim_id}: HoloCore same-window route must forbid child-process fallback")
-                if str(record.get("folder") or "").replace("\\", "/").strip("/").lower() != "holocore":
-                    errors.append(f"{dim_id}: HoloCore same-window folder must remain root-level HoloCore")
+                folder_key = str(record.get("folder") or "").replace("\\", "/").strip("/").lower()
+                if folder_key not in {"holocore", "dimensions/holocore"}:
+                    errors.append(f"{dim_id}: HoloCore same-window folder must be HoloCore or Dimensions/HoloCore, got {record.get('folder')!r}")
 
         elif launch_type == "native_panda":
             if entry is None or not entry.exists():

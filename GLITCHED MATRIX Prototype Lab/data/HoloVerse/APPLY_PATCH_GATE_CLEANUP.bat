@@ -3,7 +3,6 @@ setlocal
 cd /d "%~dp0"
 echo GPTOOL Patch Gate cleanup for HoloVerse
 for %%P in (
-  "Dimensions\HoloUtopia"
   "Dimensions\Etch-Line"
   "logs\latest.log"
   "logs\mode_gateway_audit.json"

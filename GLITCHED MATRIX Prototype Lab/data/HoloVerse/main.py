@@ -227,12 +227,18 @@ def _run_gateway_self_test_before_panda_import() -> None:
             name_raw = str(record.get("name") or record.get("title") or _dim_id).strip()
             folder_norm = folder_raw.replace("\\", "/")
             folder_parts = [part for part in folder_norm.split("/") if part]
-            if len(folder_parts) >= 2 and folder_parts[0].lower() == "dimensions" and folder_parts[1].lower() == "holocore":
-                p = root / "HoloCore"
+            # Respect the sorted layout: native/artifact dimensions live under
+            # Dimensions/, in-world region runtimes live under regions/, and
+            # HoloCore now lives at Dimensions/HoloCore while remaining
+            # same-window only. Older builds used a root-level HoloCore
+            # fallback; keep only as a compatibility fallback if present.
+            p = (root / folder_norm) if folder_norm else (dimensions_root / name_raw)
+            if not p.exists() and len(folder_parts) >= 2 and folder_parts[0].lower() == "dimensions" and folder_parts[1].lower() == "holocore":
+                alt = root / "HoloCore"
                 for part in folder_parts[2:]:
-                    p = p / part
-            else:
-                p = (root / folder_norm) if folder_norm else (dimensions_root / name_raw)
+                    alt = alt / part
+                if alt.exists():
+                    p = alt
             indexed_records_by_folder[folder_key(p)] = record
             if p not in folders:
                 folders.append(p)
@@ -895,18 +901,34 @@ def resolve_project_path(value, *, root: Path = ROOT) -> Path:
     candidate = root / path
     if candidate.exists():
         return candidate
-    # HoloCore is intentionally a root-level sub-world in this build. Some
-    # transition-index records still carry the older Dimensions\HoloCore path,
-    # which made the launcher recover it as a missing/placeholder route. Keep
-    # the source layout intact and resolve only the stale manifest path here.
+    # Sorted layout: Dimensions/HoloCore is now the canonical HoloCore
+    # location. Keep a root-level HoloCore fallback only for older local drops.
     parts = [part for part in raw.split("/") if part]
-    if len(parts) >= 2 and parts[0].lower() == "dimensions" and parts[1].lower() == "holocore":
-        alt = root / "HoloCore"
-        for part in parts[2:]:
+    if not candidate.exists() and len(parts) >= 1 and parts[0].lower() == "holocore":
+        alt = root / "Dimensions" / "HoloCore"
+        for part in parts[1:]:
             alt = alt / part
-        return alt
+        if alt.exists():
+            return alt
+    if not candidate.exists() and len(parts) >= 2 and parts[0].lower() == "dimensions" and parts[1].lower() == "holocore":
+        legacy = root / "HoloCore"
+        for part in parts[2:]:
+            legacy = legacy / part
+        if legacy.exists():
+            return legacy
     return candidate
 
+
+
+
+def resolve_holocore_root(root: Path = ROOT) -> Path:
+    """Return the canonical sorted HoloCore folder with legacy fallback."""
+    root = Path(root)
+    canonical = root / "Dimensions" / "HoloCore"
+    if canonical.exists():
+        return canonical
+    legacy = root / "HoloCore"
+    return legacy
 
 def read_dimension_index_payload() -> dict:
     # The packaged /Dimensions index is authoritative. Shared data is a mirror
@@ -3664,7 +3686,7 @@ class HoloCoreSameWindowScene:
         self.app = app
         self.mode = dict(mode or {})
         self.label = str(label or "HoloCore")
-        self.entry_path = Path(entry_path or (ROOT / "HoloCore" / "main.py")).resolve()
+        self.entry_path = Path(entry_path or resolve_holocore_root() / "main.py").resolve()
         self.root_dir = self.entry_path.parent
         self.elapsed = 0.0
         self.heading = 0.0
@@ -9117,7 +9139,7 @@ class CommandHubApp(ShowBase):
         self.refresh_core_console()
 
     def find_holocore_mode(self) -> dict | None:
-        """Return the root-level HoloCore sub-world mode without moving it into Dimensions."""
+        """Return the sorted HoloCore sub-world mode without child-window fallback."""
         for mode in list(getattr(self, "core_modes", []) or []):
             manifest = dict(mode.get("manifest") or {})
             labels = {
@@ -9127,7 +9149,7 @@ class CommandHubApp(ShowBase):
             }
             if "holocore" in labels or "holo core" in labels:
                 return dict(mode)
-        folder = ROOT / "HoloCore"
+        folder = resolve_holocore_root()
         entry = folder / "main.py"
         if not entry.exists():
             return None
@@ -16891,14 +16913,18 @@ class CommandHubApp(ShowBase):
         return Task.cont
 
 
-# Dimension runtimes now live inside their own /Dimensions folders.
-# The root no longer owns Forest/Hills/Urban/etc. runtime files; main.py only mounts
-# the active dimension-local runtime.py files onto CommandHubApp.
+# In-world region runtimes live under /regions after the sorted layout.
+# Older local builds may still carry them under /Dimensions, so keep that as a
+# read-only compatibility fallback while preferring the canonical regions path.
 def _install_dimension_runtime(dimension_folder: str, module_key: str, installer_name: str) -> None:
-    runtime_path = ROOT / "Dimensions" / dimension_folder / "runtime.py"
+    runtime_path = ROOT / "regions" / dimension_folder / "runtime.py"
     if not runtime_path.exists():
-        print(f"dimension_runtime_missing: {dimension_folder} -> {runtime_path}")
-        return
+        legacy_path = ROOT / "Dimensions" / dimension_folder / "runtime.py"
+        if legacy_path.exists():
+            runtime_path = legacy_path
+        else:
+            print(f"region_runtime_missing: {dimension_folder} -> {runtime_path}")
+            return
     try:
         module_name = f"holoverse_dimension_runtime_{module_key}"
         spec = importlib.util.spec_from_file_location(module_name, runtime_path)

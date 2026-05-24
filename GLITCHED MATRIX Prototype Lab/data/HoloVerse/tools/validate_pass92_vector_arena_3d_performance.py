@@ -64,7 +64,8 @@ def main() -> int:
     else:
         if arena.get("launch_type") != "native_panda":
             errors.append("vector_arena must be native_panda")
-        if arena.get("folder") != "Dimensions\\Vector Arena":
+        folder_norm = str(arena.get("folder") or "").replace("\\", "/")
+        if folder_norm != "Dimensions/Vector Arena":
             errors.append("vector_arena folder mismatch")
         if arena.get("native_adapter") != "holoverse_native_adapter.py":
             errors.append("vector_arena native adapter mismatch")
@@ -98,8 +99,12 @@ def main() -> int:
         errors.append("adapter should use lightweight Panda3D geometry primitives")
     if re.search(r"append\(_Projectile\(|append\(_Impact\(", adapter.split("def _build_projectile_pool", 1)[-1].split("def _build_hud", 1)[0]) is None:
         errors.append("projectile/impact pools not built in setup section")
-    if (DIM / "HoloUtopia").exists():
-        errors.append("Dimensions/HoloUtopia folder still exists")
+    # HoloUtopia is allowed as a sorted native dimension/source folder. Vector
+    # Arena still owns its artifact slot; the presence of HoloUtopia is not a
+    # Vector Arena performance regression as long as it is not a placeholder.
+    holoutopia = dims.get("holoutopia") if isinstance(dims.get("holoutopia"), dict) else {}
+    if holoutopia and holoutopia.get("placeholder_mode"):
+        errors.append("HoloUtopia route exists as a placeholder")
 
     report = {
         "schema": 1,

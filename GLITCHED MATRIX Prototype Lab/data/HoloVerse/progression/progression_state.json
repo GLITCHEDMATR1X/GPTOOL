@@ -8,10 +8,12 @@
     "gleebs_return_holo_campaign_001": true,
     "gleebs_return_holo_conquest_001": true,
     "gleebs_return_holocore_001": true,
+    "gleebs_return_vector_arena_001": true,
     "gleebs_return_vector_wars_001": true,
     "gleebs_return_zonez_001": true,
     "gleebs_welcome_001": true
   },
+  "dimension_placeholders": {},
   "dimension_progress": {
     "Etch-Line": {
       "completed": false,
@@ -39,6 +41,15 @@
       "points_total": 1960,
       "route": "native_panda",
       "score_total": 1960
+    },
+    "Vector Arena": {
+      "completed": false,
+      "last_at": "2026-05-24T13:36:34",
+      "last_score_delta": 1583,
+      "last_signal": "VECTOR_ARENA_PHASED_WAVE_COMBAT_TRACE",
+      "points_total": 1583,
+      "route": "native_panda",
+      "score_total": 1583
     },
     "Zonez": {
       "completed": false,
@@ -93,6 +104,22 @@
       "score_total": 1960,
       "signals": [
         "HOLO_CONQUEST_BATTLEFIELD_SAMPLE"
+      ]
+    },
+    "Vector Arena": {
+      "completed": false,
+      "count": 1,
+      "fragments_recovered": "",
+      "fragments_required": "",
+      "gleebs_response": "Vector Arena returned a phased first-person combat signal with enemy variant telemetry.",
+      "last_at": "2026-05-24T13:36:34",
+      "last_score_delta": 1583,
+      "last_signal": "VECTOR_ARENA_PHASED_WAVE_COMBAT_TRACE",
+      "points_total": 1583,
+      "route": "native_panda",
+      "score_total": 1583,
+      "signals": [
+        "VECTOR_ARENA_PHASED_WAVE_COMBAT_TRACE"
       ]
     },
     "Zonez": {
@@ -155,6 +182,13 @@
       "route": "same_window_native",
       "source": "native"
     },
+    "Vector Arena": {
+      "count": 1,
+      "last_at": "2026-05-24T13:36:34",
+      "reason": "escape; signal=VECTOR_ARENA_PHASED_WAVE_COMBAT_TRACE; score_delta=1583",
+      "route": "native_panda",
+      "source": "native"
+    },
     "Vector Wars": {
       "count": 13,
       "last_at": "2026-05-21T16:20:50",
@@ -170,13 +204,269 @@
       "source": "native"
     }
   },
-  "holoverse_score": 3050,
+  "dimension_visits": {
+    "Vector Arena": {
+      "count": 3,
+      "last_at": "2026-05-24T13:36:13",
+      "reason": "native_adapter_mount",
+      "route": "native_panda",
+      "source": "artifact:1"
+    },
+    "Vector Arena Dimension": {
+      "count": 1,
+      "last_at": "2026-05-24T13:36:13",
+      "reason": "dispatch",
+      "route": "transition_native_adapter",
+      "source": "artifact:1"
+    }
+  },
+  "discovered_gates": {
+    "dimension_vector_arena_dimension_vector_arena": {
+      "artifact_id": 1,
+      "best_score_delta": 1583,
+      "count": 2,
+      "display_name": "Vector Arena Dimension",
+      "doorway": "artifact",
+      "first_at": "2026-05-24T13:36:13",
+      "kind": "dimension",
+      "label": "VECTOR ARENA DIMENSION",
+      "last_at": "2026-05-24T13:36:13",
+      "last_result_at": "2026-05-24T13:36:34",
+      "last_score_delta": 1583,
+      "last_signal": "VECTOR_ARENA_PHASED_WAVE_COMBAT_TRACE",
+      "mode_id": "vector_arena",
+      "name": "Vector Arena Dimension",
+      "route": "native_panda",
+      "source": "artifact:1",
+      "state": "discovered",
+      "unlocked": true,
+      "world_id": 1
+    },
+    "region_desert_4": {
+      "count": 0,
+      "display_name": "Desert",
+      "doorway": "region_gate",
+      "first_at": "2026-05-24T13:36:00",
+      "kind": "region",
+      "label": "DESERT",
+      "last_at": "2026-05-24T13:36:00",
+      "name": "Desert",
+      "route": "region_spawn",
+      "source": "region_index",
+      "state": "discovered",
+      "target_number": 4,
+      "unlocked": true
+    },
+    "region_forests_1": {
+      "count": 0,
+      "display_name": "Forests",
+      "doorway": "region_gate",
+      "first_at": "2026-05-24T13:36:00",
+      "kind": "region",
+      "label": "FORESTS",
+      "last_at": "2026-05-24T13:36:00",
+      "name": "Forests",
+      "route": "region_spawn",
+      "source": "region_index",
+      "state": "discovered",
+      "target_number": 1,
+      "unlocked": true
+    },
+    "region_green_hills_2": {
+      "count": 0,
+      "display_name": "Green Hills",
+      "doorway": "region_gate",
+      "first_at": "2026-05-24T13:36:00",
+      "kind": "region",
+      "label": "GREEN HILLS",
+      "last_at": "2026-05-24T13:36:00",
+      "name": "Green Hills",
+      "route": "region_spawn",
+      "source": "region_index",
+      "state": "discovered",
+      "target_number": 2,
+      "unlocked": true
+    },
+    "region_holospace_8": {
+      "count": 0,
+      "display_name": "HoloSpace",
+      "doorway": "region_gate",
+      "first_at": "2026-05-24T13:36:00",
+      "kind": "region",
+      "label": "HOLOSPACE",
+      "last_at": "2026-05-24T13:36:00",
+      "name": "HoloSpace",
+      "route": "region_spawn",
+      "source": "region_index",
+      "state": "discovered",
+      "target_number": 8,
+      "unlocked": true
+    },
+    "region_hub_region_0": {
+      "count": 2,
+      "display_name": "Hub Region",
+      "doorway": "",
+      "first_at": "2026-05-24T13:35:59",
+      "kind": "region",
+      "label": "HUB REGION",
+      "last_at": "2026-05-24T13:36:01",
+      "name": "Hub Region",
+      "route": "region_discovery",
+      "source": "world_shell_entry",
+      "state": "discovered",
+      "target_number": 0,
+      "unlocked": true
+    },
+    "region_ice_5": {
+      "count": 0,
+      "display_name": "Ice",
+      "doorway": "region_gate",
+      "first_at": "2026-05-24T13:36:00",
+      "kind": "region",
+      "label": "ICE",
+      "last_at": "2026-05-24T13:36:00",
+      "name": "Ice",
+      "route": "region_spawn",
+      "source": "region_index",
+      "state": "discovered",
+      "target_number": 5,
+      "unlocked": true
+    },
+    "region_metropolis_7": {
+      "count": 0,
+      "display_name": "Metropolis",
+      "doorway": "region_gate",
+      "first_at": "2026-05-24T13:36:00",
+      "kind": "region",
+      "label": "METROPOLIS",
+      "last_at": "2026-05-24T13:36:00",
+      "name": "Metropolis",
+      "route": "region_spawn",
+      "source": "region_index",
+      "state": "discovered",
+      "target_number": 7,
+      "unlocked": true
+    },
+    "region_mushroom_3": {
+      "count": 0,
+      "display_name": "Mushroom",
+      "doorway": "region_gate",
+      "first_at": "2026-05-24T13:36:00",
+      "kind": "region",
+      "label": "MUSHROOM",
+      "last_at": "2026-05-24T13:36:00",
+      "name": "Mushroom",
+      "route": "region_spawn",
+      "source": "region_index",
+      "state": "discovered",
+      "target_number": 3,
+      "unlocked": true
+    },
+    "region_urban_6": {
+      "count": 0,
+      "display_name": "Urban",
+      "doorway": "region_gate",
+      "first_at": "2026-05-24T13:36:00",
+      "kind": "region",
+      "label": "URBAN",
+      "last_at": "2026-05-24T13:36:00",
+      "name": "Urban",
+      "route": "region_spawn",
+      "source": "region_index",
+      "state": "discovered",
+      "target_number": 6,
+      "unlocked": true
+    }
+  },
+  "events": [
+    {
+      "at": "2026-05-24T13:36:13",
+      "kind": "dimension_transition_begin",
+      "label": "Vector Arena Dimension",
+      "mode": "Vector Arena Dimension",
+      "reason": "dispatch",
+      "route": "transition_native_adapter",
+      "source": "artifact:1"
+    },
+    {
+      "at": "2026-05-24T13:36:13",
+      "kind": "dimension_launch",
+      "label": "Vector Arena",
+      "mode": "Vector Arena",
+      "reason": "",
+      "route": "native_panda",
+      "source": "artifact:1"
+    },
+    {
+      "at": "2026-05-24T13:36:13",
+      "kind": "dimension_transition_begin",
+      "label": "Vector Arena",
+      "mode": "Vector Arena",
+      "reason": "native_adapter_mount",
+      "route": "native_panda",
+      "source": "artifact:1"
+    },
+    {
+      "at": "2026-05-24T13:36:13",
+      "kind": "dimension_launch",
+      "label": "Vector Arena",
+      "mode": "Vector Arena",
+      "reason": "native_adapter_mount",
+      "route": "native_panda",
+      "source": "artifact:1"
+    },
+    {
+      "at": "2026-05-24T13:36:34",
+      "kind": "dimension_return",
+      "label": "Vector Arena",
+      "mode": "Vector Arena",
+      "reason": "escape; signal=VECTOR_ARENA_PHASED_WAVE_COMBAT_TRACE; score_delta=1583",
+      "route": "native_panda",
+      "source": "native"
+    },
+    {
+      "at": "2026-05-24T13:36:34",
+      "completed": "False",
+      "kind": "dimension_result",
+      "mode": "Vector Arena",
+      "reason": "",
+      "route": "native_panda",
+      "score_delta": "1583",
+      "signal": "VECTOR_ARENA_PHASED_WAVE_COMBAT_TRACE",
+      "source": "native"
+    }
+  ],
+  "guidance_state": {
+    "current_hint_id": "dimension_return",
+    "last_dimension": "Vector Arena",
+    "last_dimension_advice": "Vector Arena is ready. Enter, observe its rules, and bring back a clean return signal.",
+    "last_return_feedback": "Vector Arena returned a useful signal. MatrixCore will compare it with the next route.",
+    "next_action": "Check MatrixCore's Progression page, then try a dimension with no route sample yet.",
+    "updated_at": "2026-05-24T13:36:34",
+    "why": "Vector Arena returned a useful signal. MatrixCore will compare it with the next route."
+  },
+  "holoverse_score": 4633,
   "kind": "holoverse_matrixcore_progression_state",
-  "last_known_gateway": "GATEWAY 099% // INWORLD 08 // EMBED 00 // PLACE 01 // PANEL 00 // HOSTED 00 // PATCH 00 // BROKEN 01 // CHECK 00",
-  "last_mode": "Etch-Line",
-  "latest_event": "dimension_route_cleanup: Vector Arena",
+  "last_known_gateway": "GATEWAY 100% // INWORLD 08 // EMBED 00 // PLACE 00 // PANEL 00 // HOSTED 00 // PATCH 00 // BROKEN 00 // CHECK 00",
+  "last_mode": "Vector Wars",
+  "latest_event": "Gleebs dialogue acknowledged: gleebs_dimension_advice_001",
   "matrixcore": {
-    "last_dimension_route_cleanup": "Vector Arena route cleanup complete"
+    "guide": "informational/help/progression guide",
+    "last_context_signal": "dimension_result",
+    "last_dialogue_at": "2026-05-24T13:36:34",
+    "last_dialogue_id": "gleebs_dimension_advice_001",
+    "last_dimension_entered": "Vector Arena",
+    "last_dimension_result": "Vector Arena",
+    "last_dimension_returned": "Vector Arena",
+    "last_dimension_route_cleanup": "Vector Arena route cleanup complete",
+    "last_dimension_score_delta": 1583,
+    "last_dimension_signal": "VECTOR_ARENA_PHASED_WAVE_COMBAT_TRACE",
+    "last_discovered_gate": "Vector Arena Dimension",
+    "name": "MatrixCore",
+    "native_adapters_removed": true,
+    "pending_return_hint": "",
+    "placeholder_mode_enabled": true,
+    "total_points": 4633
   },
   "mode_status": {},
   "player": {
@@ -186,17 +476,17 @@
     "last_bot": "",
     "last_dimension": "",
     "last_launch_mode": "",
-    "total_points": 3050,
+    "total_points": 4633,
     "visits_total": 0
   },
-  "points_total": 3050,
+  "points_total": 4633,
   "schema_version": 5,
-  "updated_at": "2026-05-21T16:21:20",
+  "updated_at": "2026-05-24T13:36:43",
   "world_cycle": {
     "cycle_seconds": 1800.0,
     "day_night_black_backdrop_enabled": true,
-    "elapsed_seconds": 361.842,
-    "last_saved_at": "2026-05-21T16:21:20",
-    "phase": 0.201024
+    "elapsed_seconds": 401.429,
+    "last_saved_at": "2026-05-24T13:36:43",
+    "phase": 0.223016
   }
 }

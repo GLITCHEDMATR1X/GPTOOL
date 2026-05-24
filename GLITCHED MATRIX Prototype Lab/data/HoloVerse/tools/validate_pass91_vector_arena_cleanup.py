@@ -32,20 +32,22 @@ def main() -> int:
     warnings: list[str] = []
     index = j(ROOT / "Dimensions" / "dimension_index.json")
     dims = index.get("dimensions") if isinstance(index.get("dimensions"), dict) else {}
-    if "holoutopia" in dims:
-        errors.append("dimension_index still contains holoutopia")
+    holoutopia = dims.get("holoutopia") if isinstance(dims.get("holoutopia"), dict) else {}
+    if holoutopia and holoutopia.get("source_kind") != "app_capsule_panda3d_same_window_life_sim":
+        errors.append("HoloUtopia may remain only as an app capsule life-sim route")
     if "vector_arena" not in dims:
         errors.append("dimension_index missing vector_arena")
     else:
         rec = dims.get("vector_arena") or {}
         if rec.get("launch_type") != "native_panda":
             errors.append("vector_arena launch_type must be native_panda")
-        if rec.get("folder") != "Dimensions\\Vector Arena":
-            errors.append("vector_arena folder must be Dimensions\\Vector Arena")
+        folder_norm = str(rec.get("folder") or "").replace("\\", "/")
+        if folder_norm != "Dimensions/Vector Arena":
+            errors.append("vector_arena folder must be Dimensions/Vector Arena")
         if rec.get("placeholder_mode") is not False:
             errors.append("vector_arena must not be a placeholder")
-    if (ROOT / "Dimensions" / "HoloUtopia").exists():
-        errors.append("Dimensions/HoloUtopia folder still exists")
+    if (ROOT / "Dimensions" / "HoloUtopia").exists() and not holoutopia:
+        errors.append("Dimensions/HoloUtopia exists without a registered app capsule route")
     manifest = j(ROOT / "Dimensions" / "Vector Arena" / "holoverse_mode_manifest.json")
     if manifest.get("id") != "vector_arena":
         errors.append("Vector Arena manifest id mismatch")
@@ -58,13 +60,13 @@ def main() -> int:
     main_py = read(ROOT / "main.py")
     if '"vector_arena"' not in main_py or '"holoutopia"' in main_py:
         errors.append("main.py artifact route was not cleanly replaced")
-    disallowed = []
-    for path in CHECK_FILES:
-        text = read(path)
-        if "holoutopia" in text.lower() or "holoutopia" in path.as_posix().lower() or "HoloUtopia" in text:
-            disallowed.append(path.relative_to(ROOT).as_posix())
-    if disallowed:
-        errors.append("HoloUtopia token remains in active route/state files: " + ", ".join(disallowed))
+    # HoloUtopia is allowed as a GPTOOL app capsule route now.  Pass 91 still
+    # protects Vector Arena from being replaced by an old placeholder route, but
+    # it no longer treats the authored HoloUtopia app folder as cleanup junk.
+    if holoutopia and holoutopia.get("launch_type") != "native_panda":
+        errors.append("HoloUtopia capsule route must remain native_panda")
+    if holoutopia and holoutopia.get("placeholder_mode"):
+        errors.append("HoloUtopia capsule route must not be placeholder_mode")
     for log_name in ("latest.log", "mode_gateway_audit.json", "mode_gateway_history.json"):
         if (ROOT / "logs" / log_name).exists():
             errors.append(f"runtime log was not cleaned: logs/{log_name}")
