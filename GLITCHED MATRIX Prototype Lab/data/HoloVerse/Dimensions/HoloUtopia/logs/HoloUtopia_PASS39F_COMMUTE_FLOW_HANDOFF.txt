@@ -1,0 +1,50 @@
+HoloUtopia Pass 39F - Residential <-> Simulation Hub Commute Flow
+
+Scope:
+- Keep Residential as the home/garrison district.
+- Keep the Central Simulation Hub as the first outside activity district.
+- Improve visible movement flow so citizens do not appear to teleport straight from home to activity clusters.
+- Preserve 1000-person virtual population, max 20 visible outdoor/activity representatives, and no standing on buildings.
+
+What changed:
+1) Added commute flow model
+- New data file: data/database/utopia/simulation/simulation_hub_commute_flow.json
+- New runtime module: data/HoloUtopia/holoutopia_commute_flow.py
+- Defines outbound and return commute windows.
+- Defines route targets for Residential departure, Simulation arrival, Simulation departure, and Residential return.
+
+2) Expanded daily phases
+- 06:00-08:00 now produces visible departing Residential commute representatives.
+- 08:00-17:00 remains Simulation Hub work.
+- 17:00-20:00 remains Simulation Hub activity/replenish.
+- 20:00-21:00 now produces visible return-home commute representatives.
+- 21:00-06:00 remains home recharge/garrison.
+
+3) Street-safe commute placement
+- Commute citizens carry route target grid positions.
+- The pathfinding layer snaps those route targets to authored street/activity surfaces before rendering.
+- Visible commute citizens never intentionally stand on home/building/roof footprints.
+- Garrisoning inside buildings remains virtual-only.
+
+4) Visual behavior
+- Commute citizens use walking pose metadata and face their travel direction.
+- Existing tiny 3D people/no-circles/no-labels style is preserved.
+
+Validation run:
+- python -m compileall -q main.py data/HoloUtopia
+- python data/HoloUtopia/tools/validate_holoutopia_commute_flow.py
+- python data/HoloUtopia/tools/validate_holoutopia_activity_behaviors.py
+- python data/HoloUtopia/tools/validate_holoutopia_schedule_staggering.py
+- python data/HoloUtopia/tools/validate_holoutopia_simulation_activity_clusters.py
+- python data/HoloUtopia/tools/validate_holoutopia_citizen_pathfinding.py
+- python data/HoloUtopia/tools/validate_holoutopia_district_activities.py
+- python data/HoloUtopia/tools/validate_holoutopia_residential_population.py
+- python data/HoloUtopia/tools/validate_holoutopia_game_runtime.py
+- python data/HoloUtopia/tools/validate_holoutopia_world_runtime_screenshot.py
+- python data/HoloUtopia/tools/validate_holoutopia_towns.py
+
+Notes:
+- No HoloVerse route/artifact changes.
+- No collision changes.
+- No population cap changes.
+- No schema change to authored town files.

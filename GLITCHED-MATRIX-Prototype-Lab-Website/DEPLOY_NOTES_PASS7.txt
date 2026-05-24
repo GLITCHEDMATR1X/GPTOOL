@@ -1,0 +1,24 @@
+PASS 7 DEPLOY NOTES — Block Busters Single Demo
+================================================
+
+Copy the CONTENTS of this folder into the GitHub Pages repository root, replacing existing files.
+Do not upload the outer zip folder itself as a nested folder.
+
+What changed:
+- Play Demos now contains one dedicated Block Busters web demo.
+- The old multi-demo gallery and Edit Demo Manifest button are removed.
+- assets/js/demos.js now runs the Block Busters canvas game directly.
+- assets/images/block_busters_web contains the small original pixel/block art used by the web demo.
+- assets/images/site_current/block_busters_original_preview.png was added to the media gallery.
+- CSS/JS/data versions now use 20260429-pass7-blockbusters-single.
+
+After deployment:
+1. Wait for GitHub Pages to finish rebuilding.
+2. Hard refresh the page once.
+3. If old art is still visible, clear site data for glitchedmatr1x.github.io or test in a private window.
+
+Image replacement:
+- Header/gallery images: assets/images/site_current/
+- Logo files: assets/images/capsule_small.png or edit assets/data/image_manifest.json
+- Keep the same filenames for safest replacement.
+- Bump assetVersion in assets/data/image_manifest.json after changing images.

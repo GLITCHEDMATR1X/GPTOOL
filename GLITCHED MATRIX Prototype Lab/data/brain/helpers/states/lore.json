@@ -1,0 +1,10 @@
+{
+  "name": "Lore",
+  "mood": 0.01,
+  "muted": false,
+  "memory": {
+    "topics": [],
+    "opinions": {}
+  },
+  "last_reply": ""
+}

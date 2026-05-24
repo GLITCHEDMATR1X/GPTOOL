@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "id": "holoutopia_citizen_task_rules_v1",
+  "description": "Rules for deriving visible citizen task queues from authored identity, schedules, jobs, friends, needs, and danger state.",
+  "runtime_contract": {
+    "authored_files_are_read_only": true,
+    "runtime_queue_writes_go_to": "data/database/utopia/saves/citizen_task_queue_seed.json",
+    "panel_reads_only": true,
+    "logs_enabled_by_default": false
+  },
+  "queue_policy": {
+    "max_visible_next_tasks": 5,
+    "build_from_schedule_blocks": true,
+    "include_job_task": true,
+    "include_friend_task": true,
+    "include_danger_override": true,
+    "default_energy": 72,
+    "energy_from_personality": true,
+    "mood_from_activity": true
+  },
+  "purpose_templates": {
+    "engineer": "Maintain HoloUtopia infrastructure and keep local systems stable.",
+    "guard": "Watch assigned routes, protect citizens, and respond to alerts.",
+    "vendor": "Serve the public flow, stock goods, and keep social commerce alive.",
+    "courier": "Move reports, packages, food, and energy cells between districts.",
+    "scholar": "Study memory records, teach citizens, and repair archive knowledge.",
+    "researcher": "Investigate controlled anomalies and report safe conclusions.",
+    "medic": "Support triage nodes, wellness checks, and emergency response.",
+    "builder": "Repair civic structures and prepare district expansion work.",
+    "student": "Learn, socialize, and assist community tasks.",
+    "default": "Live a scheduled civic life while supporting the district simulation."
+  },
+  "panel_policy": {
+    "one_focused_panel": true,
+    "max_open_panels": 4,
+    "snap_edges": ["left", "right", "top", "bottom"],
+    "default_snap": "left",
+    "keep_crosshair_clear": true,
+    "close_button_required": true,
+    "pin_button_required": true,
+    "drag_titlebar_required": true
+  }
+}

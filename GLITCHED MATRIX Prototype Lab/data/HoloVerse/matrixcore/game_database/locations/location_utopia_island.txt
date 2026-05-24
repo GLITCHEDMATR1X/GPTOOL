@@ -1,0 +1,16 @@
+ID: matrixcore.location.utopia_island
+TITLE: Utopia Island
+TYPE: location
+ERA: Utopia
+SPOILER_LEVEL: 1
+REGION_TIE: hub
+BOT_TIE: IO
+UNLOCK: default
+SUMMARY: The artificial Atlantic island city where UTOPIA is tested under isolation.
+GLEEBS_NOTE: The island looked separate from the world. That was the first illusion.
+GAME_USE: City overview, hub lore, district map, old-world origin.
+NOVEL_USE: Opening setting and eventual collapse site.
+STATUS: draft-pass0006
+---
+BODY:
+Utopia is a man-made Atlantic island city built as a controlled technological paradise. Its public footprint is listed as 10 square kilometers, but future passes should clarify vertical, underground, and simulated expansion to support its many districts and portals.

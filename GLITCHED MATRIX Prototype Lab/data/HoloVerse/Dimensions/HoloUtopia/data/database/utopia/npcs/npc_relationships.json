@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "id": "residential_alpha_npc_relationships_v1",
+  "relationships": [
+    {
+      "a": "npc_aria_voss",
+      "b": "npc_ion_sable",
+      "relationship_type": "friend",
+      "score": 65,
+      "tags": [
+        "residential_alpha_seed",
+        "safe_edit"
+      ],
+      "notes": "Starter friendship link for schedule/social routing."
+    },
+    {
+      "a": "npc_aria_voss",
+      "b": "npc_nova_elle",
+      "relationship_type": "friend",
+      "score": 65,
+      "tags": [
+        "residential_alpha_seed",
+        "safe_edit"
+      ],
+      "notes": "Starter friendship link for schedule/social routing."
+    },
+    {
+      "a": "npc_ren_kael",
+      "b": "npc_lena_quill",
+      "relationship_type": "friend",
+      "score": 65,
+      "tags": [
+        "residential_alpha_seed",
+        "safe_edit"
+      ],
+      "notes": "Starter friendship link for schedule/social routing."
+    },
+    {
+      "a": "npc_ren_kael",
+      "b": "npc_tala_orbit",
+      "relationship_type": "friend",
+      "score": 65,
+      "tags": [
+        "residential_alpha_seed",
+        "safe_edit"
+      ],
+      "notes": "Starter friendship link for schedule/social routing."
+    },
+    {
+      "a": "npc_mira_sol",
+      "b": "npc_nova_elle",
+      "relationship_type": "friend",
+      "score": 65,
+      "tags": [
+        "residential_alpha_seed",
+        "safe_edit"
+      ],
+      "notes": "Starter friendship link for schedule/social routing."
+    },
+    {
+      "a": "npc_mira_sol",
+      "b": "npc_kade_mirror",
+      "relationship_type": "friend",
+      "score": 65,
+      "tags": [
+        "residential_alpha_seed",
+        "safe_edit"
+      ],
+      "notes": "Starter friendship link for schedule/social routing."
+    },
+    {
+      "a": "npc_ion_sable",
+      "b": "npc_tala_orbit",
+      "relationship_type": "friend",
+      "score": 65,
+      "tags": [
+        "residential_alpha_seed",
+        "safe_edit"
+      ],
+      "notes": "Starter friendship link for schedule/social routing."
+    },
+    {
+      "a": "npc_lena_quill",
+      "b": "npc_kade_mirror",
+      "relationship_type": "friend",
+      "score": 65,
+      "tags": [
+        "residential_alpha_seed",
+        "safe_edit"
+      ],
+      "notes": "Starter friendship link for schedule/social routing."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "holoutopia_citizen_panel_layout_v1",
+  "display_name": "Citizen Inspector Panel Layout",
+  "default_tab": "overview",
+  "tabs": [
+    "overview",
+    "tasks",
+    "social"
+  ],
+  "default_snap": "left",
+  "keeps_center_gameplay_view_clear": true,
+  "normal_text_policy": {
+    "hide_raw_ids": true,
+    "hide_file_paths": true,
+    "hide_source_filenames": true
+  },
+  "debug_flag": "debug_raw_ids"
+}

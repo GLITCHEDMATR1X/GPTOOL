@@ -1,0 +1,50 @@
+HoloUtopia Pass 44 - Core Hub Clarity
+
+Scope:
+- Make the central Simulation/Core read as the main raised city hub from atlas/world-view cameras.
+- Prevent authored central buildings/neighborhood props from visually sitting on top of the Core.
+- Keep this visual-only and preserve the citizen, schedule, population, commute, and pathfinding systems.
+
+Changed files:
+- data/HoloUtopia/holoutopia_city_world_style.py
+- data/HoloUtopia/holoutopia_game_runtime.py
+- data/HoloUtopia/holoutopia_town_blocks.py
+- data/HoloUtopia/holoutopia_simulation_hub_visuals.py
+- data/HoloUtopia/tools/validate_holoutopia_city_world_style.py
+- data/database/utopia/runtime/holoutopia_runtime_bridge.json
+
+What changed:
+1) Raised central Simulation/Core hub
+- Added a late overlay layer so the central hub renders after local district massing/activity props and before citizens.
+- Lifted/widened the central hub visual with a larger dark clearance plate, layered plaza, rings, spokes, gateway pylons, pyramid core, and vertical beam.
+
+2) Removed building-on-core read
+- Central Core authored blocks now render only as low plaza pads.
+- Central neighborhood overlay is suppressed in the world atlas; data remains intact for future interior/lore work.
+- Simulation Hub activity props are lowered to compact glyphs so they no longer compete with the core silhouette.
+
+3) Safety
+- Collisionless visual-only pass.
+- No route, schedule, garrison, population, or citizen behavior changes.
+- No authored data mutation beyond runtime bridge flags.
+
+Validation run:
+- python -m compileall -q main.py data/HoloUtopia
+- python data/HoloUtopia/tools/validate_holoutopia_city_world_style.py
+- python data/HoloUtopia/tools/validate_holoutopia_watch_focus.py
+- python data/HoloUtopia/tools/validate_holoutopia_watch_mode.py
+- python data/HoloUtopia/tools/validate_holoutopia_commute_flow.py
+- python data/HoloUtopia/tools/validate_holoutopia_schedule_staggering.py
+- python data/HoloUtopia/tools/validate_holoutopia_activity_behaviors.py
+- python data/HoloUtopia/tools/validate_holoutopia_simulation_activity_clusters.py
+- python data/HoloUtopia/tools/validate_holoutopia_citizen_pathfinding.py
+- python data/HoloUtopia/tools/validate_holoutopia_district_activities.py
+- python data/HoloUtopia/tools/validate_holoutopia_residential_population.py
+- python data/HoloUtopia/tools/validate_holoutopia_game_runtime.py
+- python data/HoloUtopia/tools/validate_holoutopia_world_runtime_screenshot.py
+- python data/HoloUtopia/tools/validate_holoutopia_towns.py
+
+Screenshots rendered:
+- HoloUtopia_PASS44_SCREENSHOTS/holoutopia_pass44_core_clarity_world_atlas.png
+- HoloUtopia_PASS44_SCREENSHOTS/holoutopia_pass44_core_clarity_atlas_close.png
+- HoloUtopia_PASS44_SCREENSHOTS/holoutopia_pass44_central_core_clarity_close.png

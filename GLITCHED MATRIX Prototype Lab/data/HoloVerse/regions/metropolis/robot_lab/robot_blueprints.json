@@ -1,0 +1,286 @@
+{
+  "schema": 2,
+  "tool": "Metropolis Robot Selector",
+  "dimension": "metropolis_robot_lab",
+  "save_authority": "shared_data_holoverse_region_layer",
+  "mode": "single_ally_selector",
+  "lineup": [
+    {
+      "schema": 2,
+      "id": "metro_duelist_standard_20260511_131101_0_2834",
+      "name": "Duelist MAGENTA-73",
+      "source_dimension": "Metropolis Robot Lab",
+      "purpose": "urban_warzone_single_helper_ally",
+      "class_id": "duelist_standard",
+      "class_label": "Duelist",
+      "role": "duelist",
+      "variant": "standard",
+      "description": "balanced street fighter frame",
+      "color_name": "magenta",
+      "accent_name": "gold",
+      "color": [
+        1.0,
+        0.22,
+        0.82,
+        0.94
+      ],
+      "accent": [
+        1.0,
+        0.76,
+        0.18,
+        0.94
+      ],
+      "appearance": {
+        "scale": 1.06,
+        "shoulder": 1.058,
+        "core": 0.929,
+        "weapon": 1.188,
+        "visor": "split",
+        "antenna": false
+      },
+      "stats": {
+        "armor": 5,
+        "damage": 5,
+        "speed": 6,
+        "range": 4
+      },
+      "position": [
+        -42.0,
+        -10130.0,
+        1.164
+      ],
+      "rotation": -90.0,
+      "alive": true,
+      "destroyed": false,
+      "requires_replacement_if_destroyed": true,
+      "part_count": 1,
+      "urban_actor_template": {
+        "kind": "ally",
+        "role": "duelist",
+        "variant": "standard",
+        "color": [
+          1.0,
+          0.22,
+          0.82,
+          0.94
+        ],
+        "accent": [
+          1.0,
+          0.76,
+          0.18,
+          0.94
+        ]
+      },
+      "created_at": "2026-05-11T13:11:01"
+    },
+    {
+      "schema": 2,
+      "id": "metro_crawler_acrobat_20260511_131101_1_7829",
+      "name": "Crawler CYAN-71",
+      "source_dimension": "Metropolis Robot Lab",
+      "purpose": "urban_warzone_single_helper_ally",
+      "class_id": "crawler_acrobat",
+      "class_label": "Crawler",
+      "role": "acrobat",
+      "variant": "crawler",
+      "description": "low agile runner with extra leg rigs",
+      "color_name": "cyan",
+      "accent_name": "cyan",
+      "color": [
+        0.16,
+        0.95,
+        1.0,
+        0.94
+      ],
+      "accent": [
+        0.16,
+        0.95,
+        1.0,
+        0.94
+      ],
+      "appearance": {
+        "scale": 0.987,
+        "shoulder": 1.255,
+        "core": 0.982,
+        "weapon": 1.207,
+        "visor": "wide",
+        "antenna": true
+      },
+      "stats": {
+        "armor": 3,
+        "damage": 4,
+        "speed": 9,
+        "range": 3
+      },
+      "position": [
+        -42.0,
+        -10110.0,
+        1.164
+      ],
+      "rotation": -90.0,
+      "alive": true,
+      "destroyed": false,
+      "requires_replacement_if_destroyed": true,
+      "part_count": 1,
+      "urban_actor_template": {
+        "kind": "ally",
+        "role": "acrobat",
+        "variant": "crawler",
+        "color": [
+          0.16,
+          0.95,
+          1.0,
+          0.94
+        ],
+        "accent": [
+          0.16,
+          0.95,
+          1.0,
+          0.94
+        ]
+      },
+      "created_at": "2026-05-11T13:11:01"
+    },
+    {
+      "schema": 2,
+      "id": "metro_shield_survivor_20260511_131101_2_2531",
+      "name": "Shield GREEN-86",
+      "source_dimension": "Metropolis Robot Lab",
+      "purpose": "urban_warzone_single_helper_ally",
+      "class_id": "shield_survivor",
+      "class_label": "Shield",
+      "role": "survivor",
+      "variant": "shield",
+      "description": "guard frame with riot plating",
+      "color_name": "green",
+      "accent_name": "green",
+      "color": [
+        0.22,
+        1.0,
+        0.44,
+        0.92
+      ],
+      "accent": [
+        0.22,
+        1.0,
+        0.44,
+        0.92
+      ],
+      "appearance": {
+        "scale": 1.136,
+        "shoulder": 1.071,
+        "core": 1.07,
+        "weapon": 1.325,
+        "visor": "wide",
+        "antenna": false
+      },
+      "stats": {
+        "armor": 9,
+        "damage": 3,
+        "speed": 3,
+        "range": 4
+      },
+      "position": [
+        -42.0,
+        -10090.0,
+        1.064
+      ],
+      "rotation": -90.0,
+      "alive": true,
+      "destroyed": false,
+      "requires_replacement_if_destroyed": true,
+      "part_count": 1,
+      "urban_actor_template": {
+        "kind": "ally",
+        "role": "survivor",
+        "variant": "shield",
+        "color": [
+          0.22,
+          1.0,
+          0.44,
+          0.92
+        ],
+        "accent": [
+          0.22,
+          1.0,
+          0.44,
+          0.92
+        ]
+      },
+      "created_at": "2026-05-11T13:11:01"
+    },
+    {
+      "schema": 2,
+      "id": "metro_assault_breaker_20260511_131101_3_1167",
+      "name": "Assault WHITE-15",
+      "source_dimension": "Metropolis Robot Lab",
+      "purpose": "urban_warzone_single_helper_ally",
+      "class_id": "assault_breaker",
+      "class_label": "Assault",
+      "role": "breaker",
+      "variant": "assault",
+      "description": "heavy attack frame with back rigs",
+      "color_name": "white",
+      "accent_name": "green",
+      "color": [
+        0.9,
+        0.98,
+        1.0,
+        0.9
+      ],
+      "accent": [
+        0.22,
+        1.0,
+        0.44,
+        0.92
+      ],
+      "appearance": {
+        "scale": 1.118,
+        "shoulder": 1.153,
+        "core": 1.206,
+        "weapon": 1.082,
+        "visor": "wide",
+        "antenna": false
+      },
+      "stats": {
+        "armor": 6,
+        "damage": 8,
+        "speed": 4,
+        "range": 6
+      },
+      "position": [
+        -42.0,
+        -10070.0,
+        0.725
+      ],
+      "rotation": -90.0,
+      "alive": true,
+      "destroyed": false,
+      "requires_replacement_if_destroyed": true,
+      "part_count": 1,
+      "urban_actor_template": {
+        "kind": "ally",
+        "role": "breaker",
+        "variant": "assault",
+        "color": [
+          0.9,
+          0.98,
+          1.0,
+          0.9
+        ],
+        "accent": [
+          0.22,
+          1.0,
+          0.44,
+          0.92
+        ]
+      },
+      "created_at": "2026-05-11T13:11:01"
+    }
+  ],
+  "active_ally": null,
+  "active_ally_id": "",
+  "urban_rule": "single selected robot joins Urban Warzone; death clears the export and requires a new Metropolis selection",
+  "updated_at": "2026-05-11T13:11:07",
+  "reason": "close_left_metropolis"
+}

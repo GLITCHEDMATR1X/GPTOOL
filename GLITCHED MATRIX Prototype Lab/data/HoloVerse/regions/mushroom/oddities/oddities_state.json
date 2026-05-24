@@ -1,0 +1,176 @@
+{
+  "growth_rule": "one_stage_per_real_calendar_day_stage_3_mature_unpredictable",
+  "inventory": {},
+  "items": [
+    {
+      "created_at": "2026-05-11T13:11:38",
+      "created_day": "2026-05-11",
+      "description": "unpredictable floating objects with bob, spin, orbit, or jitter behavior",
+      "gift": "levitation_shard",
+      "home_position": [
+        8.0,
+        -4000.0,
+        0.72
+      ],
+      "id": "starter_floating_object_0",
+      "label": "Floating Oddity",
+      "last_collected_day": "",
+      "name": "Study_Floating_Oddity_01",
+      "phase": 8.943330817222598,
+      "position": [
+        8.0,
+        -4000.0,
+        8.82
+      ],
+      "properties": {
+        "behavior": "orbit",
+        "energy": 6,
+        "pattern": "spiral",
+        "stability": 4,
+        "variant": "orb",
+        "weirdness": 8
+      },
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "seed": "starter_mushroom_floating_object_0_1778530298",
+      "stage": 1,
+      "type": "floating_object"
+    },
+    {
+      "created_at": "2026-05-11T13:11:38",
+      "created_day": "2026-05-11",
+      "description": "procedural plants with randomized branching patterns and strange fruit",
+      "gift": "odd_fruit",
+      "home_position": [
+        16.0,
+        -4000.0,
+        0.711
+      ],
+      "id": "starter_weird_plant_1",
+      "label": "Weird Plant",
+      "last_collected_day": "",
+      "name": "Study_Weird_Plant_02",
+      "phase": 9.461784777641302,
+      "position": [
+        16.0,
+        -4000.0,
+        0.711
+      ],
+      "properties": {
+        "behavior": "bob",
+        "energy": 7,
+        "pattern": "fork",
+        "stability": 5,
+        "variant": "cap",
+        "weirdness": 9
+      },
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "seed": "starter_mushroom_weird_plant_1_1778530298",
+      "stage": 1,
+      "type": "weird_plant"
+    },
+    {
+      "created_at": "2026-05-11T13:11:38",
+      "created_day": "2026-05-11",
+      "description": "stacked fungal machines that pulse like unsafe research equipment",
+      "gift": "spore_logic",
+      "home_position": [
+        12.0,
+        -3992.0,
+        0.71
+      ],
+      "id": "starter_spore_totem_2",
+      "label": "Spore Totem",
+      "last_collected_day": "",
+      "name": "Study_Spore_Totem_03",
+      "phase": 9.980238738059992,
+      "position": [
+        12.0,
+        -3992.0,
+        9.51
+      ],
+      "properties": {
+        "behavior": "spin",
+        "energy": 8,
+        "pattern": "stack",
+        "stability": 6,
+        "variant": "tower",
+        "weirdness": 10
+      },
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "seed": "starter_mushroom_spore_totem_2_1778530298",
+      "stage": 1,
+      "type": "spore_totem"
+    },
+    {
+      "created_at": "2026-05-11T13:11:38",
+      "created_day": "2026-05-11",
+      "description": "angular growths with impossible geometry and unstable movement",
+      "gift": "unstable_pattern",
+      "home_position": [
+        20.0,
+        -4004.0,
+        0.709
+      ],
+      "id": "starter_glitch_growth_3",
+      "label": "Glitch Growth",
+      "last_collected_day": "",
+      "name": "Study_Glitch_Growth_04",
+      "phase": 10.498692698478695,
+      "position": [
+        20.0,
+        -4004.0,
+        0.709
+      ],
+      "properties": {
+        "behavior": "jitter",
+        "energy": 9,
+        "pattern": "lattice",
+        "stability": 7,
+        "variant": "shard",
+        "weirdness": 8
+      },
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "seed": "starter_mushroom_glitch_growth_3_1778530298",
+      "stage": 1,
+      "type": "glitch_growth"
+    }
+  ],
+  "kind": "holoverse_oddities_state",
+  "mode": "Oddities",
+  "oddity_types": [
+    "floating_object",
+    "weird_plant",
+    "spore_totem",
+    "glitch_growth"
+  ],
+  "owner_bot": "Solace",
+  "population_cap": 48,
+  "region": "mushroom",
+  "region_number": 3,
+  "save_authority": "shared_data_holoverse_region_layer",
+  "schema": 1,
+  "summary": {
+    "stage_1": 4,
+    "stage_2": 0,
+    "stage_3": 0,
+    "total_oddities": 4
+  },
+  "today": "2026-05-11",
+  "updated_at": "2026-05-11T13:11:48"
+}

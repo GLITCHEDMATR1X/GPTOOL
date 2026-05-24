@@ -1,0 +1,45 @@
+{
+  "schema": "holoverse_audio_profile_v1",
+  "mode": "World Shell",
+  "inherits_hub_audio_bus": true,
+  "ambience": "assets/audio/music/ambient",
+  "notes": "Audio variant pass: hub soundscape rotates contextual variants; world shell still hands biome hints to Core.",
+  "hub_music_variants": {
+    "hv_hub_command_theme.wav": [
+      "hv_hub_command_theme.wav",
+      "hv_hub_command_theme_b.wav",
+      "hv_hub_command_theme_c.wav"
+    ],
+    "hv_world_exploration_theme.wav": [
+      "hv_world_exploration_theme.wav",
+      "hv_world_exploration_theme_b.wav",
+      "hv_world_exploration_theme_c.wav"
+    ],
+    "hv_urban_conflict_theme.wav": [
+      "hv_urban_conflict_theme.wav",
+      "hv_urban_conflict_theme_b.wav",
+      "hv_urban_conflict_theme_c.wav"
+    ],
+    "hv_metropolis_neon_theme.wav": [
+      "hv_metropolis_neon_theme.wav",
+      "hv_metropolis_neon_theme_b.wav",
+      "hv_metropolis_neon_theme_c.wav"
+    ],
+    "hv_space_orbit_theme.wav": [
+      "hv_space_orbit_theme.wav",
+      "hv_space_orbit_theme_b.wav",
+      "hv_space_orbit_theme_c.wav"
+    ],
+    "hv_water_depth_theme.wav": [
+      "hv_water_depth_theme.wav",
+      "hv_water_depth_theme_b.wav",
+      "hv_water_depth_theme_c.wav"
+    ],
+    "hv_hub_room_air.wav": [
+      "hv_hub_room_air.wav",
+      "hv_hub_room_air_b.wav",
+      "hv_hub_room_air_c.wav"
+    ]
+  },
+  "music_rotation_seconds": 60.0
+}

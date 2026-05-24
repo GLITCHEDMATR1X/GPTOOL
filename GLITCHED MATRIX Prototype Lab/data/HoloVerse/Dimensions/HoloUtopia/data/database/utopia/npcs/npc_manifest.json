@@ -1,0 +1,321 @@
+{
+  "schema": 1,
+  "id": "residential_alpha_npc_manifest_v1",
+  "town_id": "residential_alpha",
+  "neighborhood_id": "residential_alpha_neighborhood_01",
+  "runtime_writes_allowed": false,
+  "npcs": [
+    {
+      "id": "npc_aria_voss",
+      "display_name": "Aria Voss",
+      "role": "engineer",
+      "town_id": "residential_alpha",
+      "neighborhood_id": "residential_alpha_neighborhood_01",
+      "home_lot_id": "res_alpha_lot_01",
+      "home_interior_id": "res_alpha_lot_01_interior",
+      "home_unit_id": "res_alpha_lot_01_unit_01",
+      "home_node": "res_alpha_home_a_node",
+      "job": {
+        "title": "Power-grid engineer",
+        "work_node": "res_alpha_power_work",
+        "shift": "day"
+      },
+      "schedule_id": "schedule_npc_aria_voss",
+      "personality": {
+        "bravery": 0.62,
+        "curiosity": 0.84,
+        "discipline": 0.77,
+        "kindness": 0.58,
+        "ambition": 0.71
+      },
+      "traits": [
+        "night_worker",
+        "mechanical",
+        "cautious"
+      ],
+      "activities": [
+        "repairing generators",
+        "checking roof antennas",
+        "calibrating home utilities"
+      ],
+      "friends": [
+        "npc_ion_sable",
+        "npc_nova_elle"
+      ],
+      "safe_edit_notes": "Identity and preferences are authored here; current location/mood goes in save-state files."
+    },
+    {
+      "id": "npc_ren_kael",
+      "display_name": "Ren Kael",
+      "role": "courier",
+      "town_id": "residential_alpha",
+      "neighborhood_id": "residential_alpha_neighborhood_01",
+      "home_lot_id": "res_alpha_lot_02",
+      "home_interior_id": "res_alpha_lot_02_interior",
+      "home_unit_id": "res_alpha_lot_02_unit_01",
+      "home_node": "res_alpha_home_b_node",
+      "job": {
+        "title": "Neighborhood courier",
+        "work_node": "res_alpha_supply_work",
+        "shift": "morning"
+      },
+      "schedule_id": "schedule_npc_ren_kael",
+      "personality": {
+        "bravery": 0.46,
+        "curiosity": 0.76,
+        "discipline": 0.61,
+        "kindness": 0.72,
+        "ambition": 0.54
+      },
+      "traits": [
+        "fast_walker",
+        "gossip_listener",
+        "errand_runner"
+      ],
+      "activities": [
+        "mail delivery",
+        "supply pickup",
+        "courier gossip"
+      ],
+      "friends": [
+        "npc_lena_quill",
+        "npc_tala_orbit"
+      ],
+      "safe_edit_notes": "Identity and preferences are authored here; current location/mood goes in save-state files."
+    },
+    {
+      "id": "npc_mira_sol",
+      "display_name": "Mira Sol",
+      "role": "guard",
+      "town_id": "residential_alpha",
+      "neighborhood_id": "residential_alpha_neighborhood_01",
+      "home_lot_id": "res_alpha_lot_03",
+      "home_interior_id": "res_alpha_lot_03_interior",
+      "home_unit_id": "res_alpha_lot_03_unit_01",
+      "home_node": "res_alpha_home_c_node",
+      "job": {
+        "title": "Residential guard",
+        "work_node": "res_alpha_guard_post",
+        "shift": "swing"
+      },
+      "schedule_id": "schedule_npc_mira_sol",
+      "personality": {
+        "bravery": 0.88,
+        "curiosity": 0.48,
+        "discipline": 0.91,
+        "kindness": 0.5,
+        "ambition": 0.6
+      },
+      "traits": [
+        "protective",
+        "disciplined",
+        "low_patience_for_rogues"
+      ],
+      "activities": [
+        "patrol",
+        "checkpoint scan",
+        "night watch"
+      ],
+      "friends": [
+        "npc_nova_elle",
+        "npc_kade_mirror"
+      ],
+      "safe_edit_notes": "Identity and preferences are authored here; current location/mood goes in save-state files."
+    },
+    {
+      "id": "npc_nova_elle",
+      "display_name": "Nova Elle",
+      "role": "medic",
+      "town_id": "residential_alpha",
+      "neighborhood_id": "residential_alpha_neighborhood_01",
+      "home_lot_id": "res_alpha_lot_04",
+      "home_interior_id": "res_alpha_lot_04_interior",
+      "home_unit_id": "res_alpha_lot_04_unit_01",
+      "home_node": "res_alpha_home_d_node",
+      "job": {
+        "title": "Clinic medic",
+        "work_node": "res_alpha_clinic_work",
+        "shift": "day"
+      },
+      "schedule_id": "schedule_npc_nova_elle",
+      "personality": {
+        "bravery": 0.55,
+        "curiosity": 0.68,
+        "discipline": 0.82,
+        "kindness": 0.91,
+        "ambition": 0.49
+      },
+      "traits": [
+        "empathetic",
+        "clinic_regular",
+        "calm_under_alerts"
+      ],
+      "activities": [
+        "clinic triage",
+        "wellness checks",
+        "evening tea"
+      ],
+      "friends": [
+        "npc_aria_voss",
+        "npc_mira_sol"
+      ],
+      "safe_edit_notes": "Identity and preferences are authored here; current location/mood goes in save-state files."
+    },
+    {
+      "id": "npc_ion_sable",
+      "display_name": "Ion Sable",
+      "role": "maintenance",
+      "town_id": "residential_alpha",
+      "neighborhood_id": "residential_alpha_neighborhood_01",
+      "home_lot_id": "res_alpha_lot_05",
+      "home_interior_id": "res_alpha_lot_05_interior",
+      "home_unit_id": "res_alpha_lot_05_unit_01",
+      "home_node": "res_alpha_home_e_node",
+      "job": {
+        "title": "Maintenance tech",
+        "work_node": "res_alpha_maintenance_work",
+        "shift": "day"
+      },
+      "schedule_id": "schedule_npc_ion_sable",
+      "personality": {
+        "bravery": 0.52,
+        "curiosity": 0.73,
+        "discipline": 0.7,
+        "kindness": 0.47,
+        "ambition": 0.63
+      },
+      "traits": [
+        "repair_focused",
+        "quiet",
+        "prefers_maintenance_routes"
+      ],
+      "activities": [
+        "service repair",
+        "grid inspection",
+        "utility logging"
+      ],
+      "friends": [
+        "npc_aria_voss",
+        "npc_tala_orbit"
+      ],
+      "safe_edit_notes": "Identity and preferences are authored here; current location/mood goes in save-state files."
+    },
+    {
+      "id": "npc_lena_quill",
+      "display_name": "Lena Quill",
+      "role": "resident",
+      "town_id": "residential_alpha",
+      "neighborhood_id": "residential_alpha_neighborhood_01",
+      "home_lot_id": "res_alpha_lot_06",
+      "home_interior_id": "res_alpha_lot_06_interior",
+      "home_unit_id": "res_alpha_lot_06_unit_01",
+      "home_node": "res_alpha_home_f_node",
+      "job": {
+        "title": "Community host",
+        "work_node": "res_alpha_social_plaza_node",
+        "shift": "afternoon"
+      },
+      "schedule_id": "schedule_npc_lena_quill",
+      "personality": {
+        "bravery": 0.44,
+        "curiosity": 0.89,
+        "discipline": 0.57,
+        "kindness": 0.86,
+        "ambition": 0.58
+      },
+      "traits": [
+        "social_host",
+        "story_collector",
+        "courtyard_regular"
+      ],
+      "activities": [
+        "hosting courtyard talks",
+        "reading notices",
+        "organizing neighbors"
+      ],
+      "friends": [
+        "npc_ren_kael",
+        "npc_kade_mirror"
+      ],
+      "safe_edit_notes": "Identity and preferences are authored here; current location/mood goes in save-state files."
+    },
+    {
+      "id": "npc_kade_mirror",
+      "display_name": "Kade Mirror",
+      "role": "resident",
+      "town_id": "residential_alpha",
+      "neighborhood_id": "residential_alpha_neighborhood_01",
+      "home_lot_id": "res_alpha_lot_07",
+      "home_interior_id": "res_alpha_lot_07_interior",
+      "home_unit_id": "res_alpha_lot_07_unit_01",
+      "home_node": "res_alpha_home_g_node",
+      "job": {
+        "title": "Garden observer",
+        "work_node": "res_alpha_north_garden_node",
+        "shift": "late"
+      },
+      "schedule_id": "schedule_npc_kade_mirror",
+      "personality": {
+        "bravery": 0.66,
+        "curiosity": 0.93,
+        "discipline": 0.42,
+        "kindness": 0.53,
+        "ambition": 0.77
+      },
+      "traits": [
+        "late_walker",
+        "observant",
+        "keeps_old_signals"
+      ],
+      "activities": [
+        "garden observation",
+        "signal sketching",
+        "late walks"
+      ],
+      "friends": [
+        "npc_lena_quill",
+        "npc_mira_sol"
+      ],
+      "safe_edit_notes": "Identity and preferences are authored here; current location/mood goes in save-state files."
+    },
+    {
+      "id": "npc_tala_orbit",
+      "display_name": "Tala Orbit",
+      "role": "resident",
+      "town_id": "residential_alpha",
+      "neighborhood_id": "residential_alpha_neighborhood_01",
+      "home_lot_id": "res_alpha_lot_08",
+      "home_interior_id": "res_alpha_lot_08_interior",
+      "home_unit_id": "res_alpha_lot_08_unit_01",
+      "home_node": "res_alpha_home_h_node",
+      "job": {
+        "title": "South garden caretaker",
+        "work_node": "res_alpha_south_garden_node",
+        "shift": "morning"
+      },
+      "schedule_id": "schedule_npc_tala_orbit",
+      "personality": {
+        "bravery": 0.59,
+        "curiosity": 0.81,
+        "discipline": 0.74,
+        "kindness": 0.69,
+        "ambition": 0.64
+      },
+      "traits": [
+        "garden_caretaker",
+        "sky_watcher",
+        "kind_to_couriers"
+      ],
+      "activities": [
+        "watering gardens",
+        "roof stargazing",
+        "helping couriers"
+      ],
+      "friends": [
+        "npc_ren_kael",
+        "npc_ion_sable"
+      ],
+      "safe_edit_notes": "Identity and preferences are authored here; current location/mood goes in save-state files."
+    }
+  ]
+}

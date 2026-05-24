@@ -1,0 +1,55 @@
+{
+  "version": "0.2.0-pass30",
+  "relationship_tones": {
+    "friend": {
+      "display": "Friend",
+      "trust_delta": 3,
+      "stress_delta": -1,
+      "player_line": "They relax when this person is nearby."
+    },
+    "coworker": {
+      "display": "Coworker",
+      "trust_delta": 1,
+      "stress_delta": 0,
+      "player_line": "They know each other through daily work."
+    },
+    "rival": {
+      "display": "Rival",
+      "trust_delta": -2,
+      "stress_delta": 2,
+      "player_line": "Their conversations are polite, but tense."
+    },
+    "mentor": {
+      "display": "Mentor",
+      "trust_delta": 4,
+      "stress_delta": -1,
+      "player_line": "This person helps them understand the city."
+    },
+    "unknown": {
+      "display": "Unknown",
+      "trust_delta": 0,
+      "stress_delta": 0,
+      "player_line": "They have not formed a strong impression yet."
+    }
+  },
+  "social_memory_templates": [
+    {
+      "id": "social_shared_meal",
+      "tone": "friend",
+      "summary": "Shared a quiet meal before returning to the schedule stream.",
+      "importance": 0.42
+    },
+    {
+      "id": "social_work_argument",
+      "tone": "rival",
+      "summary": "Disagreed about a work order but kept the peace in public.",
+      "importance": 0.58
+    },
+    {
+      "id": "social_training_tip",
+      "tone": "mentor",
+      "summary": "Received a useful tip about navigating city pressure.",
+      "importance": 0.5
+    }
+  ]
+}

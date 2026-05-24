@@ -1,0 +1,1478 @@
+{
+  "schema": 1,
+  "id": "holoutopia_city_navigation_graph_v1",
+  "display_name": "HoloUtopia City Navigation Graph",
+  "runtime_writes_allowed": false,
+  "description": "Authored 3x3 district gate/center graph used by schedule simulation to resolve citizens into actual travel routes instead of teleporting between nodes.",
+  "alignment_id": "utopia_even_10x8_v1",
+  "source_atlas": "data/database/utopia/city_grid_atlas.json",
+  "node_policy": {
+    "district_center_node": "nav:{town_id}:center",
+    "district_gate_nodes": [
+      "west",
+      "east",
+      "north",
+      "south"
+    ],
+    "loose_schedule_nodes": "connect to their district center at route-build time",
+    "building_nodes": "connect to their district center unless a future authored local street graph overrides it"
+  },
+  "edge_policy": {
+    "bidirectional_default": true,
+    "current_modes": [
+      "walk"
+    ],
+    "restricted_edges_are_tagged_not_blocked": true,
+    "future_modes": [
+      "tram",
+      "ferry",
+      "service_vehicle",
+      "security_only"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "nav:archive_quarter_gamma:center",
+      "town_id": "archive_quarter_gamma",
+      "kind": "district_center",
+      "edge": "",
+      "district_local": [
+        5.0,
+        4.0
+      ],
+      "world": [
+        320.0,
+        1536.0
+      ],
+      "tags": [
+        "navigation",
+        "archive_memory",
+        "center"
+      ]
+    },
+    {
+      "id": "nav:archive_quarter_gamma:west",
+      "town_id": "archive_quarter_gamma",
+      "kind": "district_gate",
+      "edge": "west",
+      "district_local": [
+        0,
+        4.0
+      ],
+      "world": [
+        0.0,
+        1536.0
+      ],
+      "tags": [
+        "navigation",
+        "archive_memory",
+        "west"
+      ]
+    },
+    {
+      "id": "nav:archive_quarter_gamma:east",
+      "town_id": "archive_quarter_gamma",
+      "kind": "district_gate",
+      "edge": "east",
+      "district_local": [
+        10,
+        4.0
+      ],
+      "world": [
+        640.0,
+        1536.0
+      ],
+      "tags": [
+        "navigation",
+        "archive_memory",
+        "east"
+      ]
+    },
+    {
+      "id": "nav:archive_quarter_gamma:north",
+      "town_id": "archive_quarter_gamma",
+      "kind": "district_gate",
+      "edge": "north",
+      "district_local": [
+        5.0,
+        8
+      ],
+      "world": [
+        320.0,
+        1792.0
+      ],
+      "tags": [
+        "navigation",
+        "archive_memory",
+        "north"
+      ]
+    },
+    {
+      "id": "nav:archive_quarter_gamma:south",
+      "town_id": "archive_quarter_gamma",
+      "kind": "district_gate",
+      "edge": "south",
+      "district_local": [
+        5.0,
+        0
+      ],
+      "world": [
+        320.0,
+        1280.0
+      ],
+      "tags": [
+        "navigation",
+        "archive_memory",
+        "south"
+      ]
+    },
+    {
+      "id": "nav:harbor_grid_beta:center",
+      "town_id": "harbor_grid_beta",
+      "kind": "district_center",
+      "edge": "",
+      "district_local": [
+        5.0,
+        4.0
+      ],
+      "world": [
+        1088.0,
+        1536.0
+      ],
+      "tags": [
+        "navigation",
+        "harbor_waterfront",
+        "center"
+      ]
+    },
+    {
+      "id": "nav:harbor_grid_beta:west",
+      "town_id": "harbor_grid_beta",
+      "kind": "district_gate",
+      "edge": "west",
+      "district_local": [
+        0,
+        4.0
+      ],
+      "world": [
+        768.0,
+        1536.0
+      ],
+      "tags": [
+        "navigation",
+        "harbor_waterfront",
+        "west"
+      ]
+    },
+    {
+      "id": "nav:harbor_grid_beta:east",
+      "town_id": "harbor_grid_beta",
+      "kind": "district_gate",
+      "edge": "east",
+      "district_local": [
+        10,
+        4.0
+      ],
+      "world": [
+        1408.0,
+        1536.0
+      ],
+      "tags": [
+        "navigation",
+        "harbor_waterfront",
+        "east"
+      ]
+    },
+    {
+      "id": "nav:harbor_grid_beta:north",
+      "town_id": "harbor_grid_beta",
+      "kind": "district_gate",
+      "edge": "north",
+      "district_local": [
+        5.0,
+        8
+      ],
+      "world": [
+        1088.0,
+        1792.0
+      ],
+      "tags": [
+        "navigation",
+        "harbor_waterfront",
+        "north"
+      ]
+    },
+    {
+      "id": "nav:harbor_grid_beta:south",
+      "town_id": "harbor_grid_beta",
+      "kind": "district_gate",
+      "edge": "south",
+      "district_local": [
+        5.0,
+        0
+      ],
+      "world": [
+        1088.0,
+        1280.0
+      ],
+      "tags": [
+        "navigation",
+        "harbor_waterfront",
+        "south"
+      ]
+    },
+    {
+      "id": "nav:glitched_quarantine_epsilon:center",
+      "town_id": "glitched_quarantine_epsilon",
+      "kind": "district_center",
+      "edge": "",
+      "district_local": [
+        5.0,
+        4.0
+      ],
+      "world": [
+        1856.0,
+        1536.0
+      ],
+      "tags": [
+        "navigation",
+        "glitched_restricted",
+        "center"
+      ]
+    },
+    {
+      "id": "nav:glitched_quarantine_epsilon:west",
+      "town_id": "glitched_quarantine_epsilon",
+      "kind": "district_gate",
+      "edge": "west",
+      "district_local": [
+        0,
+        4.0
+      ],
+      "world": [
+        1536.0,
+        1536.0
+      ],
+      "tags": [
+        "navigation",
+        "glitched_restricted",
+        "west"
+      ]
+    },
+    {
+      "id": "nav:glitched_quarantine_epsilon:east",
+      "town_id": "glitched_quarantine_epsilon",
+      "kind": "district_gate",
+      "edge": "east",
+      "district_local": [
+        10,
+        4.0
+      ],
+      "world": [
+        2176.0,
+        1536.0
+      ],
+      "tags": [
+        "navigation",
+        "glitched_restricted",
+        "east"
+      ]
+    },
+    {
+      "id": "nav:glitched_quarantine_epsilon:north",
+      "town_id": "glitched_quarantine_epsilon",
+      "kind": "district_gate",
+      "edge": "north",
+      "district_local": [
+        5.0,
+        8
+      ],
+      "world": [
+        1856.0,
+        1792.0
+      ],
+      "tags": [
+        "navigation",
+        "glitched_restricted",
+        "north"
+      ]
+    },
+    {
+      "id": "nav:glitched_quarantine_epsilon:south",
+      "town_id": "glitched_quarantine_epsilon",
+      "kind": "district_gate",
+      "edge": "south",
+      "district_local": [
+        5.0,
+        0
+      ],
+      "world": [
+        1856.0,
+        1280.0
+      ],
+      "tags": [
+        "navigation",
+        "glitched_restricted",
+        "south"
+      ]
+    },
+    {
+      "id": "nav:residential_alpha:center",
+      "town_id": "residential_alpha",
+      "kind": "district_center",
+      "edge": "",
+      "district_local": [
+        5.0,
+        4.0
+      ],
+      "world": [
+        320.0,
+        896.0
+      ],
+      "tags": [
+        "navigation",
+        "starter_neighborhood",
+        "center"
+      ]
+    },
+    {
+      "id": "nav:residential_alpha:west",
+      "town_id": "residential_alpha",
+      "kind": "district_gate",
+      "edge": "west",
+      "district_local": [
+        0,
+        4.0
+      ],
+      "world": [
+        0.0,
+        896.0
+      ],
+      "tags": [
+        "navigation",
+        "starter_neighborhood",
+        "west"
+      ]
+    },
+    {
+      "id": "nav:residential_alpha:east",
+      "town_id": "residential_alpha",
+      "kind": "district_gate",
+      "edge": "east",
+      "district_local": [
+        10,
+        4.0
+      ],
+      "world": [
+        640.0,
+        896.0
+      ],
+      "tags": [
+        "navigation",
+        "starter_neighborhood",
+        "east"
+      ]
+    },
+    {
+      "id": "nav:residential_alpha:north",
+      "town_id": "residential_alpha",
+      "kind": "district_gate",
+      "edge": "north",
+      "district_local": [
+        5.0,
+        8
+      ],
+      "world": [
+        320.0,
+        1152.0
+      ],
+      "tags": [
+        "navigation",
+        "starter_neighborhood",
+        "north"
+      ]
+    },
+    {
+      "id": "nav:residential_alpha:south",
+      "town_id": "residential_alpha",
+      "kind": "district_gate",
+      "edge": "south",
+      "district_local": [
+        5.0,
+        0
+      ],
+      "world": [
+        320.0,
+        640.0
+      ],
+      "tags": [
+        "navigation",
+        "starter_neighborhood",
+        "south"
+      ]
+    },
+    {
+      "id": "nav:central_core_civic_ring:center",
+      "town_id": "central_core_civic_ring",
+      "kind": "district_center",
+      "edge": "",
+      "district_local": [
+        5.0,
+        4.0
+      ],
+      "world": [
+        1088.0,
+        896.0
+      ],
+      "tags": [
+        "navigation",
+        "portal_core",
+        "center"
+      ]
+    },
+    {
+      "id": "nav:central_core_civic_ring:west",
+      "town_id": "central_core_civic_ring",
+      "kind": "district_gate",
+      "edge": "west",
+      "district_local": [
+        0,
+        4.0
+      ],
+      "world": [
+        768.0,
+        896.0
+      ],
+      "tags": [
+        "navigation",
+        "portal_core",
+        "west"
+      ]
+    },
+    {
+      "id": "nav:central_core_civic_ring:east",
+      "town_id": "central_core_civic_ring",
+      "kind": "district_gate",
+      "edge": "east",
+      "district_local": [
+        10,
+        4.0
+      ],
+      "world": [
+        1408.0,
+        896.0
+      ],
+      "tags": [
+        "navigation",
+        "portal_core",
+        "east"
+      ]
+    },
+    {
+      "id": "nav:central_core_civic_ring:north",
+      "town_id": "central_core_civic_ring",
+      "kind": "district_gate",
+      "edge": "north",
+      "district_local": [
+        5.0,
+        8
+      ],
+      "world": [
+        1088.0,
+        1152.0
+      ],
+      "tags": [
+        "navigation",
+        "portal_core",
+        "north"
+      ]
+    },
+    {
+      "id": "nav:central_core_civic_ring:south",
+      "town_id": "central_core_civic_ring",
+      "kind": "district_gate",
+      "edge": "south",
+      "district_local": [
+        5.0,
+        0
+      ],
+      "world": [
+        1088.0,
+        640.0
+      ],
+      "tags": [
+        "navigation",
+        "portal_core",
+        "south"
+      ]
+    },
+    {
+      "id": "nav:security_gate:center",
+      "town_id": "security_gate",
+      "kind": "district_center",
+      "edge": "",
+      "district_local": [
+        5.0,
+        4.0
+      ],
+      "world": [
+        1856.0,
+        896.0
+      ],
+      "tags": [
+        "navigation",
+        "controlled_access",
+        "center"
+      ]
+    },
+    {
+      "id": "nav:security_gate:west",
+      "town_id": "security_gate",
+      "kind": "district_gate",
+      "edge": "west",
+      "district_local": [
+        0,
+        4.0
+      ],
+      "world": [
+        1536.0,
+        896.0
+      ],
+      "tags": [
+        "navigation",
+        "controlled_access",
+        "west"
+      ]
+    },
+    {
+      "id": "nav:security_gate:east",
+      "town_id": "security_gate",
+      "kind": "district_gate",
+      "edge": "east",
+      "district_local": [
+        10,
+        4.0
+      ],
+      "world": [
+        2176.0,
+        896.0
+      ],
+      "tags": [
+        "navigation",
+        "controlled_access",
+        "east"
+      ]
+    },
+    {
+      "id": "nav:security_gate:north",
+      "town_id": "security_gate",
+      "kind": "district_gate",
+      "edge": "north",
+      "district_local": [
+        5.0,
+        8
+      ],
+      "world": [
+        1856.0,
+        1152.0
+      ],
+      "tags": [
+        "navigation",
+        "controlled_access",
+        "north"
+      ]
+    },
+    {
+      "id": "nav:security_gate:south",
+      "town_id": "security_gate",
+      "kind": "district_gate",
+      "edge": "south",
+      "district_local": [
+        5.0,
+        0
+      ],
+      "world": [
+        1856.0,
+        640.0
+      ],
+      "tags": [
+        "navigation",
+        "controlled_access",
+        "south"
+      ]
+    },
+    {
+      "id": "nav:civic_commons_delta:center",
+      "town_id": "civic_commons_delta",
+      "kind": "district_center",
+      "edge": "",
+      "district_local": [
+        5.0,
+        4.0
+      ],
+      "world": [
+        320.0,
+        256.0
+      ],
+      "tags": [
+        "navigation",
+        "civic_commons",
+        "center"
+      ]
+    },
+    {
+      "id": "nav:civic_commons_delta:west",
+      "town_id": "civic_commons_delta",
+      "kind": "district_gate",
+      "edge": "west",
+      "district_local": [
+        0,
+        4.0
+      ],
+      "world": [
+        0.0,
+        256.0
+      ],
+      "tags": [
+        "navigation",
+        "civic_commons",
+        "west"
+      ]
+    },
+    {
+      "id": "nav:civic_commons_delta:east",
+      "town_id": "civic_commons_delta",
+      "kind": "district_gate",
+      "edge": "east",
+      "district_local": [
+        10,
+        4.0
+      ],
+      "world": [
+        640.0,
+        256.0
+      ],
+      "tags": [
+        "navigation",
+        "civic_commons",
+        "east"
+      ]
+    },
+    {
+      "id": "nav:civic_commons_delta:north",
+      "town_id": "civic_commons_delta",
+      "kind": "district_gate",
+      "edge": "north",
+      "district_local": [
+        5.0,
+        8
+      ],
+      "world": [
+        320.0,
+        512.0
+      ],
+      "tags": [
+        "navigation",
+        "civic_commons",
+        "north"
+      ]
+    },
+    {
+      "id": "nav:civic_commons_delta:south",
+      "town_id": "civic_commons_delta",
+      "kind": "district_gate",
+      "edge": "south",
+      "district_local": [
+        5.0,
+        0
+      ],
+      "world": [
+        320.0,
+        0.0
+      ],
+      "tags": [
+        "navigation",
+        "civic_commons",
+        "south"
+      ]
+    },
+    {
+      "id": "nav:market_crossing:center",
+      "town_id": "market_crossing",
+      "kind": "district_center",
+      "edge": "",
+      "district_local": [
+        5.0,
+        4.0
+      ],
+      "world": [
+        1088.0,
+        256.0
+      ],
+      "tags": [
+        "navigation",
+        "market_social",
+        "center"
+      ]
+    },
+    {
+      "id": "nav:market_crossing:west",
+      "town_id": "market_crossing",
+      "kind": "district_gate",
+      "edge": "west",
+      "district_local": [
+        0,
+        4.0
+      ],
+      "world": [
+        768.0,
+        256.0
+      ],
+      "tags": [
+        "navigation",
+        "market_social",
+        "west"
+      ]
+    },
+    {
+      "id": "nav:market_crossing:east",
+      "town_id": "market_crossing",
+      "kind": "district_gate",
+      "edge": "east",
+      "district_local": [
+        10,
+        4.0
+      ],
+      "world": [
+        1408.0,
+        256.0
+      ],
+      "tags": [
+        "navigation",
+        "market_social",
+        "east"
+      ]
+    },
+    {
+      "id": "nav:market_crossing:north",
+      "town_id": "market_crossing",
+      "kind": "district_gate",
+      "edge": "north",
+      "district_local": [
+        5.0,
+        8
+      ],
+      "world": [
+        1088.0,
+        512.0
+      ],
+      "tags": [
+        "navigation",
+        "market_social",
+        "north"
+      ]
+    },
+    {
+      "id": "nav:market_crossing:south",
+      "town_id": "market_crossing",
+      "kind": "district_gate",
+      "edge": "south",
+      "district_local": [
+        5.0,
+        0
+      ],
+      "world": [
+        1088.0,
+        0.0
+      ],
+      "tags": [
+        "navigation",
+        "market_social",
+        "south"
+      ]
+    },
+    {
+      "id": "nav:industrial_yard_alpha:center",
+      "town_id": "industrial_yard_alpha",
+      "kind": "district_center",
+      "edge": "",
+      "district_local": [
+        5.0,
+        4.0
+      ],
+      "world": [
+        1856.0,
+        256.0
+      ],
+      "tags": [
+        "navigation",
+        "industrial_service",
+        "center"
+      ]
+    },
+    {
+      "id": "nav:industrial_yard_alpha:west",
+      "town_id": "industrial_yard_alpha",
+      "kind": "district_gate",
+      "edge": "west",
+      "district_local": [
+        0,
+        4.0
+      ],
+      "world": [
+        1536.0,
+        256.0
+      ],
+      "tags": [
+        "navigation",
+        "industrial_service",
+        "west"
+      ]
+    },
+    {
+      "id": "nav:industrial_yard_alpha:east",
+      "town_id": "industrial_yard_alpha",
+      "kind": "district_gate",
+      "edge": "east",
+      "district_local": [
+        10,
+        4.0
+      ],
+      "world": [
+        2176.0,
+        256.0
+      ],
+      "tags": [
+        "navigation",
+        "industrial_service",
+        "east"
+      ]
+    },
+    {
+      "id": "nav:industrial_yard_alpha:north",
+      "town_id": "industrial_yard_alpha",
+      "kind": "district_gate",
+      "edge": "north",
+      "district_local": [
+        5.0,
+        8
+      ],
+      "world": [
+        1856.0,
+        512.0
+      ],
+      "tags": [
+        "navigation",
+        "industrial_service",
+        "north"
+      ]
+    },
+    {
+      "id": "nav:industrial_yard_alpha:south",
+      "town_id": "industrial_yard_alpha",
+      "kind": "district_gate",
+      "edge": "south",
+      "district_local": [
+        5.0,
+        0
+      ],
+      "world": [
+        1856.0,
+        0.0
+      ],
+      "tags": [
+        "navigation",
+        "industrial_service",
+        "south"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "nav:archive_quarter_gamma:center",
+      "to": "nav:archive_quarter_gamma:west",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:archive_quarter_gamma:center",
+      "to": "nav:archive_quarter_gamma:east",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:archive_quarter_gamma:center",
+      "to": "nav:archive_quarter_gamma:north",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:archive_quarter_gamma:center",
+      "to": "nav:archive_quarter_gamma:south",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:harbor_grid_beta:center",
+      "to": "nav:harbor_grid_beta:west",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:harbor_grid_beta:center",
+      "to": "nav:harbor_grid_beta:east",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:harbor_grid_beta:center",
+      "to": "nav:harbor_grid_beta:north",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:harbor_grid_beta:center",
+      "to": "nav:harbor_grid_beta:south",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:glitched_quarantine_epsilon:center",
+      "to": "nav:glitched_quarantine_epsilon:west",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:glitched_quarantine_epsilon:center",
+      "to": "nav:glitched_quarantine_epsilon:east",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:glitched_quarantine_epsilon:center",
+      "to": "nav:glitched_quarantine_epsilon:north",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:glitched_quarantine_epsilon:center",
+      "to": "nav:glitched_quarantine_epsilon:south",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:residential_alpha:center",
+      "to": "nav:residential_alpha:west",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:residential_alpha:center",
+      "to": "nav:residential_alpha:east",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:residential_alpha:center",
+      "to": "nav:residential_alpha:north",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:residential_alpha:center",
+      "to": "nav:residential_alpha:south",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:central_core_civic_ring:center",
+      "to": "nav:central_core_civic_ring:west",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:central_core_civic_ring:center",
+      "to": "nav:central_core_civic_ring:east",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:central_core_civic_ring:center",
+      "to": "nav:central_core_civic_ring:north",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:central_core_civic_ring:center",
+      "to": "nav:central_core_civic_ring:south",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:security_gate:center",
+      "to": "nav:security_gate:west",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:security_gate:center",
+      "to": "nav:security_gate:east",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:security_gate:center",
+      "to": "nav:security_gate:north",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:security_gate:center",
+      "to": "nav:security_gate:south",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:civic_commons_delta:center",
+      "to": "nav:civic_commons_delta:west",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:civic_commons_delta:center",
+      "to": "nav:civic_commons_delta:east",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:civic_commons_delta:center",
+      "to": "nav:civic_commons_delta:north",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:civic_commons_delta:center",
+      "to": "nav:civic_commons_delta:south",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:market_crossing:center",
+      "to": "nav:market_crossing:west",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:market_crossing:center",
+      "to": "nav:market_crossing:east",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:market_crossing:center",
+      "to": "nav:market_crossing:north",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:market_crossing:center",
+      "to": "nav:market_crossing:south",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:industrial_yard_alpha:center",
+      "to": "nav:industrial_yard_alpha:west",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:industrial_yard_alpha:center",
+      "to": "nav:industrial_yard_alpha:east",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 320.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:industrial_yard_alpha:center",
+      "to": "nav:industrial_yard_alpha:north",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:industrial_yard_alpha:center",
+      "to": "nav:industrial_yard_alpha:south",
+      "kind": "district_spoke",
+      "mode": "walk",
+      "distance_units": 256.0,
+      "bidirectional": true,
+      "tags": [
+        "road",
+        "internal"
+      ]
+    },
+    {
+      "from": "nav:central_core_civic_ring:west",
+      "to": "nav:residential_alpha:east",
+      "kind": "district_connection",
+      "mode": "walk",
+      "distance_units": 128.0,
+      "bidirectional": true,
+      "tags": [
+        "district_link",
+        "public"
+      ]
+    },
+    {
+      "from": "nav:central_core_civic_ring:east",
+      "to": "nav:security_gate:west",
+      "kind": "district_connection",
+      "mode": "walk",
+      "distance_units": 128.0,
+      "bidirectional": true,
+      "tags": [
+        "district_link",
+        "public",
+        "security_monitored"
+      ]
+    },
+    {
+      "from": "nav:central_core_civic_ring:north",
+      "to": "nav:harbor_grid_beta:south",
+      "kind": "district_connection",
+      "mode": "walk",
+      "distance_units": 128.0,
+      "bidirectional": true,
+      "tags": [
+        "district_link",
+        "public"
+      ]
+    },
+    {
+      "from": "nav:central_core_civic_ring:south",
+      "to": "nav:market_crossing:north",
+      "kind": "district_connection",
+      "mode": "walk",
+      "distance_units": 128.0,
+      "bidirectional": true,
+      "tags": [
+        "district_link",
+        "public"
+      ]
+    },
+    {
+      "from": "nav:harbor_grid_beta:west",
+      "to": "nav:archive_quarter_gamma:east",
+      "kind": "district_connection",
+      "mode": "walk",
+      "distance_units": 128.0,
+      "bidirectional": true,
+      "tags": [
+        "district_link",
+        "public"
+      ]
+    },
+    {
+      "from": "nav:harbor_grid_beta:east",
+      "to": "nav:glitched_quarantine_epsilon:west",
+      "kind": "district_connection",
+      "mode": "walk",
+      "distance_units": 128.0,
+      "bidirectional": true,
+      "tags": [
+        "district_link",
+        "public",
+        "restricted_checkpoint"
+      ]
+    },
+    {
+      "from": "nav:security_gate:north",
+      "to": "nav:glitched_quarantine_epsilon:south",
+      "kind": "district_connection",
+      "mode": "walk",
+      "distance_units": 128.0,
+      "bidirectional": true,
+      "tags": [
+        "district_link",
+        "public",
+        "restricted_checkpoint",
+        "security_monitored"
+      ]
+    },
+    {
+      "from": "nav:security_gate:south",
+      "to": "nav:industrial_yard_alpha:north",
+      "kind": "district_connection",
+      "mode": "walk",
+      "distance_units": 128.0,
+      "bidirectional": true,
+      "tags": [
+        "district_link",
+        "public",
+        "security_monitored"
+      ]
+    },
+    {
+      "from": "nav:market_crossing:east",
+      "to": "nav:industrial_yard_alpha:west",
+      "kind": "district_connection",
+      "mode": "walk",
+      "distance_units": 128.0,
+      "bidirectional": true,
+      "tags": [
+        "district_link",
+        "public"
+      ]
+    },
+    {
+      "from": "nav:market_crossing:west",
+      "to": "nav:civic_commons_delta:east",
+      "kind": "district_connection",
+      "mode": "walk",
+      "distance_units": 128.0,
+      "bidirectional": true,
+      "tags": [
+        "district_link",
+        "public"
+      ]
+    },
+    {
+      "from": "nav:residential_alpha:south",
+      "to": "nav:civic_commons_delta:north",
+      "kind": "district_connection",
+      "mode": "walk",
+      "distance_units": 128.0,
+      "bidirectional": true,
+      "tags": [
+        "district_link",
+        "public"
+      ]
+    },
+    {
+      "from": "nav:residential_alpha:north",
+      "to": "nav:archive_quarter_gamma:south",
+      "kind": "district_connection",
+      "mode": "walk",
+      "distance_units": 128.0,
+      "bidirectional": true,
+      "tags": [
+        "district_link",
+        "public"
+      ]
+    }
+  ],
+  "totals": {
+    "districts": 9,
+    "nodes": 45,
+    "edges": 48
+  }
+}

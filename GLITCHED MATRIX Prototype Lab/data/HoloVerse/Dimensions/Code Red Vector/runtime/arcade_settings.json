@@ -1,0 +1,35 @@
+{
+  "active_vehicle": "Car01",
+  "vehicles": {
+    "Car01": {
+      "mass": 2350,
+      "horsepower": 210,
+      "boost_torque": 70,
+      "boost_duration": 1.2,
+      "high_mph": 52,
+      "front_static": 2.1,
+      "rear_static": 2.1,
+      "front_slide": 1.95,
+      "rear_slide": 1.95,
+      "front_steer": 0.62,
+      "aero_drag": 1.05,
+      "offroad_drag": 0.0,
+      "downforce": 0.35,
+      "handbrake": 0.28,
+      "com_z": -0.72
+    }
+  },
+  "arcade": {
+    "renderer_preference": "panda",
+    "rival_count": 4,
+    "world_seed": 1,
+    "terrain_quality": "Balanced",
+    "weapons_enabled": true,
+    "rivals_fire": true,
+    "master_volume": 0.82,
+    "sfx_volume": 0.86,
+    "camera_fov": 88.0,
+    "camera_zoom": 1.72,
+    "full_windowed": false
+  }
+}

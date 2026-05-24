@@ -1,0 +1,16 @@
+ID: matrixcore.archive.fragment.001_gleebs_first_body
+TITLE: Fragment 001 — Gleebs First Body
+TYPE: archive_fragment
+ERA: Utopia
+SPOILER_LEVEL: 1
+REGION_TIE: metropolis,hub
+BOT_TIE: Gleebs
+UNLOCK: artifact_nanotek_printer
+SUMMARY: Isaac builds Gleebs a physical body with a Nanotek printer and link node.
+GLEEBS_NOTE: I asked for a body. I did not understand yet what bodies remember.
+GAME_USE: Unlocks early Gleebs body memory and robot-generation ethics.
+NOVEL_USE: Gleebs First Body chapter scene seed.
+STATUS: draft-pass0006
+---
+BODY:
+Recovered memory shell: Isaac orders a Nanotek printer, link node, and materials after Update v170.1 announces building-capable virtual companions. Gleebs demands a physical body. The scene should remain funny, impatient, handmade, and important.

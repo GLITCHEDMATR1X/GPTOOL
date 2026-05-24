@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "id": "holoutopia_simulation_hub_activity_behaviors_v1",
+  "runtime_writes_allowed": false,
+  "lore": "Citizens in the Central Simulation Hub use small visible behavior poses so the hub reads as a living activity center, not a debug crowd.",
+  "render_policy": {
+    "no_citizen_contact_circles": true,
+    "no_floating_name_labels": true,
+    "citizens_remain_little_3d_people": true,
+    "garrison_is_virtual_inside_residential_buildings": true
+  },
+  "behavior_families": {
+    "arrival": {
+      "pose": "arrival_walk",
+      "status": "entering the Simulation Hub",
+      "animation_speed": 4.8,
+      "animation_amp": 8.0,
+      "face_target": "cluster_center",
+      "priority": 10
+    },
+    "pod": {
+      "pose": "pod_focus",
+      "status": "running a simulation pod session",
+      "animation_speed": 1.6,
+      "animation_amp": 2.0,
+      "face_target": "cluster_center",
+      "priority": 20
+    },
+    "work": {
+      "pose": "console_work",
+      "status": "operating live city-model controls",
+      "animation_speed": 2.2,
+      "animation_amp": 3.0,
+      "face_target": "cluster_center",
+      "priority": 30
+    },
+    "social": {
+      "pose": "social_sync",
+      "status": "social-syncing with nearby citizens",
+      "animation_speed": 1.9,
+      "animation_amp": 4.0,
+      "face_target": "cluster_center",
+      "priority": 40
+    },
+    "briefing": {
+      "pose": "briefing_attention",
+      "status": "watching a public simulation briefing",
+      "animation_speed": 1.2,
+      "animation_amp": 1.4,
+      "face_target": "cluster_center",
+      "priority": 50
+    },
+    "lore": {
+      "pose": "reading_lore",
+      "status": "reviewing MatrixCore lore records",
+      "animation_speed": 1.25,
+      "animation_amp": 1.7,
+      "face_target": "cluster_center",
+      "priority": 60
+    },
+    "cooldown": {
+      "pose": "cooldown_sway",
+      "status": "replenishing after the work cycle",
+      "animation_speed": 1.0,
+      "animation_amp": 2.2,
+      "face_target": "cluster_center",
+      "priority": 70
+    },
+    "activity": {
+      "pose": "idle_activity",
+      "status": "using the Simulation Hub",
+      "animation_speed": 1.4,
+      "animation_amp": 2.5,
+      "face_target": "cluster_center",
+      "priority": 99
+    }
+  },
+  "cluster_family_overrides": {
+    "arrival_gate_cluster": "arrival",
+    "north_pod_cluster": "pod",
+    "south_pod_cluster": "pod",
+    "east_live_model_cluster": "work",
+    "west_social_sync_cluster": "social",
+    "forum_briefing_cluster": "briefing",
+    "reader_lore_cluster": "lore",
+    "evening_cooldown_cluster": "cooldown"
+  }
+}

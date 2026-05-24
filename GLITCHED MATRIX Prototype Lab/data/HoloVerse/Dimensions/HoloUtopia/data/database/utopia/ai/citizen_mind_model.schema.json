@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HoloUtopia Citizen Mind Model",
+  "type": "object",
+  "required": [
+    "version",
+    "archetype_models",
+    "mood_axes",
+    "intent_weights",
+    "cadence"
+  ],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "cadence": {
+      "type": "object",
+      "required": [
+        "thought_update_seconds",
+        "memory_event_cooldown_seconds"
+      ],
+      "properties": {
+        "thought_update_seconds": {
+          "type": "number",
+          "minimum": 1
+        },
+        "memory_event_cooldown_seconds": {
+          "type": "number",
+          "minimum": 1
+        },
+        "max_memories_per_citizen": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "mood_axes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "min",
+          "max",
+          "default"
+        ],
+        "properties": {
+          "min": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          },
+          "default": {
+            "type": "number"
+          },
+          "display": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "intent_weights": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "archetype_models": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "label",
+          "core_needs",
+          "strengths",
+          "weaknesses",
+          "preferred_tasks"
+        ],
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "core_needs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "strengths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "weaknesses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "preferred_tasks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "thought_tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "district_bias": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  }
+}

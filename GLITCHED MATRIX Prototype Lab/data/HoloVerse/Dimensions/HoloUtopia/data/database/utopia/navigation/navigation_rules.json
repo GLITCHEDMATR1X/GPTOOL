@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "id": "holoutopia_navigation_rules_v1",
+  "runtime_writes_allowed": false,
+  "route_selection": {
+    "algorithm": "dijkstra_shortest_distance",
+    "loose_node_policy": "connect start/end schedule nodes to their own district center as temporary endpoints",
+    "private_home_policy": "route exists, but interior/home details stay hidden unless highlighted",
+    "danger_policy": "route to nearest safe node using existing schedule-runner danger override target",
+    "restricted_district_policy": "restricted routes are tagged for future guard/checkpoint behavior instead of blocked in pass 20"
+  },
+  "activity_mapping": {
+    "commute": "home_to_work_route",
+    "work_shift": "stay_or_work_local_route",
+    "meal_break": "work_to_social_route",
+    "hobby": "social_or_friend_route",
+    "return_home": "current_to_home_route",
+    "danger_override": "current_to_safe_route"
+  },
+  "future_runtime_contract": {
+    "authoring_files_read_only": true,
+    "runtime_route_cache_under": "data/database/utopia/saves",
+    "event_log_should_record_route_id": true,
+    "one_route_step_can_be_rendered_per_tick": true
+  }
+}

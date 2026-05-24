@@ -1,0 +1,148 @@
+{
+  "blueprints": [
+    {
+      "color_family": "floating_object",
+      "description": "unpredictable floating objects with bob, spin, orbit, or jitter behavior",
+      "gift": "levitation_shard",
+      "id": "starter_floating_object_0",
+      "label": "Floating Oddity",
+      "name": "Study_Floating_Oddity_01",
+      "position": [
+        8.0,
+        -4000.0,
+        8.82
+      ],
+      "reuse_contract": "oddities_study_specimen_can_be_mounted_in_other_worlds",
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "spawn_hint": {
+        "attach_to": "render_or_region_runtime_root",
+        "ground_policy": "plant_on_floor_object_hover",
+        "visual_scale": 1.22
+      },
+      "stage": 1,
+      "traits": {
+        "behavior": "orbit",
+        "energy": 6,
+        "pattern": "spiral",
+        "stability": 4,
+        "variant": "orb",
+        "weirdness": 8
+      },
+      "type": "floating_object"
+    },
+    {
+      "color_family": "weird_plant",
+      "description": "procedural plants with randomized branching patterns and strange fruit",
+      "gift": "odd_fruit",
+      "id": "starter_weird_plant_1",
+      "label": "Weird Plant",
+      "name": "Study_Weird_Plant_02",
+      "position": [
+        16.0,
+        -4000.0,
+        0.711
+      ],
+      "reuse_contract": "oddities_study_specimen_can_be_mounted_in_other_worlds",
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "spawn_hint": {
+        "attach_to": "render_or_region_runtime_root",
+        "ground_policy": "plant_on_floor_object_hover",
+        "visual_scale": 1.22
+      },
+      "stage": 1,
+      "traits": {
+        "behavior": "bob",
+        "energy": 7,
+        "pattern": "fork",
+        "stability": 5,
+        "variant": "cap",
+        "weirdness": 9
+      },
+      "type": "weird_plant"
+    },
+    {
+      "color_family": "spore_totem",
+      "description": "stacked fungal machines that pulse like unsafe research equipment",
+      "gift": "spore_logic",
+      "id": "starter_spore_totem_2",
+      "label": "Spore Totem",
+      "name": "Study_Spore_Totem_03",
+      "position": [
+        12.0,
+        -3992.0,
+        9.51
+      ],
+      "reuse_contract": "oddities_study_specimen_can_be_mounted_in_other_worlds",
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "spawn_hint": {
+        "attach_to": "render_or_region_runtime_root",
+        "ground_policy": "plant_on_floor_object_hover",
+        "visual_scale": 1.22
+      },
+      "stage": 1,
+      "traits": {
+        "behavior": "spin",
+        "energy": 8,
+        "pattern": "stack",
+        "stability": 6,
+        "variant": "tower",
+        "weirdness": 10
+      },
+      "type": "spore_totem"
+    },
+    {
+      "color_family": "glitch_growth",
+      "description": "angular growths with impossible geometry and unstable movement",
+      "gift": "unstable_pattern",
+      "id": "starter_glitch_growth_3",
+      "label": "Glitch Growth",
+      "name": "Study_Glitch_Growth_04",
+      "position": [
+        20.0,
+        -4004.0,
+        0.709
+      ],
+      "reuse_contract": "oddities_study_specimen_can_be_mounted_in_other_worlds",
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "spawn_hint": {
+        "attach_to": "render_or_region_runtime_root",
+        "ground_policy": "plant_on_floor_object_hover",
+        "visual_scale": 1.22
+      },
+      "stage": 1,
+      "traits": {
+        "behavior": "jitter",
+        "energy": 9,
+        "pattern": "lattice",
+        "stability": 7,
+        "variant": "shard",
+        "weirdness": 8
+      },
+      "type": "glitch_growth"
+    }
+  ],
+  "kind": "holoverse_oddities_reuse_library",
+  "notes": "Reusable weird life/object study records created in the Mushroom/Oddities region.",
+  "owner_bot": "Solace",
+  "reason": "escape",
+  "region": "mushroom",
+  "schema": 1,
+  "total_blueprints": 4,
+  "updated_at": "2026-05-11T13:11:48"
+}

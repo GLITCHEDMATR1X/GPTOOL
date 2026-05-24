@@ -1,0 +1,1301 @@
+{
+  "schema": 1,
+  "version": "0.10.99-cinematic-tab-reclaimed",
+  "updated_at": "2026-05-21 16:21:20",
+  "event_count": 87,
+  "events": [
+    {
+      "time": "2026-05-15 14:14:39",
+      "event": "transition_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879679187_holo_campaign",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:3",
+        "context_keys": "artifact_id,artifact_mode_id,artifact_name,doorway"
+      }
+    },
+    {
+      "time": "2026-05-15 14:14:39",
+      "event": "mode_route_launch",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "source": "artifact:3",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py",
+        "context_keys": "['HOLOVERSE_ARTIFACT_ID', 'HOLOVERSE_ARTIFACT_MODE_ID', 'HOLOVERSE_GATEWAY_SOURCE', 'HOLOVERSE_MODE_ID', 'HOLOVERSE_MODE_LAUNCH_TYPE', 'HOLOVERSE_MODE_MANIFEST', 'HOLOVERSE_MODE_PANEL_SUPPORTED', 'HOLOVERSE_MODE_SOURCE_KIND', 'HOLOVERSE_MODE_TITLE', 'HOLOVERSE_TRANSITION_ACTIVE', 'HOLOVERSE_TRANSITION_CONTEXT', 'HOLOVERSE_TRANSITION_ID', 'HOLOVERSE_TRANSITION_MODE_ID', 'HOLOVERSE_TRANSITION_MODE_LABEL', 'HOLOVERSE_TRANSITION_ROUTE', 'HOLOVERSE_TRANSITION_SOURCE', 'HOLOVERSE_TRANSITION_STAGE', 'MATRIX_CORE_MODE_FOLDER', 'MATRIX_CORE_MODE_NAME']"
+      }
+    },
+    {
+      "time": "2026-05-15 14:14:39",
+      "event": "native_adapter_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879679253_holo_campaign_native",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\holoverse_native_adapter.py",
+        "source": "artifact:3"
+      }
+    },
+    {
+      "time": "2026-05-15 14:14:39",
+      "event": "native_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth"
+    },
+    {
+      "time": "2026-05-15 14:14:40",
+      "event": "native_adapter_active",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879679253_holo_campaign_native",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\holoverse_native_adapter.py",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py"
+      }
+    },
+    {
+      "time": "2026-05-15 14:14:40",
+      "event": "transition_dispatched",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879679187_holo_campaign",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:3",
+        "result": "ok"
+      }
+    },
+    {
+      "time": "2026-05-15 14:14:54",
+      "event": "native_return",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "reason": "escape",
+        "elapsed": "14.94"
+      }
+    },
+    {
+      "time": "2026-05-15 14:14:58",
+      "event": "transition_begin",
+      "mode": "HoloCore",
+      "mode_id": "holocore",
+      "label": "HoloCore Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "same_window_mode",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879698064_holocore",
+        "transition_route": "transition_same_window",
+        "transition_stage": "dispatch",
+        "source": "artifact:7",
+        "context_keys": "artifact_id,artifact_mode_id,artifact_name,doorway"
+      }
+    },
+    {
+      "time": "2026-05-15 14:14:58",
+      "event": "holocore_same_window_begin",
+      "mode": "HoloCore",
+      "mode_id": "holocore",
+      "label": "HoloCore",
+      "route": "HOSTED",
+      "launch_type": "hosted_external",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879698088_holocore_same_window",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\HoloCore\\holocore_entry.py",
+        "folder_kept_subworld": "True"
+      }
+    },
+    {
+      "time": "2026-05-15 14:14:58",
+      "event": "native_begin",
+      "mode": "HoloCore",
+      "mode_id": "holocore",
+      "label": "HoloCore",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth"
+    },
+    {
+      "time": "2026-05-15 14:14:58",
+      "event": "holocore_same_window_active",
+      "mode": "HoloCore",
+      "mode_id": "holocore",
+      "label": "HoloCore",
+      "route": "HOSTED",
+      "launch_type": "hosted_external",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879698088_holocore_same_window",
+        "fallback_available": "True"
+      }
+    },
+    {
+      "time": "2026-05-15 14:14:58",
+      "event": "transition_dispatched",
+      "mode": "HoloCore",
+      "mode_id": "holocore",
+      "label": "HoloCore Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "same_window_mode",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879698064_holocore",
+        "transition_route": "transition_same_window",
+        "transition_stage": "dispatch",
+        "source": "artifact:7",
+        "result": "ok"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:02",
+      "event": "native_return",
+      "mode": "HoloCore",
+      "mode_id": "holocore",
+      "label": "HoloCore",
+      "route": "HOSTED",
+      "launch_type": "hosted_external",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "reason": "holocore_escape",
+        "elapsed": "4.05"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:05",
+      "event": "transition_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879705365_holo_campaign",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:3",
+        "context_keys": "artifact_id,artifact_mode_id,artifact_name,doorway"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:05",
+      "event": "mode_route_launch",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "source": "artifact:3",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py",
+        "context_keys": "['HOLOVERSE_ARTIFACT_ID', 'HOLOVERSE_ARTIFACT_MODE_ID', 'HOLOVERSE_GATEWAY_SOURCE', 'HOLOVERSE_MODE_ID', 'HOLOVERSE_MODE_LAUNCH_TYPE', 'HOLOVERSE_MODE_MANIFEST', 'HOLOVERSE_MODE_PANEL_SUPPORTED', 'HOLOVERSE_MODE_SOURCE_KIND', 'HOLOVERSE_MODE_TITLE', 'HOLOVERSE_TRANSITION_ACTIVE', 'HOLOVERSE_TRANSITION_CONTEXT', 'HOLOVERSE_TRANSITION_ID', 'HOLOVERSE_TRANSITION_MODE_ID', 'HOLOVERSE_TRANSITION_MODE_LABEL', 'HOLOVERSE_TRANSITION_ROUTE', 'HOLOVERSE_TRANSITION_SOURCE', 'HOLOVERSE_TRANSITION_STAGE', 'MATRIX_CORE_MODE_FOLDER', 'MATRIX_CORE_MODE_NAME']"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:05",
+      "event": "native_adapter_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879705435_holo_campaign_native",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\holoverse_native_adapter.py",
+        "source": "artifact:3"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:05",
+      "event": "native_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth"
+    },
+    {
+      "time": "2026-05-15 14:15:05",
+      "event": "native_adapter_active",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879705435_holo_campaign_native",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\holoverse_native_adapter.py",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:05",
+      "event": "transition_dispatched",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879705365_holo_campaign",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:3",
+        "result": "ok"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:07",
+      "event": "native_return",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "reason": "escape",
+        "elapsed": "2.16"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:09",
+      "event": "transition_begin",
+      "mode": "Vector Wars",
+      "mode_id": "vector_wars",
+      "label": "Vector Wars Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879709983_vector_wars",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:5",
+        "context_keys": "artifact_id,artifact_mode_id,artifact_name,doorway"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:10",
+      "event": "mode_route_launch",
+      "mode": "Vector Wars",
+      "mode_id": "vector_wars",
+      "label": "Vector Wars",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "source": "artifact:5",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Wars\\main.py",
+        "context_keys": "['HOLOVERSE_ARTIFACT_ID', 'HOLOVERSE_ARTIFACT_MODE_ID', 'HOLOVERSE_GATEWAY_SOURCE', 'HOLOVERSE_MODE_ID', 'HOLOVERSE_MODE_LAUNCH_TYPE', 'HOLOVERSE_MODE_MANIFEST', 'HOLOVERSE_MODE_PANEL_SUPPORTED', 'HOLOVERSE_MODE_SOURCE_KIND', 'HOLOVERSE_MODE_TITLE', 'HOLOVERSE_TRANSITION_ACTIVE', 'HOLOVERSE_TRANSITION_CONTEXT', 'HOLOVERSE_TRANSITION_ID', 'HOLOVERSE_TRANSITION_MODE_ID', 'HOLOVERSE_TRANSITION_MODE_LABEL', 'HOLOVERSE_TRANSITION_ROUTE', 'HOLOVERSE_TRANSITION_SOURCE', 'HOLOVERSE_TRANSITION_STAGE', 'MATRIX_CORE_MODE_FOLDER', 'MATRIX_CORE_MODE_NAME']"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:10",
+      "event": "native_adapter_begin",
+      "mode": "Vector Wars",
+      "mode_id": "vector_wars",
+      "label": "Vector Wars",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879710051_vector_wars_native",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Wars\\main.py",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Wars\\holoverse_native_adapter.py",
+        "source": "artifact:5"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:10",
+      "event": "native_begin",
+      "mode": "Vector Wars",
+      "mode_id": "vector_wars",
+      "label": "Vector Wars",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth"
+    },
+    {
+      "time": "2026-05-15 14:15:10",
+      "event": "native_adapter_active",
+      "mode": "Vector Wars",
+      "mode_id": "vector_wars",
+      "label": "Vector Wars",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879710051_vector_wars_native",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Wars\\holoverse_native_adapter.py",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Wars\\main.py"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:10",
+      "event": "transition_dispatched",
+      "mode": "Vector Wars",
+      "mode_id": "vector_wars",
+      "label": "Vector Wars Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879709983_vector_wars",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:5",
+        "result": "ok"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:13",
+      "event": "native_return",
+      "mode": "Vector Wars",
+      "mode_id": "vector_wars",
+      "label": "Vector Wars",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "reason": "escape",
+        "elapsed": "3.20"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:21",
+      "event": "transition_begin",
+      "mode": "Zonez",
+      "mode_id": "zonez",
+      "label": "Zonez Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879721736_zonez",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:6",
+        "context_keys": "artifact_id,artifact_mode_id,artifact_name,doorway"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:21",
+      "event": "mode_route_launch",
+      "mode": "Zonez",
+      "mode_id": "zonez",
+      "label": "Zonez",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "source": "artifact:6",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Zonez\\main.py",
+        "context_keys": "['HOLOVERSE_ARTIFACT_ID', 'HOLOVERSE_ARTIFACT_MODE_ID', 'HOLOVERSE_GATEWAY_SOURCE', 'HOLOVERSE_MODE_ID', 'HOLOVERSE_MODE_LAUNCH_TYPE', 'HOLOVERSE_MODE_MANIFEST', 'HOLOVERSE_MODE_PANEL_SUPPORTED', 'HOLOVERSE_MODE_SOURCE_KIND', 'HOLOVERSE_MODE_TITLE', 'HOLOVERSE_TRANSITION_ACTIVE', 'HOLOVERSE_TRANSITION_CONTEXT', 'HOLOVERSE_TRANSITION_ID', 'HOLOVERSE_TRANSITION_MODE_ID', 'HOLOVERSE_TRANSITION_MODE_LABEL', 'HOLOVERSE_TRANSITION_ROUTE', 'HOLOVERSE_TRANSITION_SOURCE', 'HOLOVERSE_TRANSITION_STAGE', 'MATRIX_CORE_MODE_FOLDER', 'MATRIX_CORE_MODE_NAME']"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:21",
+      "event": "native_adapter_begin",
+      "mode": "Zonez",
+      "mode_id": "zonez",
+      "label": "Zonez",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879721805_zonez_native",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Zonez\\main.py",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Zonez\\holoverse_native_adapter.py",
+        "source": "artifact:6"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:21",
+      "event": "native_begin",
+      "mode": "Zonez",
+      "mode_id": "zonez",
+      "label": "Zonez",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth"
+    },
+    {
+      "time": "2026-05-15 14:15:29",
+      "event": "native_adapter_active",
+      "mode": "Zonez",
+      "mode_id": "zonez",
+      "label": "Zonez",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879721805_zonez_native",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Zonez\\holoverse_native_adapter.py",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Zonez\\main.py"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:29",
+      "event": "transition_dispatched",
+      "mode": "Zonez",
+      "mode_id": "zonez",
+      "label": "Zonez Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "transition_id": "1778879721736_zonez",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:6",
+        "result": "ok"
+      }
+    },
+    {
+      "time": "2026-05-15 14:15:31",
+      "event": "native_return",
+      "mode": "Zonez",
+      "mode_id": "zonez",
+      "label": "Zonez",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.87-holospace-visual-depth",
+      "extra": {
+        "reason": "escape",
+        "elapsed": "9.66"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:08",
+      "event": "transition_begin",
+      "mode": "Zonez",
+      "mode_id": "zonez",
+      "label": "Zonez Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962328437_zonez",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:6",
+        "context_keys": "artifact_id,artifact_mode_id,artifact_name,doorway"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:08",
+      "event": "mode_route_launch",
+      "mode": "Zonez",
+      "mode_id": "zonez",
+      "label": "Zonez",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "source": "artifact:6",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Zonez\\main.py",
+        "context_keys": "['HOLOVERSE_ARTIFACT_ID', 'HOLOVERSE_ARTIFACT_MODE_ID', 'HOLOVERSE_GATEWAY_SOURCE', 'HOLOVERSE_MODE_ID', 'HOLOVERSE_MODE_LAUNCH_TYPE', 'HOLOVERSE_MODE_MANIFEST', 'HOLOVERSE_MODE_PANEL_SUPPORTED', 'HOLOVERSE_MODE_SOURCE_KIND', 'HOLOVERSE_MODE_TITLE', 'HOLOVERSE_TRANSITION_ACTIVE', 'HOLOVERSE_TRANSITION_CONTEXT', 'HOLOVERSE_TRANSITION_ID', 'HOLOVERSE_TRANSITION_MODE_ID', 'HOLOVERSE_TRANSITION_MODE_LABEL', 'HOLOVERSE_TRANSITION_ROUTE', 'HOLOVERSE_TRANSITION_SOURCE', 'HOLOVERSE_TRANSITION_STAGE', 'MATRIX_CORE_MODE_FOLDER', 'MATRIX_CORE_MODE_NAME']"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:08",
+      "event": "native_adapter_begin",
+      "mode": "Zonez",
+      "mode_id": "zonez",
+      "label": "Zonez",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962328565_zonez_native",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Zonez\\main.py",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Zonez\\holoverse_native_adapter.py",
+        "source": "artifact:6"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:08",
+      "event": "native_begin",
+      "mode": "Zonez",
+      "mode_id": "zonez",
+      "label": "Zonez",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed"
+    },
+    {
+      "time": "2026-05-16 13:12:17",
+      "event": "native_adapter_active",
+      "mode": "Zonez",
+      "mode_id": "zonez",
+      "label": "Zonez",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962328565_zonez_native",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Zonez\\holoverse_native_adapter.py",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Zonez\\main.py"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:17",
+      "event": "transition_dispatched",
+      "mode": "Zonez",
+      "mode_id": "zonez",
+      "label": "Zonez Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962328437_zonez",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:6",
+        "result": "ok"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:29",
+      "event": "native_return",
+      "mode": "Zonez",
+      "mode_id": "zonez",
+      "label": "Zonez",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "reason": "escape",
+        "elapsed": "21.20"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:34",
+      "event": "transition_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962354444_holo_campaign",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:3",
+        "context_keys": "artifact_id,artifact_mode_id,artifact_name,doorway"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:34",
+      "event": "mode_route_launch",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "source": "artifact:3",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py",
+        "context_keys": "['HOLOVERSE_ARTIFACT_ID', 'HOLOVERSE_ARTIFACT_MODE_ID', 'HOLOVERSE_GATEWAY_SOURCE', 'HOLOVERSE_MODE_ID', 'HOLOVERSE_MODE_LAUNCH_TYPE', 'HOLOVERSE_MODE_MANIFEST', 'HOLOVERSE_MODE_PANEL_SUPPORTED', 'HOLOVERSE_MODE_SOURCE_KIND', 'HOLOVERSE_MODE_TITLE', 'HOLOVERSE_TRANSITION_ACTIVE', 'HOLOVERSE_TRANSITION_CONTEXT', 'HOLOVERSE_TRANSITION_ID', 'HOLOVERSE_TRANSITION_MODE_ID', 'HOLOVERSE_TRANSITION_MODE_LABEL', 'HOLOVERSE_TRANSITION_ROUTE', 'HOLOVERSE_TRANSITION_SOURCE', 'HOLOVERSE_TRANSITION_STAGE', 'MATRIX_CORE_MODE_FOLDER', 'MATRIX_CORE_MODE_NAME']"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:34",
+      "event": "native_adapter_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962354521_holo_campaign_native",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\holoverse_native_adapter.py",
+        "source": "artifact:3"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:34",
+      "event": "native_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed"
+    },
+    {
+      "time": "2026-05-16 13:12:35",
+      "event": "native_adapter_active",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962354521_holo_campaign_native",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\holoverse_native_adapter.py",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:35",
+      "event": "transition_dispatched",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962354444_holo_campaign",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:3",
+        "result": "ok"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:38",
+      "event": "native_return",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "reason": "escape",
+        "elapsed": "4.06"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:53",
+      "event": "transition_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962373788_holo_campaign",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:3",
+        "context_keys": "artifact_id,artifact_mode_id,artifact_name,doorway"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:53",
+      "event": "mode_route_launch",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "source": "artifact:3",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py",
+        "context_keys": "['HOLOVERSE_ARTIFACT_ID', 'HOLOVERSE_ARTIFACT_MODE_ID', 'HOLOVERSE_GATEWAY_SOURCE', 'HOLOVERSE_MODE_ID', 'HOLOVERSE_MODE_LAUNCH_TYPE', 'HOLOVERSE_MODE_MANIFEST', 'HOLOVERSE_MODE_PANEL_SUPPORTED', 'HOLOVERSE_MODE_SOURCE_KIND', 'HOLOVERSE_MODE_TITLE', 'HOLOVERSE_TRANSITION_ACTIVE', 'HOLOVERSE_TRANSITION_CONTEXT', 'HOLOVERSE_TRANSITION_ID', 'HOLOVERSE_TRANSITION_MODE_ID', 'HOLOVERSE_TRANSITION_MODE_LABEL', 'HOLOVERSE_TRANSITION_ROUTE', 'HOLOVERSE_TRANSITION_SOURCE', 'HOLOVERSE_TRANSITION_STAGE', 'MATRIX_CORE_MODE_FOLDER', 'MATRIX_CORE_MODE_NAME']"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:53",
+      "event": "native_adapter_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962373864_holo_campaign_native",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\holoverse_native_adapter.py",
+        "source": "artifact:3"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:53",
+      "event": "native_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed"
+    },
+    {
+      "time": "2026-05-16 13:12:54",
+      "event": "native_adapter_active",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962373864_holo_campaign_native",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\holoverse_native_adapter.py",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:54",
+      "event": "transition_dispatched",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962373788_holo_campaign",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:3",
+        "result": "ok"
+      }
+    },
+    {
+      "time": "2026-05-16 13:12:56",
+      "event": "native_return",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "reason": "escape",
+        "elapsed": "2.33"
+      }
+    },
+    {
+      "time": "2026-05-16 13:13:01",
+      "event": "transition_begin",
+      "mode": "Holo Conquest",
+      "mode_id": "holo_conquest",
+      "label": "Holo Conquest Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962381815_holo_conquest",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:4",
+        "context_keys": "artifact_id,artifact_mode_id,artifact_name,doorway"
+      }
+    },
+    {
+      "time": "2026-05-16 13:13:01",
+      "event": "mode_route_launch",
+      "mode": "Holo Conquest",
+      "mode_id": "holo_conquest",
+      "label": "Holo Conquest",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "source": "artifact:4",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Conquest\\main.py",
+        "context_keys": "['HOLOVERSE_ARTIFACT_ID', 'HOLOVERSE_ARTIFACT_MODE_ID', 'HOLOVERSE_GATEWAY_SOURCE', 'HOLOVERSE_MODE_ID', 'HOLOVERSE_MODE_LAUNCH_TYPE', 'HOLOVERSE_MODE_MANIFEST', 'HOLOVERSE_MODE_PANEL_SUPPORTED', 'HOLOVERSE_MODE_SOURCE_KIND', 'HOLOVERSE_MODE_TITLE', 'HOLOVERSE_TRANSITION_ACTIVE', 'HOLOVERSE_TRANSITION_CONTEXT', 'HOLOVERSE_TRANSITION_ID', 'HOLOVERSE_TRANSITION_MODE_ID', 'HOLOVERSE_TRANSITION_MODE_LABEL', 'HOLOVERSE_TRANSITION_ROUTE', 'HOLOVERSE_TRANSITION_SOURCE', 'HOLOVERSE_TRANSITION_STAGE', 'MATRIX_CORE_MODE_FOLDER', 'MATRIX_CORE_MODE_NAME']"
+      }
+    },
+    {
+      "time": "2026-05-16 13:13:01",
+      "event": "native_adapter_begin",
+      "mode": "Holo Conquest",
+      "mode_id": "holo_conquest",
+      "label": "Holo Conquest",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962381891_holo_conquest_native",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Conquest\\main.py",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Conquest\\holoverse_native_adapter.py",
+        "source": "artifact:4"
+      }
+    },
+    {
+      "time": "2026-05-16 13:13:02",
+      "event": "native_begin",
+      "mode": "Holo Conquest",
+      "mode_id": "holo_conquest",
+      "label": "Holo Conquest",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed"
+    },
+    {
+      "time": "2026-05-16 13:13:04",
+      "event": "native_adapter_active",
+      "mode": "Holo Conquest",
+      "mode_id": "holo_conquest",
+      "label": "Holo Conquest",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962381891_holo_conquest_native",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Conquest\\holoverse_native_adapter.py",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Conquest\\main.py"
+      }
+    },
+    {
+      "time": "2026-05-16 13:13:04",
+      "event": "transition_dispatched",
+      "mode": "Holo Conquest",
+      "mode_id": "holo_conquest",
+      "label": "Holo Conquest Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962381815_holo_conquest",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:4",
+        "result": "ok"
+      }
+    },
+    {
+      "time": "2026-05-16 13:13:33",
+      "event": "native_return",
+      "mode": "Holo Conquest",
+      "mode_id": "holo_conquest",
+      "label": "Holo Conquest",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "reason": "escape",
+        "elapsed": "31.91"
+      }
+    },
+    {
+      "time": "2026-05-16 13:13:37",
+      "event": "transition_begin",
+      "mode": "Etch-Line",
+      "mode_id": "etch_line",
+      "label": "Etch-Line Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962417784_etch_line",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:1",
+        "context_keys": "artifact_id,artifact_mode_id,artifact_name,doorway"
+      }
+    },
+    {
+      "time": "2026-05-16 13:13:37",
+      "event": "mode_route_launch",
+      "mode": "Etch-Line",
+      "mode_id": "etch_line",
+      "label": "Etch-Line",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "source": "artifact:1",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Etch-Line\\main.py",
+        "context_keys": "['HOLOVERSE_ARTIFACT_ID', 'HOLOVERSE_ARTIFACT_MODE_ID', 'HOLOVERSE_GATEWAY_SOURCE', 'HOLOVERSE_MODE_ID', 'HOLOVERSE_MODE_LAUNCH_TYPE', 'HOLOVERSE_MODE_MANIFEST', 'HOLOVERSE_MODE_PANEL_SUPPORTED', 'HOLOVERSE_MODE_SOURCE_KIND', 'HOLOVERSE_MODE_TITLE', 'HOLOVERSE_TRANSITION_ACTIVE', 'HOLOVERSE_TRANSITION_CONTEXT', 'HOLOVERSE_TRANSITION_ID', 'HOLOVERSE_TRANSITION_MODE_ID', 'HOLOVERSE_TRANSITION_MODE_LABEL', 'HOLOVERSE_TRANSITION_ROUTE', 'HOLOVERSE_TRANSITION_SOURCE', 'HOLOVERSE_TRANSITION_STAGE', 'MATRIX_CORE_MODE_FOLDER', 'MATRIX_CORE_MODE_NAME']"
+      }
+    },
+    {
+      "time": "2026-05-16 13:13:37",
+      "event": "native_adapter_begin",
+      "mode": "Etch-Line",
+      "mode_id": "etch_line",
+      "label": "Etch-Line",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962417861_etch_line_native",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Etch-Line\\main.py",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Etch-Line\\holoverse_native_adapter.py",
+        "source": "artifact:1"
+      }
+    },
+    {
+      "time": "2026-05-16 13:13:37",
+      "event": "native_begin",
+      "mode": "Etch-Line",
+      "mode_id": "etch_line",
+      "label": "Etch-Line",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed"
+    },
+    {
+      "time": "2026-05-16 13:13:38",
+      "event": "native_adapter_active",
+      "mode": "Etch-Line",
+      "mode_id": "etch_line",
+      "label": "Etch-Line",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962417861_etch_line_native",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Etch-Line\\holoverse_native_adapter.py",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Etch-Line\\main.py"
+      }
+    },
+    {
+      "time": "2026-05-16 13:13:38",
+      "event": "transition_dispatched",
+      "mode": "Etch-Line",
+      "mode_id": "etch_line",
+      "label": "Etch-Line Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1778962417784_etch_line",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:1",
+        "result": "ok"
+      }
+    },
+    {
+      "time": "2026-05-16 13:14:04",
+      "event": "native_return",
+      "mode": "Etch-Line",
+      "mode_id": "etch_line",
+      "label": "Etch-Line",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "reason": "escape",
+        "elapsed": "26.55"
+      }
+    },
+    {
+      "time": "2026-05-21 16:20:40",
+      "event": "transition_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1779405640024_holo_campaign",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:3",
+        "context_keys": "artifact_id,artifact_mode_id,artifact_name,doorway"
+      }
+    },
+    {
+      "time": "2026-05-21 16:20:40",
+      "event": "mode_route_launch",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "source": "artifact:3",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py",
+        "context_keys": "['HOLOVERSE_ARTIFACT_ID', 'HOLOVERSE_ARTIFACT_MODE_ID', 'HOLOVERSE_GATEWAY_SOURCE', 'HOLOVERSE_MODE_ID', 'HOLOVERSE_MODE_LAUNCH_TYPE', 'HOLOVERSE_MODE_MANIFEST', 'HOLOVERSE_MODE_PANEL_SUPPORTED', 'HOLOVERSE_MODE_SOURCE_KIND', 'HOLOVERSE_MODE_TITLE', 'HOLOVERSE_TRANSITION_ACTIVE', 'HOLOVERSE_TRANSITION_CONTEXT', 'HOLOVERSE_TRANSITION_ID', 'HOLOVERSE_TRANSITION_MODE_ID', 'HOLOVERSE_TRANSITION_MODE_LABEL', 'HOLOVERSE_TRANSITION_ROUTE', 'HOLOVERSE_TRANSITION_SOURCE', 'HOLOVERSE_TRANSITION_STAGE', 'MATRIX_CORE_MODE_FOLDER', 'MATRIX_CORE_MODE_NAME']"
+      }
+    },
+    {
+      "time": "2026-05-21 16:20:40",
+      "event": "native_adapter_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1779405640137_holo_campaign_native",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\holoverse_native_adapter.py",
+        "source": "artifact:3"
+      }
+    },
+    {
+      "time": "2026-05-21 16:20:40",
+      "event": "native_begin",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed"
+    },
+    {
+      "time": "2026-05-21 16:20:40",
+      "event": "native_adapter_active",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1779405640137_holo_campaign_native",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\holoverse_native_adapter.py",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Holo Campaign\\main.py"
+      }
+    },
+    {
+      "time": "2026-05-21 16:20:40",
+      "event": "transition_dispatched",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1779405640024_holo_campaign",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:3",
+        "result": "ok"
+      }
+    },
+    {
+      "time": "2026-05-21 16:20:43",
+      "event": "native_return",
+      "mode": "Holo Campaign",
+      "mode_id": "holo_campaign",
+      "label": "Holo Campaign",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "reason": "escape",
+        "elapsed": "2.80"
+      }
+    },
+    {
+      "time": "2026-05-21 16:20:47",
+      "event": "transition_begin",
+      "mode": "Vector Wars",
+      "mode_id": "vector_wars",
+      "label": "Vector Wars Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1779405647004_vector_wars",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:5",
+        "context_keys": "artifact_id,artifact_mode_id,artifact_name,doorway"
+      }
+    },
+    {
+      "time": "2026-05-21 16:20:47",
+      "event": "mode_route_launch",
+      "mode": "Vector Wars",
+      "mode_id": "vector_wars",
+      "label": "Vector Wars",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "source": "artifact:5",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Wars\\main.py",
+        "context_keys": "['HOLOVERSE_ARTIFACT_ID', 'HOLOVERSE_ARTIFACT_MODE_ID', 'HOLOVERSE_GATEWAY_SOURCE', 'HOLOVERSE_MODE_ID', 'HOLOVERSE_MODE_LAUNCH_TYPE', 'HOLOVERSE_MODE_MANIFEST', 'HOLOVERSE_MODE_PANEL_SUPPORTED', 'HOLOVERSE_MODE_SOURCE_KIND', 'HOLOVERSE_MODE_TITLE', 'HOLOVERSE_TRANSITION_ACTIVE', 'HOLOVERSE_TRANSITION_CONTEXT', 'HOLOVERSE_TRANSITION_ID', 'HOLOVERSE_TRANSITION_MODE_ID', 'HOLOVERSE_TRANSITION_MODE_LABEL', 'HOLOVERSE_TRANSITION_ROUTE', 'HOLOVERSE_TRANSITION_SOURCE', 'HOLOVERSE_TRANSITION_STAGE', 'MATRIX_CORE_MODE_FOLDER', 'MATRIX_CORE_MODE_NAME']"
+      }
+    },
+    {
+      "time": "2026-05-21 16:20:47",
+      "event": "native_adapter_begin",
+      "mode": "Vector Wars",
+      "mode_id": "vector_wars",
+      "label": "Vector Wars",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1779405647082_vector_wars_native",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Wars\\main.py",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Wars\\holoverse_native_adapter.py",
+        "source": "artifact:5"
+      }
+    },
+    {
+      "time": "2026-05-21 16:20:47",
+      "event": "native_begin",
+      "mode": "Vector Wars",
+      "mode_id": "vector_wars",
+      "label": "Vector Wars",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed"
+    },
+    {
+      "time": "2026-05-21 16:20:47",
+      "event": "native_adapter_active",
+      "mode": "Vector Wars",
+      "mode_id": "vector_wars",
+      "label": "Vector Wars",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1779405647082_vector_wars_native",
+        "adapter": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Wars\\holoverse_native_adapter.py",
+        "entry": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Vector Wars\\main.py"
+      }
+    },
+    {
+      "time": "2026-05-21 16:20:47",
+      "event": "transition_dispatched",
+      "mode": "Vector Wars",
+      "mode_id": "vector_wars",
+      "label": "Vector Wars Dimension",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1779405647004_vector_wars",
+        "transition_route": "transition_native_adapter",
+        "transition_stage": "dispatch",
+        "source": "artifact:5",
+        "result": "ok"
+      }
+    },
+    {
+      "time": "2026-05-21 16:20:50",
+      "event": "native_return",
+      "mode": "Vector Wars",
+      "mode_id": "vector_wars",
+      "label": "Vector Wars",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "reason": "escape",
+        "elapsed": "3.14"
+      }
+    },
+    {
+      "time": "2026-05-21 16:21:04",
+      "event": "transition_begin",
+      "mode": "HoloUtopia",
+      "mode_id": "holoutopia",
+      "label": "HoloUtopia Live City",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1779405664759_holoutopia",
+        "transition_route": "transition_placeholder",
+        "transition_stage": "reserved_placeholder",
+        "source": "artifact:1",
+        "context_keys": "artifact_id,artifact_mode_id,artifact_name,doorway"
+      }
+    },
+    {
+      "time": "2026-05-21 16:21:04",
+      "event": "placeholder_transition_panel",
+      "mode": "HoloUtopia",
+      "mode_id": "holoutopia",
+      "label": "HoloUtopia",
+      "route": "HOSTED",
+      "launch_type": "hosted_external",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "folder": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\HoloUtopia",
+        "bot": "",
+        "entry_started": "False"
+      }
+    },
+    {
+      "time": "2026-05-21 16:21:04",
+      "event": "transition_dispatched",
+      "mode": "HoloUtopia",
+      "mode_id": "holoutopia",
+      "label": "HoloUtopia Live City",
+      "route": "SAME-WINDOW",
+      "launch_type": "native_panda",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "transition_id": "1779405664759_holoutopia",
+        "transition_route": "transition_placeholder",
+        "transition_stage": "reserved_placeholder",
+        "source": "artifact:1",
+        "result": "ok"
+      }
+    },
+    {
+      "time": "2026-05-21 16:21:20",
+      "event": "close_all_apps",
+      "mode": "CORE PANEL",
+      "mode_id": "core_panel",
+      "label": "CORE PANEL",
+      "route": "HOSTED",
+      "launch_type": "hosted_external",
+      "version": "0.10.99-cinematic-tab-reclaimed",
+      "extra": {
+        "count": "1"
+      }
+    }
+  ]
+}

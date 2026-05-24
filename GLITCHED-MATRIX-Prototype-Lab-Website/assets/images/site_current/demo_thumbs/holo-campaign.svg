@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-label="Holo Campaign thumbnail">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#050508"/><stop offset="1" stop-color="#26060a"/></linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0v32" fill="none" stroke="#46dcff" stroke-opacity="0.14"/></pattern>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <rect width="640" height="360" fill="url(#grid)"/>
+  <line x1="60" y1="260" x2="120" y2="70" stroke="#46dcff" stroke-width="3" opacity="0.34"/><line x1="115" y1="260" x2="165" y2="70" stroke="#46dcff" stroke-width="3" opacity="0.34"/><line x1="170" y1="260" x2="210" y2="70" stroke="#46dcff" stroke-width="3" opacity="0.34"/><line x1="225" y1="260" x2="255" y2="70" stroke="#46dcff" stroke-width="3" opacity="0.34"/><line x1="280" y1="260" x2="300" y2="70" stroke="#46dcff" stroke-width="3" opacity="0.34"/><line x1="335" y1="260" x2="345" y2="70" stroke="#46dcff" stroke-width="3" opacity="0.34"/><line x1="390" y1="260" x2="390" y2="70" stroke="#46dcff" stroke-width="3" opacity="0.34"/><line x1="445" y1="260" x2="435" y2="70" stroke="#46dcff" stroke-width="3" opacity="0.34"/><line x1="500" y1="260" x2="480" y2="70" stroke="#46dcff" stroke-width="3" opacity="0.34"/><line x1="555" y1="260" x2="525" y2="70" stroke="#46dcff" stroke-width="3" opacity="0.34"/><circle cx="180" cy="120" r="30" fill="none" stroke="#fff" opacity="0.7" stroke-width="3"/><circle cx="260" cy="120" r="30" fill="none" stroke="#fff" opacity="0.7" stroke-width="3"/><circle cx="340" cy="120" r="30" fill="none" stroke="#fff" opacity="0.7" stroke-width="3"/><circle cx="420" cy="120" r="30" fill="none" stroke="#fff" opacity="0.7" stroke-width="3"/><circle cx="500" cy="120" r="30" fill="none" stroke="#fff" opacity="0.7" stroke-width="3"/><rect x="290" y="175" width="60" height="55" fill="#46dcff" opacity="0.65" stroke="#fff" stroke-width="2"/>
+  <rect y="255" width="640" height="105" fill="#000" opacity="0.72"/>
+  <rect x="1.5" y="1.5" width="637" height="357" rx="4" fill="none" stroke="#46dcff" stroke-opacity="0.72" stroke-width="3"/>
+  <text x="28" y="304" fill="#fff0f0" font-family="Arial, sans-serif" font-size="40" font-weight="700">Holo Campaign</text>
+  <text x="30" y="336" fill="#e7b6b6" font-family="Arial, sans-serif" font-size="18">Playable now</text>
+</svg>

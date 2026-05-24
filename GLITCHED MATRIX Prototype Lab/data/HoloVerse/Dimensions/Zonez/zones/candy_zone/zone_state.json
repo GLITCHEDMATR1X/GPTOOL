@@ -1,0 +1,7 @@
+{
+  "zone": "candy_zone",
+  "name": "Candy Zone",
+  "connected": true,
+  "stabilized": 0.0,
+  "route": "artifact_slot_6_zonez_native"
+}

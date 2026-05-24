@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "id": "holoutopia_simulation_hub_schedule_staggering_v1",
+  "runtime_writes_allowed": false,
+  "purpose": "Keep Simulation Hub representatives on different personal schedules and activity clusters so citizens do not build up in one place.",
+  "rules": {
+    "unique_visible_schedule_profiles": 20,
+    "personal_day_offset_minutes_step": 7,
+    "personal_day_offset_minutes_jitter": 19,
+    "max_representatives_per_activity_cluster": 4,
+    "use_cluster_distribution_guard": true,
+    "preserve_visible_cap": true
+  },
+  "phase_mix": {
+    "simulation_hub_work": [
+      "east_live_model_cluster",
+      "north_pod_cluster",
+      "south_pod_cluster",
+      "forum_briefing_cluster",
+      "reader_lore_cluster",
+      "arrival_gate_cluster",
+      "west_social_sync_cluster"
+    ],
+    "simulation_hub_activity": [
+      "north_pod_cluster",
+      "south_pod_cluster",
+      "west_social_sync_cluster",
+      "forum_briefing_cluster",
+      "reader_lore_cluster",
+      "evening_cooldown_cluster",
+      "arrival_gate_cluster"
+    ],
+    "returning_to_residential": [
+      "evening_cooldown_cluster",
+      "arrival_gate_cluster",
+      "west_social_sync_cluster"
+    ]
+  },
+  "schedule_archetypes": [
+    {
+      "id": "early_model_worker",
+      "work_start": "07:40",
+      "work_end": "15:40",
+      "activity_start": "16:10",
+      "return_home": "20:00",
+      "preferred_clusters": [
+        "east_live_model_cluster",
+        "north_pod_cluster",
+        "reader_lore_cluster"
+      ]
+    },
+    {
+      "id": "pod_operator",
+      "work_start": "08:00",
+      "work_end": "16:20",
+      "activity_start": "17:00",
+      "return_home": "20:20",
+      "preferred_clusters": [
+        "north_pod_cluster",
+        "south_pod_cluster",
+        "west_social_sync_cluster"
+      ]
+    },
+    {
+      "id": "briefing_attendee",
+      "work_start": "08:20",
+      "work_end": "17:00",
+      "activity_start": "17:25",
+      "return_home": "20:40",
+      "preferred_clusters": [
+        "forum_briefing_cluster",
+        "arrival_gate_cluster",
+        "reader_lore_cluster"
+      ]
+    },
+    {
+      "id": "lore_reviewer",
+      "work_start": "09:00",
+      "work_end": "17:30",
+      "activity_start": "18:00",
+      "return_home": "20:55",
+      "preferred_clusters": [
+        "reader_lore_cluster",
+        "forum_briefing_cluster",
+        "evening_cooldown_cluster"
+      ]
+    },
+    {
+      "id": "social_sync_worker",
+      "work_start": "09:20",
+      "work_end": "16:50",
+      "activity_start": "17:10",
+      "return_home": "20:15",
+      "preferred_clusters": [
+        "west_social_sync_cluster",
+        "south_pod_cluster",
+        "evening_cooldown_cluster"
+      ]
+    }
+  ]
+}

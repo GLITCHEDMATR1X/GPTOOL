@@ -1,0 +1,69 @@
+{
+  "schema": "holoverse_mode_audio_profile_v1",
+  "id": "fractured_dimension",
+  "mode": "Fractured Dimension",
+  "role": "glitch_shooter",
+  "music_loop": "hv_space_orbit_theme.wav",
+  "music_bus": "music",
+  "music_volume": 0.3,
+  "events": {
+    "shot_left": {
+      "categories": [
+        "weapons/lasers",
+        "weapons/guns"
+      ],
+      "preferred": [
+        "vw_laser_fire_glitch.wav",
+        "sm_laser_plasma_01.wav"
+      ],
+      "volume": 0.62
+    },
+    "shot_right": {
+      "categories": [
+        "weapons/lasers",
+        "weapons/guns"
+      ],
+      "preferred": [
+        "vw_laser_fire_clean.wav",
+        "sm_gauss_burst_01.wav"
+      ],
+      "volume": 0.62
+    },
+    "roar": {
+      "categories": [
+        "damage/hit",
+        "ambient/battle"
+      ],
+      "preferred": [
+        "vw_hit_shield_fizz.wav",
+        "sm_battle_pulse_stinger_01.wav"
+      ],
+      "volume": 0.65
+    },
+    "hit": {
+      "categories": [
+        "damage/hit"
+      ],
+      "preferred": [
+        "sm_shield_hit_01.wav"
+      ],
+      "volume": 0.55
+    },
+    "destroy": {
+      "categories": [
+        "damage/destroy"
+      ],
+      "preferred": [
+        "sm_core_destroy_01.wav"
+      ],
+      "volume": 0.72
+    }
+  },
+  "notes": "Audio variant pass: mode can rotate among profile music_variants about once per minute; event SFX remain profile-driven.",
+  "music_variants": [
+    "hv_space_orbit_theme.wav",
+    "hv_space_orbit_theme_b.wav",
+    "hv_space_orbit_theme_c.wav"
+  ],
+  "music_rotation_seconds": 60.0
+}

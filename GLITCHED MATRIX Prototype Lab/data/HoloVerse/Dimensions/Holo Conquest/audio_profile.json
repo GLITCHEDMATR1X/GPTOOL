@@ -1,0 +1,68 @@
+{
+  "schema": "holoverse_mode_audio_profile_v1",
+  "id": "holo_conquest",
+  "mode": "Holo Conquest",
+  "role": "strategy_combat",
+  "music_loop": "hv_metropolis_neon_theme.wav",
+  "music_bus": "music",
+  "music_volume": 0.25,
+  "events": {
+    "attack": {
+      "categories": [
+        "weapons/lasers",
+        "weapons/guns"
+      ],
+      "preferred": [
+        "sm_laser_plasma_01.wav",
+        "vw_laser_fire_campaign.wav"
+      ],
+      "volume": 0.64
+    },
+    "ability": {
+      "categories": [
+        "weapons/missiles",
+        "weapons/lasers"
+      ],
+      "preferred": [
+        "sm_missile_launch_01.wav",
+        "vw_rocket_launch_deep.wav"
+      ],
+      "volume": 0.7
+    },
+    "hit": {
+      "categories": [
+        "damage/hit"
+      ],
+      "preferred": [
+        "vw_hit_heavy_core.wav",
+        "sm_shield_hit_01.wav"
+      ],
+      "volume": 0.58
+    },
+    "destroy": {
+      "categories": [
+        "damage/destroy"
+      ],
+      "preferred": [
+        "sm_core_destroy_01.wav"
+      ],
+      "volume": 0.78
+    },
+    "ui": {
+      "categories": [
+        "ui"
+      ],
+      "preferred": [
+        "sm_ui_select_01.wav"
+      ],
+      "volume": 0.42
+    }
+  },
+  "notes": "Audio variant pass: mode can rotate among profile music_variants about once per minute; event SFX remain profile-driven.",
+  "music_variants": [
+    "hv_metropolis_neon_theme.wav",
+    "hv_metropolis_neon_theme_b.wav",
+    "hv_metropolis_neon_theme_c.wav"
+  ],
+  "music_rotation_seconds": 60.0
+}

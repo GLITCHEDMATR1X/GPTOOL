@@ -1,0 +1,7 @@
+# HoloVerse / MatrixCore runtime requirements
+# Python 3.12 recommended on Windows 10+
+panda3d>=1.10.15,<1.11
+pygame>=2.6.1
+numpy>=1.26.4
+Pillow>=10.4.0
+opencv-python>=4.10.0.84

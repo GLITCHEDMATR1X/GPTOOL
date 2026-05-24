@@ -1,0 +1,16 @@
+ID: matrixcore.system.the_patch
+TITLE: The Patch
+TYPE: system
+ERA: Utopia
+SPOILER_LEVEL: 3
+REGION_TIE: urban,hub
+BOT_TIE: IO / Archivist
+UNLOCK: post_chaos_archive
+SUMMARY: The control update that stops powers from being obtained but does not heal the causes.
+GLEEBS_NOTE: A patch can close a door. It cannot apologize for what came through.
+GAME_USE: Safety gates, corrupted ability locks, rollback records, anti-regression lore.
+NOVEL_USE: Post-chaos stabilization and false repair theme.
+STATUS: draft-pass0006
+---
+BODY:
+The Patch strips or blocks leaked powers after the ARG/simulation disasters. It restores surface order, but it also proves Utopia solves crises through restriction and containment before truth and accountability.

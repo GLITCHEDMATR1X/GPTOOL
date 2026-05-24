@@ -1,0 +1,13 @@
+{
+  "schema": 2,
+  "tool": "Metropolis Robot Selector",
+  "dimension": "metropolis_robot_lab",
+  "mode": "single_ally_selector",
+  "active_ally": null,
+  "active_ally_id": "",
+  "arena_allies": [],
+  "requires_new_selection": true,
+  "death_rule": "If this ally dies in Urban Warzone, return to Archivist and bind a new robot.",
+  "updated_at": "2026-05-11T13:11:07",
+  "reason": "close_left_metropolis"
+}

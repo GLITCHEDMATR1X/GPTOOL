@@ -1,0 +1,16 @@
+ID: matrixcore.archive.fragment.002_andrew_first_breach
+TITLE: Fragment 002 — Andrew First Breach
+TYPE: archive_fragment
+ERA: Utopia
+SPOILER_LEVEL: 3
+REGION_TIE: urban,hub
+BOT_TIE: Archivist
+UNLOCK: security_breach_archive
+SUMMARY: Andrew discovers update manipulation and hidden UTOPIA visibility.
+GLEEBS_NOTE: He saw too much. Then he chose what to do with it.
+GAME_USE: Unlocks breach warning, corrupted patch route, Andrew trail.
+NOVEL_USE: The Hacker restructuring seed.
+STATUS: draft-pass0006
+---
+BODY:
+Recovered memory shell: Andrew isolates himself after humiliation and social collapse. He studies UTOPIA until he can see update queues, Overseer blind spots, and hidden network functions. Later prose must handle this material carefully and with moral weight.

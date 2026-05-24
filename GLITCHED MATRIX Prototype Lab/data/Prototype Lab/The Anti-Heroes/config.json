@@ -1,0 +1,13 @@
+{
+  "hud_visible": true,
+  "camera_distance": 8.8,
+  "camera_height": 2.8,
+  "camera_pitch": -10.0,
+  "camera_yaw": 180.0,
+  "camera_sensitivity": 0.17,
+  "invert_y": false,
+  "ui_scale": 1.0,
+  "music_volume": 0.65,
+  "sfx_volume": 0.9,
+  "quality": "Performance"
+}

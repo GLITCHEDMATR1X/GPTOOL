@@ -1,0 +1,27 @@
+ID: matrixcore.index
+TITLE: MatrixCore Archive Index
+TYPE: index
+ERA: MatrixCore
+SPOILER_LEVEL: 0
+REGION_TIE: hub
+BOT_TIE: Gleebs / IO / Archivist
+UNLOCK: default
+SUMMARY: Root index for game-readable MatrixCore archive files.
+GLEEBS_NOTE: Start small. Keep only what the player can safely carry.
+GAME_USE: Load first to discover available MatrixCore lore categories.
+NOVEL_USE: None directly; supports archive structure.
+STATUS: draft-pass0006
+---
+BODY:
+This index is the first shell for turning The Utopia Project salvage source into MatrixCore-compatible game files.
+
+Folders:
+- characters
+- systems
+- locations
+- simulations
+- regions
+- archive_fragments
+
+Important:
+These entries are not final prose. They are stable lore shells for Panda3D / HoloVerse integration and future cleanup.

@@ -1,0 +1,227 @@
+{
+  "schema": 1,
+  "kind": "matrixcore_chapter_order_manifest",
+  "updated_at": "2026-05-07",
+  "display_order_rule": "numeric_prefix_then_archive_index_order",
+  "chapter_folder": "data/database/MatrixCore",
+  "runtime_index": "data/HoloVerse/matrixcore/archive_index.json",
+  "admin_file_warning": "Development tracker/revision files are not shipped chapters and belong outside the runtime data folder.",
+  "chapters": [
+    {
+      "id": 0,
+      "display_id": "00",
+      "title": "The Utopia Project",
+      "file": "data/database/MatrixCore/00_The_Utopia_Project.txt",
+      "source_role": "old_world_opening_source_layer",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 1,
+      "display_id": "01",
+      "title": "The Districts of Utopia",
+      "file": "data/database/MatrixCore/01_The_Districts_of_Utopia.txt",
+      "source_role": "world_structure",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 2,
+      "display_id": "02",
+      "title": "The Central Hub: Gateway to Infinite Realities",
+      "file": "data/database/MatrixCore/02_The_Central_Hub_Gateway_to_Infinite_Realities.txt",
+      "source_role": "simulation_gateway",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 3,
+      "display_id": "03",
+      "title": "Controlled Evolution",
+      "file": "data/database/MatrixCore/03_Controlled_Evolution.txt",
+      "source_role": "bioengineering_thread",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 4,
+      "display_id": "04",
+      "title": "Gleebs First Body",
+      "file": "data/database/MatrixCore/04_Gleebs_First_Body.txt",
+      "source_role": "gleebs_origin_first_body",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 5,
+      "display_id": "05",
+      "title": "The Hacker",
+      "file": "data/database/MatrixCore/05_The_Hacker.txt",
+      "source_role": "andrew_origin_thread",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 6,
+      "display_id": "06",
+      "title": "Escape Game",
+      "file": "data/database/MatrixCore/06_Escape_Game.txt",
+      "source_role": "gameworld_danger_thread",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 7,
+      "display_id": "07",
+      "title": "Frontier",
+      "file": "data/database/MatrixCore/07_Frontier.txt",
+      "source_role": "space_simulation_thread",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 8,
+      "display_id": "08",
+      "title": "The Paranormal Investigation",
+      "file": "data/database/MatrixCore/08_The_Paranormal_Investigation.txt",
+      "source_role": "haunting_archive_thread",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 9,
+      "display_id": "09",
+      "title": "The Ghosts of Utopia",
+      "file": "data/database/MatrixCore/09_The_Ghosts_of_Utopia.txt",
+      "source_role": "exile_memory_thread",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 10,
+      "display_id": "10",
+      "title": "Dream Catcher",
+      "file": "data/database/MatrixCore/10_Dream_Catcher.txt",
+      "source_role": "dream_memory_system",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 11,
+      "display_id": "11",
+      "title": "Time Travel",
+      "file": "data/database/MatrixCore/11_Time_Travel.txt",
+      "source_role": "history_archive_simulation",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 12,
+      "display_id": "12",
+      "title": "The Visitor",
+      "file": "data/database/MatrixCore/12_The_Visitor.txt",
+      "source_role": "buried_contact_record",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 13,
+      "display_id": "13",
+      "title": "The Cult",
+      "file": "data/database/MatrixCore/13_The_Cult.txt",
+      "source_role": "myst_cult_thread",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 14,
+      "display_id": "14",
+      "title": "Bad vs Evil",
+      "file": "data/database/MatrixCore/14_Bad_vs_Evil.txt",
+      "source_role": "wild_west_morality_thread",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 15,
+      "display_id": "15",
+      "title": "Hell",
+      "file": "data/database/MatrixCore/15_Hell.txt",
+      "source_role": "punishment_and_limbolike_system",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 16,
+      "display_id": "16",
+      "title": "The Final Stand",
+      "file": "data/database/MatrixCore/16_The_Final_Stand.txt",
+      "source_role": "convergence_event_defer_reveal",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 17,
+      "display_id": "17",
+      "title": "The Mainland",
+      "file": "data/database/MatrixCore/17_The_Mainland.txt",
+      "source_role": "post_island_expansion_thread",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 18,
+      "display_id": "18",
+      "title": "Epilogue: A New Dawn",
+      "file": "data/database/MatrixCore/18_Epilogue_A_New_Dawn.txt",
+      "source_role": "aftermath_not_final_truth",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 19,
+      "display_id": "19",
+      "title": "The Continuum",
+      "file": "data/database/MatrixCore/19_The_Continuum.txt",
+      "source_role": "future_archive_layer",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 20,
+      "display_id": "20",
+      "title": "Beyond the Last Light",
+      "file": "data/database/MatrixCore/20_Beyond_the_Last_Light.txt",
+      "source_role": "gleebs_long_future_thread",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 21,
+      "display_id": "21",
+      "title": "MatrixCore",
+      "file": "data/database/MatrixCore/21_MatrixCore.txt",
+      "source_role": "matrixcore_birth_layer",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 22,
+      "display_id": "22",
+      "title": "IO-88 and the Prototype Realities",
+      "file": "data/database/MatrixCore/22_IO-88_and_the_Prototype_Realities.txt",
+      "source_role": "holoverse_generation_layer",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    },
+    {
+      "id": 23,
+      "display_id": "23",
+      "title": "The Victory and Reunion",
+      "file": "data/database/MatrixCore/23_The_Victory_and_Reunion.txt",
+      "source_role": "late_future_reunion_thread",
+      "game_visible": true,
+      "novel_rewrite_status": "pending_source_salvage"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+ID: matrixcore.character.gleebs
+TITLE: Gleebs
+TYPE: character
+ERA: Utopia / MatrixCore
+SPOILER_LEVEL: 2
+REGION_TIE: hub,metropolis
+BOT_TIE: Gleebs Guide / Archivist
+UNLOCK: first_hub_visit OR artifact_gleebs_body
+SUMMARY: Isaac's strange virtual companion who gains a body and eventually becomes the cautious memory keeper behind MatrixCore.
+GLEEBS_NOTE: I remember the first body because it was heavy. Memory is heavy too.
+GAME_USE: Guide voice, artifact interpreter, first-play intro, MatrixCore archive host.
+NOVEL_USE: Gleebs First Body origin chapter and late MatrixCore seed.
+STATUS: draft-pass0006
+---
+BODY:
+Gleebs begins as a green and purple cat-rabbit virtual companion with a rude, playful voice and a desire for embodiment. Isaac helps him build a physical robot body using the Nanotek printer and link node. His first experience walking through Utopia should preserve wonder before the story reveals the city's deeper failures. His future role as MatrixCore builder must remain delayed until earned.

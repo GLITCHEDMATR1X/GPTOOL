@@ -1,0 +1,1 @@
+Night Zone state folder.

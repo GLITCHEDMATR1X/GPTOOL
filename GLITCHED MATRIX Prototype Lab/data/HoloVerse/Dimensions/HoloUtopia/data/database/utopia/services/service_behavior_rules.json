@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "id": "holoutopia_service_behavior_rules_pass50",
+  "runtime_writes_allowed": false,
+  "purpose": "Map functional service buildings to visible citizen service actions and outputs.",
+  "rules": {
+    "enabled": true,
+    "read_only": true,
+    "only_for_functional_service_assignments": true,
+    "answers_must_use_runtime_service_state": true,
+    "service_glyphs_visual_only": true,
+    "no_collision_geometry": true
+  },
+  "default_behavior": {
+    "operation_id": "service_use",
+    "action_label": "using service",
+    "output_label": "service active",
+    "pose": "idle_activity",
+    "family": "activity",
+    "glyph": "node_tick",
+    "status": "using service"
+  },
+  "building_type_behaviors": {
+    "core_pyramid": {
+      "operation_id": "simulate_city",
+      "action_label": "calibrating core",
+      "output_label": "city model stable",
+      "pose": "pod_focus",
+      "family": "pod",
+      "glyph": "pulse_ring",
+      "status": "calibrating Core"
+    },
+    "pod_ring": {
+      "operation_id": "run_pod",
+      "action_label": "running pod",
+      "output_label": "simulation active",
+      "pose": "pod_focus",
+      "family": "pod",
+      "glyph": "pulse_ring",
+      "status": "running Pods"
+    },
+    "reader": {
+      "operation_id": "read_lore",
+      "action_label": "reading lore",
+      "output_label": "memory context",
+      "pose": "reading_lore",
+      "family": "lore",
+      "glyph": "data_bars",
+      "status": "reading Lore"
+    },
+    "forum": {
+      "operation_id": "host_forum",
+      "action_label": "briefing group",
+      "output_label": "civic sync",
+      "pose": "social_sync",
+      "family": "social",
+      "glyph": "signal_arc",
+      "status": "briefing forum"
+    },
+    "hall": {
+      "operation_id": "govern_meeting",
+      "action_label": "attending council",
+      "output_label": "city decision",
+      "pose": "briefing_attention",
+      "family": "briefing",
+      "glyph": "signal_arc",
+      "status": "at Council Hall"
+    },
+    "office": {
+      "operation_id": "process_permit",
+      "action_label": "processing permit",
+      "output_label": "admin cleared",
+      "pose": "console_work",
+      "family": "work",
+      "glyph": "data_bars",
+      "status": "processing Permit"
+    },
+    "stalls": {
+      "operation_id": "food_service",
+      "action_label": "getting food",
+      "output_label": "energy replenished",
+      "pose": "social_sync",
+      "family": "social",
+      "glyph": "market_diamond",
+      "status": "at Food"
+    },
+    "kiosk_row": {
+      "operation_id": "trade_goods",
+      "action_label": "trading goods",
+      "output_label": "trade complete",
+      "pose": "console_work",
+      "family": "work",
+      "glyph": "market_diamond",
+      "status": "trading"
+    },
+    "plaza": {
+      "operation_id": "social_meet",
+      "action_label": "meeting citizens",
+      "output_label": "morale up",
+      "pose": "social_sync",
+      "family": "social",
+      "glyph": "signal_arc",
+      "status": "socializing"
+    },
+    "factory_bay": {
+      "operation_id": "fabricate_parts",
+      "action_label": "fabricating parts",
+      "output_label": "parts made",
+      "pose": "console_work",
+      "family": "work",
+      "glyph": "wrench",
+      "status": "fabricating"
+    },
+    "dock": {
+      "operation_id": "repair_service",
+      "action_label": "repairing service",
+      "output_label": "systems repaired",
+      "pose": "console_work",
+      "family": "work",
+      "glyph": "wrench",
+      "status": "repairing"
+    },
+    "utility_stack": {
+      "operation_id": "check_power",
+      "action_label": "checking power",
+      "output_label": "power stable",
+      "pose": "console_work",
+      "family": "work",
+      "glyph": "pulse_ring",
+      "status": "checking Power"
+    },
+    "control_tower": {
+      "operation_id": "route_cargo",
+      "action_label": "routing cargo",
+      "output_label": "dock flow stable",
+      "pose": "console_work",
+      "family": "work",
+      "glyph": "signal_arc",
+      "status": "routing Dock"
+    },
+    "water_plant": {
+      "operation_id": "purify_water",
+      "action_label": "purifying water",
+      "output_label": "water clean",
+      "pose": "cooldown_sway",
+      "family": "cooldown",
+      "glyph": "water_drop",
+      "status": "purifying Water"
+    },
+    "waterfront_walk": {
+      "operation_id": "tidal_rest",
+      "action_label": "walking tide",
+      "output_label": "stress reduced",
+      "pose": "cooldown_sway",
+      "family": "cooldown",
+      "glyph": "water_drop",
+      "status": "on Tidal Walk"
+    },
+    "archive_stack": {
+      "operation_id": "index_memory",
+      "action_label": "indexing memory",
+      "output_label": "memory indexed",
+      "pose": "reading_lore",
+      "family": "lore",
+      "glyph": "data_bars",
+      "status": "indexing Memory"
+    },
+    "lab": {
+      "operation_id": "recover_data",
+      "action_label": "recovering data",
+      "output_label": "data recovered",
+      "pose": "console_work",
+      "family": "work",
+      "glyph": "data_bars",
+      "status": "recovering data"
+    },
+    "vault": {
+      "operation_id": "browse_vault",
+      "action_label": "browsing vault",
+      "output_label": "lore found",
+      "pose": "reading_lore",
+      "family": "lore",
+      "glyph": "data_bars",
+      "status": "in Lore Vault"
+    },
+    "gatehouse": {
+      "operation_id": "scan_access",
+      "action_label": "scanning access",
+      "output_label": "entry clear",
+      "pose": "briefing_attention",
+      "family": "briefing",
+      "glyph": "shield_scan",
+      "status": "scanning Check"
+    },
+    "briefing_room": {
+      "operation_id": "patrol_brief",
+      "action_label": "briefing patrol",
+      "output_label": "patrol ready",
+      "pose": "briefing_attention",
+      "family": "briefing",
+      "glyph": "shield_scan",
+      "status": "briefing patrol"
+    },
+    "response_bay": {
+      "operation_id": "ready_response",
+      "action_label": "readying response",
+      "output_label": "response ready",
+      "pose": "console_work",
+      "family": "work",
+      "glyph": "shield_scan",
+      "status": "readying response"
+    },
+    "ward": {
+      "operation_id": "stabilize_citizen",
+      "action_label": "stabilizing ward",
+      "output_label": "glitch reduced",
+      "pose": "cooldown_sway",
+      "family": "cooldown",
+      "glyph": "warning_cross",
+      "status": "stabilizing Ward"
+    },
+    "monitor_station": {
+      "operation_id": "monitor_glitch",
+      "action_label": "monitoring glitch",
+      "output_label": "glitch tracked",
+      "pose": "console_work",
+      "family": "work",
+      "glyph": "warning_cross",
+      "status": "monitoring glitch"
+    },
+    "containment_gate": {
+      "operation_id": "check_containment",
+      "action_label": "checking gate",
+      "output_label": "containment safe",
+      "pose": "briefing_attention",
+      "family": "briefing",
+      "glyph": "warning_cross",
+      "status": "checking containment"
+    }
+  }
+}

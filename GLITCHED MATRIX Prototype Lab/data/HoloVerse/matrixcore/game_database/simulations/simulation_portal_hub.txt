@@ -1,0 +1,16 @@
+ID: matrixcore.simulation.portal_hub
+TITLE: Utopia Portal Hub
+TYPE: simulation
+ERA: Utopia
+SPOILER_LEVEL: 1
+REGION_TIE: hub
+BOT_TIE: IO / Gleebs
+UNLOCK: default
+SUMMARY: The central access system for simulations, ARG portals, long-term immersion, and reality leakage.
+GLEEBS_NOTE: Every door needed a rule. Then someone found doors without rules.
+GAME_USE: Origin of artifact pedestals and dimension activation.
+NOVEL_USE: Hub/worldbuilding and anthology connector.
+STATUS: draft-pass0006
+---
+BODY:
+The Portal Hub hosts simulation portals, fantasy worlds, recreation spaces, ARG games, and long-term virtual living. In MatrixCore/HoloVerse, this becomes the ancestor of artifact-triggered dimensions.

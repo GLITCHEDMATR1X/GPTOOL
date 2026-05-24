@@ -1,0 +1,14 @@
+# HoloVerse Dyson sphere build progress
+# Delete this TXT file to reset the build state.
+game=HoloVerse Observatory
+version=1.11.98-live-screenshot-route
+kind=space_build_progress
+first_started_utc=2026-04-28T01:27:31Z
+last_saved_utc=2026-04-28T01:27:33Z
+session_count=1
+total_build_seconds=0.0
+session_build_seconds=0.0
+space_build_progress=0.0
+progress_rate_per_second=0.00042
+base_progress=0.0
+reset_hint=Delete this TXT file to reset the Dyson sphere build progress.

@@ -1,0 +1,18 @@
+GLITCHED MATRIX Prototype Lab Site — Pass 4 Deploy Notes
+
+Use this as a full GitHub Pages site replacement:
+1. Open this zip.
+2. Open the GLITCHED-MATRIX-Prototype-Lab-main folder inside it.
+3. Copy the CONTENTS of that folder into the root of the GitHub Pages repository.
+4. Commit/push all changed files, including assets/js/demos.js, index.html, style.css, admin.js, assets/data, and assets/images/site_current.
+5. Wait for GitHub Pages to finish deployment.
+6. Open the site with a cache buster once, for example: index.html?v=20260429-pass4-playerfix
+7. Hard refresh if needed: Ctrl+F5 on Windows.
+
+Pass 4 specifically fixes the Play Demos black player issue by restoring the missing demoCanvas element and bumping browser-local asset config keys.
+
+Image replacement:
+- Main gallery/hero images: replace files in assets/images/site_current using the same filenames.
+- Demo thumbnails: replace files in assets/images/site_current/demo_thumbs using the same filenames.
+- Text/title/path edits: edit assets/data/image_manifest.json or assets/data/demo_manifest.json.
+- After replacing images, bump assetVersion in the manifest to force browser refresh.

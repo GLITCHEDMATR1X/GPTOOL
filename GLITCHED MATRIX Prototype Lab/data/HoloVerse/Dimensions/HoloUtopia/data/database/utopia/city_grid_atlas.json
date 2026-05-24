@@ -1,0 +1,285 @@
+{
+  "schema": 2,
+  "id": "utopia_alpha_city_grid",
+  "display_name": "HoloUtopia Complete 3x3 Alpha City Grid",
+  "alignment_id": "utopia_even_10x8_v1",
+  "canonical_grid_size": [
+    10,
+    8
+  ],
+  "block_size": 64,
+  "district_gap_blocks": 2,
+  "frame_policy": {
+    "one_town_one_frame": true,
+    "frame_is_even": true,
+    "safe_to_build_neighborhoods": true,
+    "notes": "Pass 16 completes the 3x3 district atlas: every slot is authored as a 10x8 frame with 3D massing and residential/citizen-ready data.",
+    "complete_3x3": true
+  },
+  "towns": [
+    {
+      "town_id": "archive_quarter_gamma",
+      "city_grid": [
+        0,
+        2
+      ],
+      "role": "archive_memory",
+      "entry_edges": [
+        "east",
+        "south"
+      ]
+    },
+    {
+      "town_id": "harbor_grid_beta",
+      "city_grid": [
+        1,
+        2
+      ],
+      "role": "harbor_waterfront",
+      "entry_edges": [
+        "south",
+        "east",
+        "west"
+      ]
+    },
+    {
+      "town_id": "glitched_quarantine_epsilon",
+      "city_grid": [
+        2,
+        2
+      ],
+      "role": "glitched_restricted",
+      "entry_edges": [
+        "west",
+        "south",
+        "north"
+      ]
+    },
+    {
+      "town_id": "residential_alpha",
+      "city_grid": [
+        0,
+        1
+      ],
+      "role": "starter_neighborhood",
+      "entry_edges": [
+        "east",
+        "south",
+        "north"
+      ]
+    },
+    {
+      "town_id": "central_core_civic_ring",
+      "city_grid": [
+        1,
+        1
+      ],
+      "role": "portal_core",
+      "entry_edges": [
+        "north",
+        "south",
+        "east",
+        "west"
+      ]
+    },
+    {
+      "town_id": "security_gate",
+      "city_grid": [
+        2,
+        1
+      ],
+      "role": "controlled_access",
+      "entry_edges": [
+        "west",
+        "south",
+        "north"
+      ]
+    },
+    {
+      "town_id": "civic_commons_delta",
+      "city_grid": [
+        0,
+        0
+      ],
+      "role": "civic_commons",
+      "entry_edges": [
+        "north",
+        "east"
+      ]
+    },
+    {
+      "town_id": "market_crossing",
+      "city_grid": [
+        1,
+        0
+      ],
+      "role": "market_social",
+      "entry_edges": [
+        "north",
+        "east",
+        "west"
+      ]
+    },
+    {
+      "town_id": "industrial_yard_alpha",
+      "city_grid": [
+        2,
+        0
+      ],
+      "role": "industrial_service",
+      "entry_edges": [
+        "west",
+        "north"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "central_core_civic_ring",
+      "to": "residential_alpha",
+      "edge": "west"
+    },
+    {
+      "from": "central_core_civic_ring",
+      "to": "security_gate",
+      "edge": "east"
+    },
+    {
+      "from": "central_core_civic_ring",
+      "to": "harbor_grid_beta",
+      "edge": "north"
+    },
+    {
+      "from": "central_core_civic_ring",
+      "to": "market_crossing",
+      "edge": "south"
+    },
+    {
+      "from": "harbor_grid_beta",
+      "to": "archive_quarter_gamma",
+      "edge": "west"
+    },
+    {
+      "from": "harbor_grid_beta",
+      "to": "glitched_quarantine_epsilon",
+      "edge": "east"
+    },
+    {
+      "from": "security_gate",
+      "to": "glitched_quarantine_epsilon",
+      "edge": "north"
+    },
+    {
+      "from": "security_gate",
+      "to": "industrial_yard_alpha",
+      "edge": "south"
+    },
+    {
+      "from": "market_crossing",
+      "to": "industrial_yard_alpha",
+      "edge": "east"
+    },
+    {
+      "from": "market_crossing",
+      "to": "civic_commons_delta",
+      "edge": "west"
+    },
+    {
+      "from": "residential_alpha",
+      "to": "civic_commons_delta",
+      "edge": "south"
+    },
+    {
+      "from": "residential_alpha",
+      "to": "archive_quarter_gamma",
+      "edge": "north"
+    }
+  ],
+  "next_build_target": {
+    "town_id": "citizens",
+    "pass_name": "Citizen Schedule Simulation Spine",
+    "reason": "The 3x3 city frame is now complete; next work can safely focus on visible citizen schedule movement."
+  },
+  "complete_grid": {
+    "size": [
+      3,
+      3
+    ],
+    "required_slots": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        2
+      ]
+    ],
+    "filled_slots": [
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "metropolis_robot_lab",
+  "title": "METROPOLIS ROBOT SELECTOR",
+  "description": "In-world Metropolis robot selector: choose one prebuilt Urban-class robot. The selected robot loads beside you whenever you enter Urban until it is destroyed or replaced.",
+  "entry": "main.py",
+  "runtime": "runtime.py",
+  "runtime_module": "metropolis_robot_lab_runtime",
+  "runtime_installer": "install_metropolis_robot_lab_runtime",
+  "launch_type": "in_world_region",
+  "placeholder_mode": false,
+  "source_kind": "in_world_panda3d",
+  "preferred_display": "current_metropolis_region",
+  "host_contract": "holoverse_in_world_metropolis_robot_selector_runtime_v3_dimension_local",
+  "region_owner": "METROPOLIS",
+  "bot_owner": "Archivist",
+  "return_target": "same_region",
+  "requires_mouse_capture": true,
+  "native_adapter_enabled": false,
+  "x_transition_route": "transition_in_world_region",
+  "x_transition_stage": "dimension_folder_runtime",
+  "x_cleanup_note": "Metropolis is a selector/binder, not a player robot part editor. One selected prebuilt robot deploys into Urban and death clears the export until a new robot is selected."
+}

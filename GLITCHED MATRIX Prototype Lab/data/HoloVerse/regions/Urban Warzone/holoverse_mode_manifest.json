@@ -1,0 +1,41 @@
+{
+  "id": "urban_warzone",
+  "title": "URBAN WARZONE",
+  "description": "Urban endgame arena inside the live Urban biome: buried arena underlay, capture posts, bombs, arena weapons, 4D teleport enemy waves, eight non-IO battle-bot allies, robots, drones, mechs, and bosses.",
+  "entry": "main.py",
+  "runtime": "runtime.py",
+  "runtime_module": "urban_warzone_runtime",
+  "runtime_installer": "install_urban_warzone_runtime",
+  "launch_type": "in_world_region",
+  "placeholder_mode": false,
+  "source_kind": "in_world_panda3d",
+  "preferred_display": "current_urban_region",
+  "host_contract": "holoverse_in_world_urban_warzone_friend_bot_wave_arena_v5_dimension_local",
+  "region_owner": "URBAN",
+  "bot_owner": "Sable",
+  "return_target": "same_region",
+  "requires_mouse_capture": true,
+  "native_adapter_enabled": false,
+  "x_transition_route": "transition_in_world_region",
+  "x_transition_stage": "dimension_folder_runtime",
+  "x_cleanup_note": "Runtime + salvaged arena blueprint live inside this dimension folder. Old legacy arena app/native adapter route remains retired; friend bots are the only allied faction.",
+  "arena_blueprint": "arena_blueprint.py",
+  "wave_arena_features": [
+    "summoned_friend_bots",
+    "score_and_combo",
+    "challenge_waves",
+    "difficulty_scaling",
+    "robot_drone_mech_variants",
+    "colossus_wave"
+  ],
+  "x_endgame_systems": [
+    "buried_arena_underlay",
+    "capture_posts",
+    "bomb_sites",
+    "arena_weapons",
+    "4d_enemy_teleport",
+    "battle_bot_allies_except_io",
+    "wave_scoring",
+    "boss_ready"
+  ]
+}

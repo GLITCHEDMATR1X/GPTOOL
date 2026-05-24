@@ -1,0 +1,342 @@
+{
+  "schema": 2,
+  "id": "holoutopia_city_citizen_relationships_v1",
+  "relationships": [
+    {
+      "a": "npc_aria_voss",
+      "b": "npc_ren_kael",
+      "relationship": "friend",
+      "trust": 55,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "npc_mira_sol",
+      "b": "npc_ren_kael",
+      "relationship": "friend",
+      "trust": 62,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "npc_mira_sol",
+      "b": "npc_nova_elle",
+      "relationship": "friend",
+      "trust": 69,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "npc_ion_sable",
+      "b": "npc_nova_elle",
+      "relationship": "friend",
+      "trust": 76,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "npc_ion_sable",
+      "b": "npc_lena_quill",
+      "relationship": "friend",
+      "trust": 83,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "npc_kade_mirror",
+      "b": "npc_lena_quill",
+      "relationship": "friend",
+      "trust": 55,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "npc_kade_mirror",
+      "b": "npc_tala_orbit",
+      "relationship": "friend",
+      "trust": 62,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "npc_aria_voss",
+      "b": "npc_tala_orbit",
+      "relationship": "friend",
+      "trust": 69,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_eira_glass",
+      "b": "citizen_voss_ember",
+      "relationship": "friend",
+      "trust": 76,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_senna_lux",
+      "b": "citizen_voss_ember",
+      "relationship": "friend",
+      "trust": 83,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_oro_wyde",
+      "b": "citizen_senna_lux",
+      "relationship": "friend",
+      "trust": 55,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_eira_glass",
+      "b": "citizen_oro_wyde",
+      "relationship": "friend",
+      "trust": 62,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_mako_penn",
+      "b": "citizen_yara_cove",
+      "relationship": "friend",
+      "trust": 69,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_fenn_rook",
+      "b": "citizen_yara_cove",
+      "relationship": "friend",
+      "trust": 76,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_fenn_rook",
+      "b": "citizen_lio_bright",
+      "relationship": "friend",
+      "trust": 83,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_lio_bright",
+      "b": "citizen_zia_fold",
+      "relationship": "friend",
+      "trust": 55,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_mako_penn",
+      "b": "citizen_zia_fold",
+      "relationship": "friend",
+      "trust": 62,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_bram_steel",
+      "b": "citizen_nix_carter",
+      "relationship": "friend",
+      "trust": 69,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_nix_carter",
+      "b": "citizen_veda_line",
+      "relationship": "friend",
+      "trust": 76,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_torin_vex",
+      "b": "citizen_veda_line",
+      "relationship": "friend",
+      "trust": 83,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_ell_march",
+      "b": "citizen_torin_vex",
+      "relationship": "friend",
+      "trust": 55,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_bram_steel",
+      "b": "citizen_ell_march",
+      "relationship": "friend",
+      "trust": 62,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_juno_reef",
+      "b": "citizen_sera_tide",
+      "relationship": "friend",
+      "trust": 69,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_juno_reef",
+      "b": "citizen_mira_kel",
+      "relationship": "friend",
+      "trust": 76,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_mira_kel",
+      "b": "citizen_oan_lamp",
+      "relationship": "friend",
+      "trust": 83,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_oan_lamp",
+      "b": "citizen_sera_tide",
+      "relationship": "friend",
+      "trust": 55,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_iva_scriptor",
+      "b": "citizen_noor_veil",
+      "relationship": "friend",
+      "trust": 62,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_cass_lyre",
+      "b": "citizen_noor_veil",
+      "relationship": "friend",
+      "trust": 69,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_cass_lyre",
+      "b": "citizen_omne_red",
+      "relationship": "friend",
+      "trust": 76,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_iva_scriptor",
+      "b": "citizen_omne_red",
+      "relationship": "friend",
+      "trust": 83,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_aya_scan",
+      "b": "citizen_ronn_shield",
+      "relationship": "friend",
+      "trust": 55,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_aya_scan",
+      "b": "citizen_dax_green",
+      "relationship": "friend",
+      "trust": 62,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_dax_green",
+      "b": "citizen_nemi_cross",
+      "relationship": "friend",
+      "trust": 69,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_nemi_cross",
+      "b": "citizen_ronn_shield",
+      "relationship": "friend",
+      "trust": 76,
+      "notes": "Authored starter social link."
+    },
+    {
+      "a": "citizen_eira_glass",
+      "b": "npc_ren_kael",
+      "relationship": "cross_district_contact",
+      "trust": 62,
+      "notes": "Connects districts for future city schedule simulation."
+    },
+    {
+      "a": "citizen_mako_penn",
+      "b": "citizen_sera_tide",
+      "relationship": "cross_district_contact",
+      "trust": 62,
+      "notes": "Connects districts for future city schedule simulation."
+    },
+    {
+      "a": "citizen_bram_steel",
+      "b": "npc_aria_voss",
+      "relationship": "cross_district_contact",
+      "trust": 62,
+      "notes": "Connects districts for future city schedule simulation."
+    },
+    {
+      "a": "citizen_iva_scriptor",
+      "b": "citizen_senna_lux",
+      "relationship": "cross_district_contact",
+      "trust": 62,
+      "notes": "Connects districts for future city schedule simulation."
+    },
+    {
+      "a": "citizen_ronn_shield",
+      "b": "npc_mira_sol",
+      "relationship": "cross_district_contact",
+      "trust": 62,
+      "notes": "Connects districts for future city schedule simulation."
+    },
+    {
+      "a": "citizen_suri_lane",
+      "b": "citizen_omar_veil",
+      "relationship": "friend",
+      "trust": 58,
+      "notes": "Pass 16 authored 3x3 city social link."
+    },
+    {
+      "a": "citizen_suri_lane",
+      "b": "citizen_nessa_rye",
+      "relationship": "friend",
+      "trust": 62,
+      "notes": "Pass 16 authored 3x3 city social link."
+    },
+    {
+      "a": "citizen_pax_miro",
+      "b": "citizen_io_mender",
+      "relationship": "friend",
+      "trust": 66,
+      "notes": "Pass 16 authored 3x3 city social link."
+    },
+    {
+      "a": "citizen_vesper_null",
+      "b": "citizen_mira_ward",
+      "relationship": "friend",
+      "trust": 70,
+      "notes": "Pass 16 authored 3x3 city social link."
+    },
+    {
+      "a": "citizen_calo_rift",
+      "b": "citizen_yuna_static",
+      "relationship": "friend",
+      "trust": 74,
+      "notes": "Pass 16 authored 3x3 city social link."
+    },
+    {
+      "a": "citizen_brix_wake",
+      "b": "citizen_mira_ward",
+      "relationship": "friend",
+      "trust": 78,
+      "notes": "Pass 16 authored 3x3 city social link."
+    },
+    {
+      "a": "citizen_nessa_rye",
+      "b": "npc_tala_orbit",
+      "relationship": "cross_district_contact",
+      "trust": 82,
+      "notes": "Pass 16 authored 3x3 city social link."
+    },
+    {
+      "a": "citizen_vesper_null",
+      "b": "citizen_senna_lux",
+      "relationship": "cross_district_contact",
+      "trust": 86,
+      "notes": "Pass 16 authored 3x3 city social link."
+    },
+    {
+      "a": "citizen_yuna_static",
+      "b": "citizen_bram_steel",
+      "relationship": "cross_district_contact",
+      "trust": 90,
+      "notes": "Pass 16 authored 3x3 city social link."
+    }
+  ]
+}

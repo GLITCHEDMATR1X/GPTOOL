@@ -1,0 +1,116 @@
+{
+  "schema": 16,
+  "required_town_keys": [
+    "id",
+    "display_name",
+    "district_type",
+    "grid_size",
+    "block_size",
+    "roads",
+    "town_blocks",
+    "schedule_nodes",
+    "district_frame",
+    "grid_origin"
+  ],
+  "district_center_rule": "Each town must define either portal_hub for the central portal district or district_anchor for normal neighborhoods/districts.",
+  "required_block_keys": [
+    "id",
+    "type",
+    "grid",
+    "size",
+    "height_class",
+    "style",
+    "connectors",
+    "population_capacity",
+    "tags",
+    "structure_variant_id",
+    "purpose_id",
+    "activity_affordances",
+    "interior_policy",
+    "structure_massing_profile"
+  ],
+  "required_schedule_node_keys": [
+    "id",
+    "kind",
+    "tags"
+  ],
+  "grid_coordinate_format": "[x, y] integer list within town grid bounds",
+  "notes": [
+    "Authored town files are safe to hand-edit as JSON.",
+    "Runtime save/state files must not overwrite these authored town definitions.",
+    "Blocks can reference schedule nodes by block id; validators resolve those references before runtime use.",
+    "Normal towns should use neighbor_towns to describe connections without hardcoding runtime teleports.",
+    "Market/social towns should include vendor, courier, guard, public gathering, and alert/shelter schedule nodes before full NPC AI is attached.",
+    "Security/control towns should include checkpoint, patrol, shelter, command, and alert-lockdown schedule nodes before full NPC AI is attached.",
+    "Controlled-access towns can use access_level=\"controlled\" and event hooks to redirect civilians while guards move to patrol/checkpoint nodes.",
+    "Industrial towns should include work, repair, supply, courier, shelter, and command nodes so future NPC schedules can redirect during power/supply alerts.",
+    "Harbor/waterfront towns should include dock, ferry, water utility, public boardwalk, shelter, scan/checkpoint, and storm/ocean alert schedule nodes before full NPC AI is attached.",
+    "Water-edge towns should keep ocean/future water cells explicit so later rendering can preserve water transitions without confusing NPC land routes.",
+    "Archive/MatrixCore towns should include public archive, memory, research, restricted, shelter, courier, and lore-pulse nodes before narrative NPC AI is attached.",
+    "Archive towns can mix public and restricted blocks, but restricted destinations must remain explicit schedule nodes so lockdown and guard routing can override normal schedules safely.",
+    "Pass 8 normalizes all authored town grids to a shared 10x8 district frame before neighborhood detailing starts.",
+    "city_grid_atlas.json is the city-level placement authority; town JSON files remain the local block/schedule authority.",
+    "Neighborhood build passes should add detail inside the existing even district frame rather than changing grid_size again.",
+    "Pass 9 starts neighborhood buildout in Residential Alpha using data/database/utopia/neighborhoods/residential_alpha_neighborhood_01.json.",
+    "Neighborhood files add lots, addresses, porches, rooms, and micro-schedule nodes without changing the town grid frame.",
+    "Pass 14 adds district-specific structure variants and purpose layers so every block has an understandable use before deeper building art is authored.",
+    "Blocks now expose structure_variant_id, purpose_id, activity_affordances, and interior_policy for future NPC schedules and highlight-only interiors.",
+    "Structure variants should stay data-driven and district-appropriate: civic/portal, residential, market, security, industrial, harbor, and archive areas each use their own catalog.",
+    "Pass 15 makes all district town blocks renderable as 3D purpose massing, including non-building blocks represented as open-space, water-edge, gate, plaza, or service volumes.",
+    "structure_massing_profile.visual_policy.no_arbitrary_diagonals must stay true; floor bands and verticals are outer-perimeter only so lines do not cut through buildings without purpose.",
+    "Detailed interiors remain highlight-only and separate from exterior massing; runtime should not load all interiors at once.",
+    "Pass 16 completes the city atlas to a 3x3 district grid.",
+    "Every new district must include structure_variant_profile and structure_massing_profile on each block before citizens/schedules rely on it."
+  ],
+  "canonical_grid_rule": {
+    "alignment_id": "utopia_even_10x8_v1",
+    "canonical_grid_size": [
+      10,
+      8
+    ],
+    "block_size": 64,
+    "all_current_towns_must_match": true,
+    "purpose": "Keep district frames even before building detailed neighborhoods."
+  },
+  "neighborhood_rule": {
+    "first_buildout": "residential_alpha_neighborhood_01",
+    "town_id": "residential_alpha",
+    "authoritative_folder": "data/database/utopia/neighborhoods",
+    "keep_town_grid_size_unchanged": true,
+    "purpose": "Detailed living-world blocks are now layered inside towns through safe-edit neighborhood files."
+  },
+  "structure_variant_rule": {
+    "profile_key": "structure_variant_profile",
+    "catalog_id": "utopia_district_structure_variants_v1",
+    "purpose": "Each district exposes purpose layers and structure variants appropriate to its identity before individual buildings are modeled in detail.",
+    "block_rule": "Every town block references a variant and purpose from its district profile.",
+    "visual_rule": "Variant metadata is semantic first: rendering must still keep foundations clean and avoid meaningless line crossings.",
+    "interior_rule": "interior_policy must be exterior_only, highlight_only, or locked_until_story."
+  },
+  "structure_massing_rule": {
+    "required_on_every_town_block": true,
+    "valid_height_classes": [
+      "low",
+      "mid",
+      "tall"
+    ],
+    "valid_floor_range": [
+      1,
+      24
+    ],
+    "max_height_units": 180,
+    "visual_contract": "foundation first, outer perimeter lines only, no arbitrary diagonals, highlight-only interiors"
+  },
+  "complete_3x3_rule": {
+    "required": true,
+    "atlas_slots": 9,
+    "canonical_frame": [
+      10,
+      8
+    ],
+    "new_pass16_districts": [
+      "civic_commons_delta",
+      "glitched_quarantine_epsilon"
+    ]
+  }
+}

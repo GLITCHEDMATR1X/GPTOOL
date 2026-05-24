@@ -1,0 +1,73 @@
+{
+  "schema": 4,
+  "id": "holoutopia_citizen_dialogue_rules_pass47d_daily_no_repeat",
+  "runtime_writes_allowed": false,
+  "proximity_only": true,
+  "garrisoned_citizens_silent": true,
+  "brief_speech_only": true,
+  "visual": {
+    "max_active_bubbles": 3,
+    "max_text_chars": 28,
+    "proximity_radius_units": 28.0,
+    "min_anchor_distance_units": 70.0,
+    "bubble_lifetime_seconds": 3.0,
+    "bubble_scale": 1.55,
+    "bubble_z_offset": 10.0,
+    "max_dialogue_lines": 2,
+    "no_overlap_policy": "cap_active_bubbles_space_anchors_unique_speakers_and_emit_watch_log",
+    "max_card_width": 14.0,
+    "max_recent_log_lines": 4
+  },
+  "turn_order": [
+    "greeting",
+    "informative",
+    "positive",
+    "negative"
+  ],
+  "question_intents": [
+    "current_activity",
+    "current_phase",
+    "home_garrison",
+    "outdoor_cap",
+    "energy_rule",
+    "recharge_rule",
+    "cluster_assignment",
+    "district_purpose",
+    "commute_status",
+    "clock_time",
+    "population_total",
+    "visible_population"
+  ],
+  "notes": "Pass 47D: same-day dialogue memory prevents citizens from repeating the same pair/question/answer during a single in-game day.",
+  "category_labels": {
+    "greeting": "Greeting",
+    "positive": "Positive",
+    "negative": "Concern",
+    "informative": "Info"
+  },
+  "watch_log": {
+    "enabled": true,
+    "max_lines": 3,
+    "max_line_chars": 56,
+    "read_only": true
+  },
+  "specific_question_router": {
+    "enabled": true,
+    "source": "dialogue/specific_question_catalog.json",
+    "runtime_state_only": true,
+    "safe_unknown_when_missing": true,
+    "supports_alias_matching": true,
+    "natural_question_ids": true
+  },
+  "daily_memory": {
+    "enabled": true,
+    "scope": "same_game_day",
+    "runtime_only": true,
+    "no_repeat_same_pair_question": true,
+    "no_repeat_same_citizen_line": true,
+    "no_repeat_same_answer_text": true,
+    "reset_when_day_id_changes": true,
+    "max_attempts_per_pair": 8,
+    "writes_authored_data": false
+  }
+}

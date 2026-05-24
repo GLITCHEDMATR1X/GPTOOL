@@ -1,0 +1,215 @@
+{
+  "schema": 1,
+  "id": "holoutopia_specific_question_catalog_pass51a_adventure_simulation",
+  "runtime_writes_allowed": false,
+  "answer_policy": {
+    "runtime_state_only": true,
+    "do_not_guess": true,
+    "safe_unknown_when_missing": true,
+    "specific_question_requires_known_runtime_field": true
+  },
+  "specific_questions": [
+    {
+      "id": "q_current_activity",
+      "intent": "current_activity",
+      "category": "greeting",
+      "question": "What are you doing?",
+      "aliases": [
+        "task",
+        "doing",
+        "activity"
+      ]
+    },
+    {
+      "id": "q_current_phase",
+      "intent": "current_phase",
+      "category": "informative",
+      "question": "What cycle is it?",
+      "aliases": [
+        "cycle",
+        "phase",
+        "schedule"
+      ]
+    },
+    {
+      "id": "q_home_garrison",
+      "intent": "home_garrison",
+      "category": "informative",
+      "question": "Where do you live?",
+      "aliases": [
+        "live",
+        "home",
+        "garrison"
+      ]
+    },
+    {
+      "id": "q_outdoor_cap",
+      "intent": "outdoor_cap",
+      "category": "informative",
+      "question": "How many can be outside?",
+      "aliases": [
+        "outdoor cap",
+        "outside cap",
+        "visible outside"
+      ]
+    },
+    {
+      "id": "q_energy_rule",
+      "intent": "energy_rule",
+      "category": "negative",
+      "question": "How long can you stay active?",
+      "aliases": [
+        "energy",
+        "active time",
+        "stay active"
+      ]
+    },
+    {
+      "id": "q_recharge_rule",
+      "intent": "recharge_rule",
+      "category": "negative",
+      "question": "How long do you recharge?",
+      "aliases": [
+        "recharge",
+        "sleep",
+        "inside"
+      ]
+    },
+    {
+      "id": "q_cluster_assignment",
+      "intent": "cluster_assignment",
+      "category": "positive",
+      "question": "Which hub node are you using?",
+      "aliases": [
+        "hub node",
+        "cluster",
+        "pod"
+      ]
+    },
+    {
+      "id": "q_district_purpose",
+      "intent": "district_purpose",
+      "category": "informative",
+      "question": "What is this district?",
+      "aliases": [
+        "district",
+        "purpose",
+        "place"
+      ]
+    },
+    {
+      "id": "q_commute_status",
+      "intent": "commute_status",
+      "category": "greeting",
+      "question": "Where are you going?",
+      "aliases": [
+        "going",
+        "commuting",
+        "route"
+      ]
+    },
+    {
+      "id": "q_clock_time",
+      "intent": "clock_time",
+      "category": "informative",
+      "question": "What time is it?",
+      "aliases": [
+        "time",
+        "clock"
+      ]
+    },
+    {
+      "id": "q_population_total",
+      "intent": "population_total",
+      "category": "informative",
+      "question": "How many citizens live here?",
+      "aliases": [
+        "world population",
+        "citizens",
+        "population"
+      ]
+    },
+    {
+      "id": "q_visible_population",
+      "intent": "visible_population",
+      "category": "informative",
+      "question": "How many are visible?",
+      "aliases": [
+        "visible now",
+        "outside now",
+        "activity citizens"
+      ]
+    },
+    {
+      "id": "q_functional_buildings",
+      "intent": "functional_buildings",
+      "category": "informative",
+      "question": "What buildings work here?",
+      "aliases": [
+        "buildings",
+        "services",
+        "what works here",
+        "what buildings",
+        "functional buildings"
+      ]
+    },
+    {
+      "id": "q_service_operation",
+      "intent": "service_operation",
+      "category": "informative",
+      "question": "What is this service doing?",
+      "aliases": [
+        "service doing",
+        "operation",
+        "output",
+        "building doing",
+        "service output"
+      ]
+    },
+    {
+      "id": "q_adventure_simulation",
+      "intent": "adventure_simulation",
+      "category": "informative",
+      "question": "Is the adventure simulation active?",
+      "aliases": [
+        "adventure",
+        "simulation active",
+        "active match",
+        "observe simulation",
+        "adventure queue"
+      ]
+    }
+  ],
+  "category_question_order": {
+    "greeting": [
+      "q_commute_status",
+      "q_current_activity"
+    ],
+    "positive": [
+      "q_cluster_assignment",
+      "q_current_activity"
+    ],
+    "negative": [
+      "q_energy_rule",
+      "q_recharge_rule"
+    ],
+    "informative": [
+      "q_adventure_simulation",
+      "q_district_purpose",
+      "q_service_operation",
+      "q_functional_buildings",
+      "q_outdoor_cap",
+      "q_clock_time",
+      "q_home_garrison",
+      "q_population_total",
+      "q_visible_population",
+      "q_current_phase"
+    ]
+  },
+  "fallback_answers": [
+    "I don't know that.",
+    "That is outside my assignment.",
+    "Ask a civic node for that."
+  ],
+  "notes": "Pass 51A: citizens can identify whether the Central Hub adventure simulation has active players and can be observed."
+}

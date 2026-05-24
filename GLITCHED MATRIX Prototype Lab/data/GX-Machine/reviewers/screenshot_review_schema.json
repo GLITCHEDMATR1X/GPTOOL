@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GPT Bridge Screenshot Review",
+  "type": "object",
+  "required": ["image_path","layout_profile","metrics","issues","scores","summary","fix_order"],
+  "properties": {
+    "image_path": {"type": "string"},
+    "layout_profile": {"type": "string"},
+    "metrics": {"type": "object"},
+    "issues": {"type": "array"},
+    "scores": {"type": "object"},
+    "summary": {"type": "object"},
+    "fix_order": {"type": "array", "items": {"type": "string"}}
+  }
+}

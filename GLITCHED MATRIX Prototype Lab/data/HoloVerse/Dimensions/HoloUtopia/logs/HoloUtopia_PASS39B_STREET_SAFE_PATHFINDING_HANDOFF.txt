@@ -1,0 +1,44 @@
+HoloUtopia Pass 39B - Street-Safe Citizen Pathfinding
+
+Scope:
+- Improve visible population pathfinding after Simulation Hub activity routing.
+- Keep Residential as the home/garrison district.
+- Let citizens garrison inside home buildings virtually.
+- Prevent visible citizens from standing on building footprints/roofs.
+
+Changed / added:
+- data/HoloUtopia/holoutopia_pathfinding.py
+- data/HoloUtopia/holoutopia_game_runtime.py
+- data/HoloUtopia/holoutopia_residential_population.py
+- data/HoloUtopia/holoutopia_district_activities.py
+- data/HoloUtopia/tools/validate_holoutopia_citizen_pathfinding.py
+- data/HoloUtopia/tools/render_holoutopia_in_world_runtime_screenshot.py
+- data/database/utopia/runtime/holoutopia_runtime_bridge.json
+
+Implementation notes:
+- Added pure-Python street/activity-pad placement resolver.
+- Visible virtual citizens snap to authored roads, portal pads, public pads, or safe plaza/garden surfaces.
+- Home/building occupancy remains virtual and is represented by garrison counts.
+- Building footprint exclusion uses town block metadata and avoids non-walkable blocks.
+- Added caching to avoid expensive JSON/sample recomputation during Panda3D frames.
+- Lowered same-node spread because pathfinding now handles crowd distribution safely.
+
+Validation:
+- python -m compileall -q main.py data/HoloUtopia
+- python data/HoloUtopia/tools/validate_holoutopia_citizen_pathfinding.py
+- python data/HoloUtopia/tools/validate_holoutopia_district_activities.py
+- python data/HoloUtopia/tools/validate_holoutopia_residential_population.py
+- python data/HoloUtopia/tools/validate_holoutopia_game_runtime.py
+- python data/HoloUtopia/tools/validate_holoutopia_world_runtime_screenshot.py
+- python data/HoloUtopia/tools/validate_holoutopia_towns.py
+
+Screenshots:
+- HoloUtopia_PASS39B_SCREENSHOTS/holoutopia_pass39b_simulation_pathfinding.png
+- HoloUtopia_PASS39B_SCREENSHOTS/holoutopia_pass39b_residential_street_pathing.png
+- HoloUtopia_PASS39B_SCREENSHOTS/holoutopia_pass39b_simulation_overview.png
+
+Safety:
+- No HoloVerse/artifact route edits.
+- No population cap edits.
+- No schema-breaking changes.
+- No collision additions.

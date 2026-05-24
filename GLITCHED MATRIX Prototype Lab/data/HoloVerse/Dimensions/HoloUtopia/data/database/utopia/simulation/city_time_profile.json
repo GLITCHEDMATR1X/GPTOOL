@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "id": "holoutopia_city_time_profile_v1",
+  "display_name": "HoloUtopia City Day Cycle",
+  "runtime_writes_allowed": false,
+  "clock_model": {
+    "format": "HH:MM",
+    "day_minutes": 1440,
+    "authoring_policy": "Majora-style predictable daily cycle with editable schedule blocks.",
+    "simulation_step_minutes_default": 30,
+    "sample_times": ["06:00", "08:00", "12:00", "17:30", "21:00"]
+  },
+  "day_phases": [
+    {
+      "id": "early_morning",
+      "start": "05:00",
+      "end": "07:59",
+      "summary": "Citizens wake up, leave homes, and begin district movement."
+    },
+    {
+      "id": "day_shift",
+      "start": "08:00",
+      "end": "11:59",
+      "summary": "Jobs, schools, guard posts, clinics, markets, and service work become active."
+    },
+    {
+      "id": "midday_social",
+      "start": "12:00",
+      "end": "13:59",
+      "summary": "Meal breaks and public plaza overlaps create visible social clusters."
+    },
+    {
+      "id": "afternoon_shift",
+      "start": "14:00",
+      "end": "17:29",
+      "summary": "Work resumes and couriers/service routes continue."
+    },
+    {
+      "id": "evening_activity",
+      "start": "17:30",
+      "end": "20:59",
+      "summary": "Personal activities, friend visits, plaza activity, and hobbies become visible."
+    },
+    {
+      "id": "night_return",
+      "start": "21:00",
+      "end": "04:59",
+      "summary": "Most citizens return home while guards, restricted workers, and emergency crews can stay active later."
+    }
+  ]
+}

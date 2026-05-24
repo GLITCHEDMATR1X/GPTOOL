@@ -1,0 +1,129 @@
+{
+  "name": "World Creation Blueprint",
+  "generated_at": "2026-04-04T13:38:36",
+  "arena_theme": "neptune_upper",
+  "round_mutator": "none",
+  "camera": {
+    "fov": 76.0,
+    "default_distance": 24.5
+  },
+  "player_profile": {
+    "name": "Argent Rider",
+    "team": "player_chrome_surfer",
+    "family": "inferno_wraith",
+    "primary": [
+      0.9974643768009404,
+      0.0,
+      0.17130120521622338,
+      1.0
+    ],
+    "secondary": [
+      1.0,
+      0.5698631175004305,
+      0.008554563358929235,
+      1.0
+    ],
+    "accent": [
+      1.0,
+      0.8222484099957983,
+      0.3352569129708066,
+      1.0
+    ],
+    "mode": "grapple",
+    "secondary_mode": "beam",
+    "origin": "head",
+    "secondary_origin": "chest",
+    "support_fx": "lightning",
+    "scale": 1.212,
+    "body_tint": [
+      0.8376921346772933,
+      0.23052640603162786,
+      0.26543378791905625,
+      1.0
+    ],
+    "helmet": "split",
+    "helmet_scale": [
+      0.9971971304850656,
+      1.087665526037598,
+      1.3380796702565272
+    ],
+    "visor_scale": [
+      0.9318479173922747,
+      1.0,
+      1.1731102021591269
+    ],
+    "jaw_scale": [
+      0.9300108648034985,
+      0.9124442786658433,
+      0.9101054852341357
+    ],
+    "max_hp": 102.21,
+    "cruise_speed": 80.82,
+    "attack_interval": 1.013,
+    "evade_speed": 122.1,
+    "secondary_cd": 2.869,
+    "formation_slot": 7,
+    "count": 5,
+    "spread": 0.19152131199438016,
+    "speed": 114.0761725928491,
+    "projectile_scale": 0.326,
+    "cape": false,
+    "wire_wings": true,
+    "wing_style": "angel",
+    "wing_span": 1.2482171392753827,
+    "giant_wings": false,
+    "tail_style": "whip",
+    "tail_length": 0.5746380268965271,
+    "big_horns": true,
+    "suit_style": "electric_silhouette",
+    "weight_class": "light",
+    "combat_role": "duelist",
+    "power_source": "arc",
+    "temperament": "disciplined",
+    "fx_kind": "slash",
+    "secondary_fx": "ring",
+    "back_pattern": "Propeller",
+    "mobility_style": "jetpack",
+    "aura_color": [
+      1.0,
+      0.6794774381076396,
+      0.15368277252480533,
+      1.0
+    ],
+    "aura_glow": 0.42,
+    "back_neon_seed": 527788326,
+    "back_color_primary": [
+      0.007010471286072795,
+      0.9894634706559289,
+      1.0,
+      1.0
+    ],
+    "back_color_secondary": [
+      0.6239439466461335,
+      1.0,
+      0.3073654818906104,
+      1.0
+    ],
+    "back_color_accent": [
+      0.6603365683444111,
+      0.36219814341298706,
+      1.0,
+      1.0
+    ],
+    "back_variant_scale": 1.7,
+    "base_scale": 1.263529988115384,
+    "base_max_hp": 121.6760132928261,
+    "base_cruise_speed": 69.67327576815708,
+    "base_evade_speed": 101.74598975467129,
+    "base_attack_interval": 1.1509674535648302,
+    "base_secondary_cd": 3.1880636775445526,
+    "base_projectile_scale": 0.35450288055267165,
+    "mass_hit_radius_mul": 0.92
+  },
+  "future_systems": {
+    "world_creation": true,
+    "replaceable_assets": true,
+    "combat_simulation": true,
+    "player_creation": true
+  }
+}

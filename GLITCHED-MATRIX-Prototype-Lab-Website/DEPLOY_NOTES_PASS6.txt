@@ -1,0 +1,19 @@
+GLITCHED MATRIX Prototype Lab site pass 6
+Version: 20260429-pass6-demo-image-patchnotes
+
+Deploy:
+1. Open this zip.
+2. Copy the CONTENTS of GLITCHED-MATRIX-Prototype-Lab-main into your GitHub Pages repo root.
+   Do not upload the wrapper folder as a folder inside the repo.
+3. Commit/push, wait for GitHub Pages to finish, then hard refresh once.
+
+Fixes:
+- Demo cards use real Prototype Lab screenshots instead of generic placeholder SVGs.
+- Clicking any demo card switches the canvas player and help text.
+- Patch notes force-load from assets/data/combined_patch_notes.txt and newest notes are prepended.
+- The bundled image manifest wins over stale local browser image paths.
+
+Easy image replacement:
+- Main gallery/hero art: replace files in assets/images/site_current with the same filenames.
+- Demo thumbs: replace files in assets/images/site_current/demo_thumbs with the same filenames.
+- If filenames/extensions change, edit assets/data/image_manifest.json or assets/data/demo_manifest.json.

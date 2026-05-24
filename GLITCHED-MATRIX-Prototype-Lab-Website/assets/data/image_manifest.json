@@ -1,0 +1,27 @@
+{
+  "assetVersion": "20260429-pass7-blockbusters-single",
+  "images": {
+    "heroHeader": "assets/images/site_current/hero_header.png",
+    "navLogo": "assets/images/capsule_small.png",
+    "footerLogo": "assets/images/capsule_small.png",
+    "gallery": [
+      "assets/images/site_current/block_busters_original_preview.png",
+      "assets/images/site_current/gallery_01_gleebs.png",
+      "assets/images/site_current/gallery_02_holoverse_orb.png",
+      "assets/images/site_current/gallery_03_holo_conquest.jpg",
+      "assets/images/site_current/gallery_04_anti_heroes.jpg",
+      "assets/images/site_current/gallery_05_afterlife_hotel.jpg",
+      "assets/images/site_current/gallery_06_apocalypse_run.jpg",
+      "assets/images/site_current/gallery_07_radar_hell.jpg",
+      "assets/images/site_current/gallery_08_duck_n_cover.jpg",
+      "assets/images/site_current/gallery_09_holo_campaign.jpg",
+      "assets/images/site_current/gallery_10_gleebs_pot.png"
+    ]
+  },
+  "notes": [
+    "Pass 7 keeps the image manifest as the source of truth and uses a fresh browser-storage key so stale local image paths stop winning.",
+    "Replace files in assets/images/site_current with the same names for the safest site image refresh.",
+    "Block Busters now has a dedicated original-preview image in the media gallery.",
+    "Bump assetVersion after image replacement so browsers refresh cached files."
+  ]
+}

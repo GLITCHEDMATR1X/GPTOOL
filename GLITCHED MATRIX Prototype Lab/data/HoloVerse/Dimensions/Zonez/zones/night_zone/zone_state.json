@@ -1,0 +1,7 @@
+{
+  "zone": "night_zone",
+  "name": "Night Zone",
+  "connected": true,
+  "stabilized": 0.0,
+  "route": "artifact_slot_6_zonez_native"
+}

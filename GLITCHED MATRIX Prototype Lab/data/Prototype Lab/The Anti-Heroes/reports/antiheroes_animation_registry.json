@@ -1,0 +1,29 @@
+{
+  "schema_version": "antiheroes_animation_registry.v1",
+  "generated_at": "2026-05-05T01:37:01",
+  "ok": false,
+  "manifest_path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\Prototype Lab\\3D - Third Person\\The Anti-Heroes\\assets\\characters\\humans\\human_manifest.json",
+  "manifest_exists": false,
+  "base_asset_count": 0,
+  "animation_asset_count": 0,
+  "roles": [
+    "idle",
+    "walk",
+    "run",
+    "jump",
+    "attack",
+    "hit",
+    "fall",
+    "death",
+    "get_up",
+    "block"
+  ],
+  "role_map": {},
+  "missing_files": [],
+  "warnings": [
+    "human_manifest.json was not found; run GPTOOL import-human-assets first."
+  ],
+  "notes": [
+    "Registry can still be generated as a missing-manifest proof report."
+  ]
+}

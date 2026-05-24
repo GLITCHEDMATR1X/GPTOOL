@@ -1,0 +1,233 @@
+{
+  "schema": 1,
+  "id": "res_alpha_lot_01_interior",
+  "town_id": "residential_alpha",
+  "neighborhood_id": "residential_alpha_neighborhood_01",
+  "lot_id": "res_alpha_lot_01",
+  "display_name": "Aria Voss Residence Interior",
+  "address": "A-01 North Home Lane",
+  "source_building_profile": {
+    "building_type": "micro_pod_house",
+    "height_class": "low",
+    "floor_count": 2,
+    "residential_capacity": 2,
+    "height_units": 34.0,
+    "roof_type": "flat_garden"
+  },
+  "load_policy": {
+    "mode": "highlight_only",
+    "load_trigger": "building_highlighted",
+    "unload_trigger": "building_unhighlighted_or_selection_changed",
+    "max_active_instances": 1,
+    "render_mode": "abstract_cutaway",
+    "runtime_writes_allowed": false
+  },
+  "entry_points": [
+    {
+      "id": "res_alpha_lot_01_front_door_to_interior",
+      "external_anchor": "res_alpha_home_a_front_door",
+      "interior_anchor": "res_alpha_lot_01_interior_entry"
+    }
+  ],
+  "floors": [
+    {
+      "floor": 0,
+      "kind": "lobby_service",
+      "height_units": 17.0,
+      "rooms": [
+        {
+          "id": "res_alpha_lot_01_entry_lobby",
+          "kind": "lobby",
+          "local_offset_3d": [
+            0.0,
+            -0.24,
+            0.0
+          ],
+          "tags": [
+            "entry",
+            "public_threshold"
+          ]
+        },
+        {
+          "id": "res_alpha_lot_01_utility_core",
+          "kind": "utility_core",
+          "local_offset_3d": [
+            0.26,
+            0.18,
+            0.0
+          ],
+          "tags": [
+            "utility",
+            "maintenance"
+          ]
+        }
+      ]
+    },
+    {
+      "floor": 1,
+      "kind": "residential_floor",
+      "height_units": 17.0,
+      "rooms": [
+        {
+          "id": "res_alpha_lot_01_unit_01_home_anchor",
+          "kind": "home_unit_anchor",
+          "unit_id": "res_alpha_lot_01_unit_01",
+          "local_offset_3d": [
+            -0.22,
+            0.02,
+            1.0
+          ],
+          "capacity_hint": 1,
+          "tags": [
+            "sleep",
+            "private",
+            "home"
+          ]
+        },
+        {
+          "id": "res_alpha_lot_01_floor_01_common_node",
+          "kind": "floor_common",
+          "local_offset_3d": [
+            0.0,
+            -0.16,
+            1.0
+          ],
+          "tags": [
+            "hallway",
+            "neighbor_social"
+          ]
+        }
+      ]
+    },
+    {
+      "floor": 2,
+      "kind": "residential_floor",
+      "height_units": 17.0,
+      "rooms": [
+        {
+          "id": "res_alpha_lot_01_unit_02_home_anchor",
+          "kind": "home_unit_anchor",
+          "unit_id": "res_alpha_lot_01_unit_02",
+          "local_offset_3d": [
+            -0.22,
+            0.02,
+            2.0
+          ],
+          "capacity_hint": 1,
+          "tags": [
+            "sleep",
+            "private",
+            "home"
+          ]
+        },
+        {
+          "id": "res_alpha_lot_01_floor_02_common_node",
+          "kind": "floor_common",
+          "local_offset_3d": [
+            0.0,
+            -0.16,
+            2.0
+          ],
+          "tags": [
+            "hallway",
+            "neighbor_social"
+          ]
+        }
+      ]
+    }
+  ],
+  "activity_nodes": [
+    {
+      "id": "res_alpha_lot_01_interior_entry",
+      "kind": "interior_entry",
+      "floor": 0,
+      "local_offset_3d": [
+        0.0,
+        -0.38,
+        0.0
+      ],
+      "tags": [
+        "door",
+        "load_anchor"
+      ]
+    },
+    {
+      "id": "res_alpha_lot_01_mail_check",
+      "kind": "mail_check",
+      "floor": 0,
+      "local_offset_3d": [
+        0.24,
+        -0.32,
+        0.0
+      ],
+      "tags": [
+        "morning",
+        "mail"
+      ]
+    },
+    {
+      "id": "res_alpha_lot_01_social_landing",
+      "kind": "social_landing",
+      "floor": 1,
+      "local_offset_3d": [
+        0.0,
+        -0.18,
+        1
+      ],
+      "tags": [
+        "friend_visit",
+        "conversation"
+      ]
+    },
+    {
+      "id": "res_alpha_lot_01_roof_idle",
+      "kind": "roof_idle",
+      "floor": 2,
+      "local_offset_3d": [
+        0.0,
+        0.0,
+        2
+      ],
+      "tags": [
+        "evening",
+        "roof",
+        "view"
+      ]
+    }
+  ],
+  "resident_unit_slots": [
+    {
+      "id": "res_alpha_lot_01_unit_01",
+      "floor": 1,
+      "capacity": 1,
+      "reserved_capacity": 1,
+      "assigned_npc_ids": [
+        "npc_aria_voss"
+      ],
+      "schedule_anchor": "res_alpha_lot_01_unit_01_home_anchor",
+      "tags": [
+        "home_unit",
+        "abstract_interior",
+        "future_assignable"
+      ]
+    },
+    {
+      "id": "res_alpha_lot_01_unit_02",
+      "floor": 2,
+      "capacity": 1,
+      "reserved_capacity": 0,
+      "assigned_npc_ids": [],
+      "schedule_anchor": "res_alpha_lot_01_unit_02_home_anchor",
+      "tags": [
+        "home_unit",
+        "abstract_interior",
+        "future_assignable"
+      ]
+    }
+  ],
+  "future_detail_policy": {
+    "full_mesh_interiors_allowed_later": true,
+    "npc_paths_use_activity_nodes_not_mesh_names": true
+  },
+  "notes": "Abstract lazy-loaded interior; room meshes and furniture can be detailed later while keeping these ids stable."
+}

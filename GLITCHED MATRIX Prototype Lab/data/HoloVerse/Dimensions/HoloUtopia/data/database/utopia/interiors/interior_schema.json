@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "id": "holoutopia_interior_schema",
+  "display_name": "HoloUtopia Interior Blueprint Schema",
+  "required_keys": [
+    "id",
+    "town_id",
+    "neighborhood_id",
+    "lot_id",
+    "load_policy",
+    "floors",
+    "activity_nodes",
+    "resident_unit_slots"
+  ],
+  "load_policy": {
+    "valid_modes": [
+      "highlight_only"
+    ],
+    "runtime_rule": "Load an interior blueprint only for the selected/highlighted building; unload on selection change."
+  },
+  "safe_edit_policy": {
+    "author_files": "data/database/utopia/interiors/*.json",
+    "runtime_state_files": "data/database/utopia/saves/interior_runtime_state.json",
+    "never_runtime_overwrite_author_files": true,
+    "safe_to_edit": [
+      "floors",
+      "activity_nodes",
+      "resident_unit_slots",
+      "notes"
+    ]
+  },
+  "references": {
+    "lot_id": "Must match an authored lot in data/database/utopia/neighborhoods.",
+    "resident_unit_slots.assigned_npc_ids": "When present, must match npc ids in data/database/utopia/npcs/npc_manifest.json.",
+    "activity_nodes.id": "Can be used by NPC schedules."
+  }
+}

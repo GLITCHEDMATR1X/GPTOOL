@@ -1,0 +1,24 @@
+{
+  "assetVersion": "20260429-pass7-blockbusters-single",
+  "title": "Block Busters \u2014 Neon Arena Web Demo",
+  "intro": "Single focused browser demo. The previous multi-demo gallery is removed so Block Busters can look closer to the original desktop prototype.",
+  "note": "The Play Demos section now loads Block Busters directly from assets/js/demos.js. This manifest is kept only as a readable reference for the current web demo.",
+  "demos": [
+    {
+      "id": "block-busters",
+      "title": "Block Busters",
+      "status": "Playable now",
+      "prototype": "Block Busters",
+      "thumbnail": "assets/images/site_current/demo_thumbs/block-busters.jpg",
+      "summary": "A focused neon block-arena web demo using original Block Busters pixel/block art where available.",
+      "objective": "Break blocks, grab powerups, outscore bots, and survive Gleebs dropping into the arena.",
+      "controls": "A/D or Arrows move, W/Up jump, G gravity flip, Space shockwave, Shift dash, R reset, P pause, M mute.",
+      "details": "Low-volume browser audio with a mute button. Uses original art assets with generated fallbacks.",
+      "tags": [
+        "Generated",
+        "Arena",
+        "Gravity"
+      ]
+    }
+  ]
+}

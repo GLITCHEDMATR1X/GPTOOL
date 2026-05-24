@@ -1,0 +1,202 @@
+{
+  "bot_visits": {},
+  "created_at": "2026-05-12T16:43:21",
+  "dialogue_flags": {
+    "gleebs_return_code_red_vector_001": true,
+    "gleebs_return_etch_line_001": true,
+    "gleebs_return_fractured_dimension_001": true,
+    "gleebs_return_holo_campaign_001": true,
+    "gleebs_return_holo_conquest_001": true,
+    "gleebs_return_holocore_001": true,
+    "gleebs_return_vector_wars_001": true,
+    "gleebs_return_zonez_001": true,
+    "gleebs_welcome_001": true
+  },
+  "dimension_progress": {
+    "Etch-Line": {
+      "completed": false,
+      "last_at": "2026-05-16T13:14:04",
+      "last_score_delta": 100,
+      "last_signal": "",
+      "points_total": 100,
+      "route": "native_panda",
+      "score_total": 100
+    },
+    "Holo Campaign": {
+      "completed": false,
+      "last_at": "2026-05-21T16:20:43",
+      "last_score_delta": 0,
+      "last_signal": "HOLO_CAMPAIGN_COMMAND_NODE",
+      "points_total": 750,
+      "route": "native_panda",
+      "score_total": 750
+    },
+    "Holo Conquest": {
+      "completed": false,
+      "last_at": "2026-05-16T13:13:33",
+      "last_score_delta": 1960,
+      "last_signal": "HOLO_CONQUEST_BATTLEFIELD_SAMPLE",
+      "points_total": 1960,
+      "route": "native_panda",
+      "score_total": 1960
+    },
+    "Zonez": {
+      "completed": false,
+      "last_at": "2026-05-16T13:12:29",
+      "last_score_delta": 240,
+      "last_signal": "ZONEZ_ZONE_SAMPLE",
+      "points_total": 240,
+      "route": "native_panda",
+      "score_total": 240
+    }
+  },
+  "dimension_results": {
+    "Etch-Line": {
+      "completed": false,
+      "count": 1,
+      "fragments_recovered": "0",
+      "fragments_required": "4",
+      "gleebs_response": "Etch-Line returned a partial signal trace.",
+      "last_at": "2026-05-16T13:14:04",
+      "last_score_delta": 100,
+      "points_total": 100,
+      "route": "native_panda",
+      "score_total": 100
+    },
+    "Holo Campaign": {
+      "completed": false,
+      "count": 6,
+      "fragments_recovered": "0",
+      "fragments_required": "4",
+      "gleebs_response": "Etch-Line returned a partial signal trace.",
+      "last_at": "2026-05-21T16:20:43",
+      "last_score_delta": 0,
+      "last_signal": "HOLO_CAMPAIGN_COMMAND_NODE",
+      "points_total": 750,
+      "route": "native_panda",
+      "score_total": 750,
+      "signals": [
+        "HOLO_CAMPAIGN_COMMAND_NODE"
+      ]
+    },
+    "Holo Conquest": {
+      "completed": false,
+      "count": 1,
+      "fragments_recovered": "0",
+      "fragments_required": "3",
+      "gleebs_response": "Conquest returned partial battlefield pressure data.",
+      "last_at": "2026-05-16T13:13:33",
+      "last_score_delta": 1960,
+      "last_signal": "HOLO_CONQUEST_BATTLEFIELD_SAMPLE",
+      "points_total": 1960,
+      "route": "native_panda",
+      "score_total": 1960,
+      "signals": [
+        "HOLO_CONQUEST_BATTLEFIELD_SAMPLE"
+      ]
+    },
+    "Zonez": {
+      "completed": false,
+      "count": 1,
+      "fragments_recovered": "2",
+      "fragments_required": "9",
+      "gleebs_response": "Zonez returned a partial zone travel sample.",
+      "last_at": "2026-05-16T13:12:29",
+      "last_score_delta": 240,
+      "last_signal": "ZONEZ_ZONE_SAMPLE",
+      "points_total": 240,
+      "route": "native_panda",
+      "score_total": 240,
+      "signals": [
+        "ZONEZ_ZONE_SAMPLE"
+      ]
+    }
+  },
+  "dimension_returns": {
+    "Code Red Vector": {
+      "count": 8,
+      "last_at": "2026-05-14T09:26:56",
+      "reason": "escape",
+      "route": "native_panda",
+      "source": "native"
+    },
+    "Etch-Line": {
+      "count": 4,
+      "last_at": "2026-05-16T13:14:04",
+      "reason": "escape; score_delta=100",
+      "route": "native_panda",
+      "source": "native"
+    },
+    "Fractured Dimension": {
+      "count": 3,
+      "last_at": "2026-05-14T09:26:47",
+      "reason": "escape",
+      "route": "native_panda",
+      "source": "native"
+    },
+    "Holo Campaign": {
+      "count": 7,
+      "last_at": "2026-05-21T16:20:42",
+      "reason": "escape",
+      "route": "native_panda",
+      "source": "native"
+    },
+    "Holo Conquest": {
+      "count": 4,
+      "last_at": "2026-05-16T13:13:33",
+      "reason": "escape; signal=HOLO_CONQUEST_BATTLEFIELD_SAMPLE; score_delta=1960",
+      "route": "native_panda",
+      "source": "native"
+    },
+    "HoloCore": {
+      "count": 6,
+      "last_at": "2026-05-15T14:15:02",
+      "reason": "holocore_escape",
+      "route": "same_window_native",
+      "source": "native"
+    },
+    "Vector Wars": {
+      "count": 13,
+      "last_at": "2026-05-21T16:20:50",
+      "reason": "escape",
+      "route": "native_panda",
+      "source": "native"
+    },
+    "Zonez": {
+      "count": 17,
+      "last_at": "2026-05-16T13:12:29",
+      "reason": "escape; signal=ZONEZ_ZONE_SAMPLE; score_delta=240",
+      "route": "native_panda",
+      "source": "native"
+    }
+  },
+  "holoverse_score": 3050,
+  "kind": "holoverse_matrixcore_progression_state",
+  "last_known_gateway": "GATEWAY 099% // INWORLD 08 // EMBED 00 // PLACE 01 // PANEL 00 // HOSTED 00 // PATCH 00 // BROKEN 01 // CHECK 00",
+  "last_mode": "Etch-Line",
+  "latest_event": "dimension_route_cleanup: Vector Arena",
+  "matrixcore": {
+    "last_dimension_route_cleanup": "Vector Arena route cleanup complete"
+  },
+  "mode_status": {},
+  "player": {
+    "first_gleebs_intro_seen": true,
+    "first_launch_seen": true,
+    "first_matrixcore_intro_seen": true,
+    "last_bot": "",
+    "last_dimension": "",
+    "last_launch_mode": "",
+    "total_points": 3050,
+    "visits_total": 0
+  },
+  "points_total": 3050,
+  "schema_version": 5,
+  "updated_at": "2026-05-21T16:21:20",
+  "world_cycle": {
+    "cycle_seconds": 1800.0,
+    "day_night_black_backdrop_enabled": true,
+    "elapsed_seconds": 361.842,
+    "last_saved_at": "2026-05-21T16:21:20",
+    "phase": 0.201024
+  }
+}

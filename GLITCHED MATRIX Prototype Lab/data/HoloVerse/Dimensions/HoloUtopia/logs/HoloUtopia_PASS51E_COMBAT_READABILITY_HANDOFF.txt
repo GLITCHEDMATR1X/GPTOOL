@@ -1,0 +1,36 @@
+HoloUtopia Pass 51E - Core Ring Combat Readability
+
+Scope:
+- Improve readability of the Central Core Ring adventure combat prototype.
+- Keep action embedded in the Central Hub circle around the pyramid.
+- No external dimension route, no HoloVerse/HoloCore/artifact route changes, no collision changes, no player control.
+
+Changed files:
+- data/HoloUtopia/holoutopia_adventure_simulation.py
+- data/HoloUtopia/holoutopia_game_runtime.py
+- data/HoloUtopia/tools/validate_holoutopia_adventure_combat_readability.py
+- data/database/utopia/simulation/adventure_simulation_rules.json
+- data/database/utopia/runtime/holoutopia_runtime_bridge.json
+
+Implemented:
+- 4 hero HP/status bars over active Core Ring player slots.
+- Class color ticks for Mage / Blade / Archer / Mender slots.
+- Enemy HP/status ticks over active enemies.
+- Wave spawn pulse markers on the Core Ring perimeter.
+- Final score board metadata with four brief lines.
+- Visual final score line rendering in the Core Ring.
+- Watch Mode/runtime bridge updated to v27 functional Core Ring combat readability.
+
+Validation:
+- python -m compileall -q main.py data/HoloUtopia
+- python data/HoloUtopia/tools/validate_holoutopia_adventure_combat_readability.py
+- python data/HoloUtopia/tools/validate_holoutopia_adventure_waves_final_score.py
+- python data/HoloUtopia/tools/validate_holoutopia_adventure_combat.py
+- python data/HoloUtopia/tools/validate_holoutopia_adventure_simulation.py
+- python data/HoloUtopia/tools/validate_holoutopia_adventure_hub_ring.py
+- broader runtime/watch/pathfinding/population/world validators also passed where present.
+
+Screenshot proof:
+- HoloUtopia_PASS51E_SCREENSHOTS/holoutopia_pass51e_combat_readability_action.png
+- HoloUtopia_PASS51E_SCREENSHOTS/holoutopia_pass51e_final_score_watch_status.png
+- HoloUtopia_PASS51E_SCREENSHOTS/holoutopia_pass51e_watch_status.png

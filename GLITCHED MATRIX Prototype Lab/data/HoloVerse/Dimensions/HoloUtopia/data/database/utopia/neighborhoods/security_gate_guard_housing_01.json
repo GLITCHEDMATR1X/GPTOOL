@@ -1,0 +1,1355 @@
+{
+  "schema": 1,
+  "id": "security_gate_guard_housing_01",
+  "town_id": "security_gate",
+  "display_name": "Security Gate Guard Housing 01",
+  "summary": "Guard barracks and controlled support residences for Security Gate staff. These keep residential capacity near the checkpoint without turning the gate into a normal public neighborhood.",
+  "district_frame_alignment_id": "utopia_even_10x8_v1",
+  "buildout_stage": "cross_district_guard_residential_v1",
+  "grid_policy": {
+    "uses_existing_town_grid": true,
+    "does_not_change_town_grid_size": true,
+    "town_grid_size": [
+      10,
+      8
+    ],
+    "block_size": 64,
+    "safe_to_edit_lots": true,
+    "runtime_writes_allowed": false
+  },
+  "residential_policy": {
+    "interiors_load_only_when_highlighted": true,
+    "exterior_massing_ready": true,
+    "npc_assignment_future": true,
+    "capacity_is_authority_for_future_residents": true
+  },
+  "lots": [
+    {
+      "id": "security_home_01",
+      "address": "S-01 West Guard Barracks",
+      "display_name": "West Guard Barracks",
+      "block": "block_barracks_west",
+      "home_node": "barracks_west_node",
+      "resident_slot": "",
+      "resident_display_name": "",
+      "resident_role": "future_resident_pool",
+      "lot_class": "guard_barracks",
+      "privacy": "district_residential_property_highlight_for_interior",
+      "footprint": {
+        "local_offset": [
+          0.0,
+          0.0
+        ],
+        "size_blocks": [
+          1.1,
+          0.58
+        ],
+        "height_class": "mid",
+        "roof_hint": "watch_roof",
+        "height_units": 51.0
+      },
+      "foundation_profile": {
+        "foundation_type": "holo_foundation_pad",
+        "pad_local_offset": [
+          0.0,
+          0.0
+        ],
+        "pad_size_blocks": [
+          1.28,
+          0.76
+        ],
+        "clearance_margin_blocks": 0.08,
+        "anchor_rule": "centered_on_town_block",
+        "cover_underlay_grid": true,
+        "visible_ground_pad": true,
+        "edge_style": "clean_outer_perimeter_only"
+      },
+      "building_profile": {
+        "building_type": "guard_barracks",
+        "height_class": "mid",
+        "floor_count": 3,
+        "residential_capacity": 24,
+        "current_reserved_capacity": 0,
+        "roof_type": "watch_roof",
+        "style_variant": "guard_barracks_district_infill_01",
+        "height_units": 51.0
+      },
+      "line_policy": {
+        "roof_cross_braces": false,
+        "arbitrary_diagonals": false,
+        "floor_bands": "outer_perimeter_only",
+        "interior_lines": "highlight_only"
+      },
+      "anchors": {
+        "front_door": {
+          "id": "security_home_01_front_door",
+          "local_offset": [
+            0.0,
+            -0.38
+          ],
+          "kind": "door"
+        },
+        "porch": {
+          "id": "security_home_01_porch",
+          "local_offset": [
+            0.0,
+            -0.29
+          ],
+          "kind": "porch"
+        },
+        "mailbox": {
+          "id": "security_home_01_mailbox",
+          "local_offset": [
+            0.31,
+            -0.45
+          ],
+          "kind": "mailbox"
+        },
+        "lobby": {
+          "id": "security_home_01_lobby",
+          "local_offset": [
+            0.0,
+            -0.12
+          ],
+          "kind": "lobby"
+        },
+        "roof_access": {
+          "id": "security_home_01_roof_access",
+          "local_offset": [
+            0.18,
+            0.18
+          ],
+          "kind": "roof_access"
+        }
+      },
+      "rooms": [
+        {
+          "id": "security_home_01_entry_lobby",
+          "kind": "entry_lobby",
+          "local_offset": [
+            0.0,
+            -0.12
+          ],
+          "tags": [
+            "entry",
+            "future_interior"
+          ]
+        },
+        {
+          "id": "security_home_01_residential_core",
+          "kind": "residential_core",
+          "local_offset": [
+            0.0,
+            0.1
+          ],
+          "tags": [
+            "home",
+            "abstract_units"
+          ]
+        },
+        {
+          "id": "security_home_01_utility_closet",
+          "kind": "utility",
+          "local_offset": [
+            -0.25,
+            0.2
+          ],
+          "tags": [
+            "service",
+            "safe_edit"
+          ]
+        }
+      ],
+      "floor_anchors": [
+        {
+          "id": "security_home_01_floor_01_residential_anchor",
+          "floor": 1,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 8
+        },
+        {
+          "id": "security_home_01_floor_02_residential_anchor",
+          "floor": 2,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 8
+        },
+        {
+          "id": "security_home_01_floor_03_residential_anchor",
+          "floor": 3,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 8
+        }
+      ],
+      "vertical_anchors": {
+        "stair_core": {
+          "id": "security_home_01_stair_core",
+          "kind": "stairs_or_lift",
+          "floor_min": 0,
+          "floor_max": 3
+        },
+        "roof_anchor": {
+          "id": "security_home_01_roof_anchor",
+          "kind": "roof",
+          "floor": 3
+        }
+      },
+      "future_interior_policy": {
+        "load_mode": "highlight_only",
+        "interior_blueprint_pending": true,
+        "safe_to_stub_now": true,
+        "notes": "This property is exterior/massing ready. Interior blueprint should be authored only when this building becomes interactive."
+      },
+      "visual_model_profile": {
+        "kit_id": "residential_dorm",
+        "silhouette": "procedural_residential_model_v1",
+        "detail_level": "standard",
+        "interior_visibility": "solid_until_selected",
+        "purpose_driven": true
+      }
+    },
+    {
+      "id": "security_home_02",
+      "address": "S-02 East Guard Barracks",
+      "display_name": "East Guard Barracks",
+      "block": "block_barracks_east",
+      "home_node": "barracks_east_node",
+      "resident_slot": "",
+      "resident_display_name": "",
+      "resident_role": "future_resident_pool",
+      "lot_class": "guard_barracks",
+      "privacy": "district_residential_property_highlight_for_interior",
+      "footprint": {
+        "local_offset": [
+          0.0,
+          0.0
+        ],
+        "size_blocks": [
+          1.1,
+          0.58
+        ],
+        "height_class": "mid",
+        "roof_hint": "watch_roof",
+        "height_units": 51.0
+      },
+      "foundation_profile": {
+        "foundation_type": "holo_foundation_pad",
+        "pad_local_offset": [
+          0.0,
+          0.0
+        ],
+        "pad_size_blocks": [
+          1.28,
+          0.76
+        ],
+        "clearance_margin_blocks": 0.08,
+        "anchor_rule": "centered_on_town_block",
+        "cover_underlay_grid": true,
+        "visible_ground_pad": true,
+        "edge_style": "clean_outer_perimeter_only"
+      },
+      "building_profile": {
+        "building_type": "guard_barracks",
+        "height_class": "mid",
+        "floor_count": 3,
+        "residential_capacity": 24,
+        "current_reserved_capacity": 0,
+        "roof_type": "watch_roof",
+        "style_variant": "guard_barracks_district_infill_02",
+        "height_units": 51.0
+      },
+      "line_policy": {
+        "roof_cross_braces": false,
+        "arbitrary_diagonals": false,
+        "floor_bands": "outer_perimeter_only",
+        "interior_lines": "highlight_only"
+      },
+      "anchors": {
+        "front_door": {
+          "id": "security_home_02_front_door",
+          "local_offset": [
+            0.0,
+            -0.38
+          ],
+          "kind": "door"
+        },
+        "porch": {
+          "id": "security_home_02_porch",
+          "local_offset": [
+            0.0,
+            -0.29
+          ],
+          "kind": "porch"
+        },
+        "mailbox": {
+          "id": "security_home_02_mailbox",
+          "local_offset": [
+            0.31,
+            -0.45
+          ],
+          "kind": "mailbox"
+        },
+        "lobby": {
+          "id": "security_home_02_lobby",
+          "local_offset": [
+            0.0,
+            -0.12
+          ],
+          "kind": "lobby"
+        },
+        "roof_access": {
+          "id": "security_home_02_roof_access",
+          "local_offset": [
+            0.18,
+            0.18
+          ],
+          "kind": "roof_access"
+        }
+      },
+      "rooms": [
+        {
+          "id": "security_home_02_entry_lobby",
+          "kind": "entry_lobby",
+          "local_offset": [
+            0.0,
+            -0.12
+          ],
+          "tags": [
+            "entry",
+            "future_interior"
+          ]
+        },
+        {
+          "id": "security_home_02_residential_core",
+          "kind": "residential_core",
+          "local_offset": [
+            0.0,
+            0.1
+          ],
+          "tags": [
+            "home",
+            "abstract_units"
+          ]
+        },
+        {
+          "id": "security_home_02_utility_closet",
+          "kind": "utility",
+          "local_offset": [
+            -0.25,
+            0.2
+          ],
+          "tags": [
+            "service",
+            "safe_edit"
+          ]
+        }
+      ],
+      "floor_anchors": [
+        {
+          "id": "security_home_02_floor_01_residential_anchor",
+          "floor": 1,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 8
+        },
+        {
+          "id": "security_home_02_floor_02_residential_anchor",
+          "floor": 2,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 8
+        },
+        {
+          "id": "security_home_02_floor_03_residential_anchor",
+          "floor": 3,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 8
+        }
+      ],
+      "vertical_anchors": {
+        "stair_core": {
+          "id": "security_home_02_stair_core",
+          "kind": "stairs_or_lift",
+          "floor_min": 0,
+          "floor_max": 3
+        },
+        "roof_anchor": {
+          "id": "security_home_02_roof_anchor",
+          "kind": "roof",
+          "floor": 3
+        }
+      },
+      "future_interior_policy": {
+        "load_mode": "highlight_only",
+        "interior_blueprint_pending": true,
+        "safe_to_stub_now": true,
+        "notes": "This property is exterior/massing ready. Interior blueprint should be authored only when this building becomes interactive."
+      },
+      "visual_model_profile": {
+        "kit_id": "residential_dorm",
+        "silhouette": "procedural_residential_model_v1",
+        "detail_level": "standard",
+        "interior_visibility": "solid_until_selected",
+        "purpose_driven": true
+      }
+    },
+    {
+      "id": "security_home_03",
+      "address": "S-03 Training Cadet Bunks",
+      "display_name": "Training Cadet Bunks",
+      "block": "block_training_pad",
+      "home_node": "training_pad_node",
+      "resident_slot": "",
+      "resident_display_name": "",
+      "resident_role": "future_resident_pool",
+      "lot_class": "cadet_bunkhouse",
+      "privacy": "district_residential_property_highlight_for_interior",
+      "footprint": {
+        "local_offset": [
+          0.0,
+          0.0
+        ],
+        "size_blocks": [
+          0.58,
+          0.52
+        ],
+        "height_class": "low",
+        "roof_hint": "flat_service",
+        "height_units": 38.0
+      },
+      "foundation_profile": {
+        "foundation_type": "holo_foundation_pad",
+        "pad_local_offset": [
+          0.0,
+          0.0
+        ],
+        "pad_size_blocks": [
+          0.76,
+          0.7
+        ],
+        "clearance_margin_blocks": 0.08,
+        "anchor_rule": "centered_on_town_block",
+        "cover_underlay_grid": true,
+        "visible_ground_pad": true,
+        "edge_style": "clean_outer_perimeter_only"
+      },
+      "building_profile": {
+        "building_type": "cadet_bunkhouse",
+        "height_class": "low",
+        "floor_count": 2,
+        "residential_capacity": 8,
+        "current_reserved_capacity": 0,
+        "roof_type": "flat_service",
+        "style_variant": "cadet_bunkhouse_district_infill_03",
+        "height_units": 38.0
+      },
+      "line_policy": {
+        "roof_cross_braces": false,
+        "arbitrary_diagonals": false,
+        "floor_bands": "outer_perimeter_only",
+        "interior_lines": "highlight_only"
+      },
+      "anchors": {
+        "front_door": {
+          "id": "security_home_03_front_door",
+          "local_offset": [
+            0.0,
+            -0.38
+          ],
+          "kind": "door"
+        },
+        "porch": {
+          "id": "security_home_03_porch",
+          "local_offset": [
+            0.0,
+            -0.29
+          ],
+          "kind": "porch"
+        },
+        "mailbox": {
+          "id": "security_home_03_mailbox",
+          "local_offset": [
+            0.31,
+            -0.45
+          ],
+          "kind": "mailbox"
+        },
+        "lobby": {
+          "id": "security_home_03_lobby",
+          "local_offset": [
+            0.0,
+            -0.12
+          ],
+          "kind": "lobby"
+        },
+        "roof_access": {
+          "id": "security_home_03_roof_access",
+          "local_offset": [
+            0.18,
+            0.18
+          ],
+          "kind": "roof_access"
+        }
+      },
+      "rooms": [
+        {
+          "id": "security_home_03_entry_lobby",
+          "kind": "entry_lobby",
+          "local_offset": [
+            0.0,
+            -0.12
+          ],
+          "tags": [
+            "entry",
+            "future_interior"
+          ]
+        },
+        {
+          "id": "security_home_03_residential_core",
+          "kind": "residential_core",
+          "local_offset": [
+            0.0,
+            0.1
+          ],
+          "tags": [
+            "home",
+            "abstract_units"
+          ]
+        },
+        {
+          "id": "security_home_03_utility_closet",
+          "kind": "utility",
+          "local_offset": [
+            -0.25,
+            0.2
+          ],
+          "tags": [
+            "service",
+            "safe_edit"
+          ]
+        }
+      ],
+      "floor_anchors": [
+        {
+          "id": "security_home_03_floor_01_residential_anchor",
+          "floor": 1,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 4
+        },
+        {
+          "id": "security_home_03_floor_02_residential_anchor",
+          "floor": 2,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 4
+        }
+      ],
+      "vertical_anchors": {
+        "stair_core": {
+          "id": "security_home_03_stair_core",
+          "kind": "stairs_or_lift",
+          "floor_min": 0,
+          "floor_max": 2
+        },
+        "roof_anchor": {
+          "id": "security_home_03_roof_anchor",
+          "kind": "roof",
+          "floor": 2
+        }
+      },
+      "future_interior_policy": {
+        "load_mode": "highlight_only",
+        "interior_blueprint_pending": true,
+        "safe_to_stub_now": true,
+        "notes": "This property is exterior/massing ready. Interior blueprint should be authored only when this building becomes interactive."
+      },
+      "visual_model_profile": {
+        "kit_id": "residential_dorm",
+        "silhouette": "procedural_residential_model_v1",
+        "detail_level": "standard",
+        "interior_visibility": "solid_until_selected",
+        "purpose_driven": true
+      }
+    },
+    {
+      "id": "security_home_04",
+      "address": "S-04 Field Hospital Staff Rooms",
+      "display_name": "Field Hospital Staff Rooms",
+      "block": "block_field_hospital",
+      "home_node": "field_hospital_node",
+      "resident_slot": "",
+      "resident_display_name": "",
+      "resident_role": "future_resident_pool",
+      "lot_class": "medical_staff_rooms",
+      "privacy": "district_residential_property_highlight_for_interior",
+      "footprint": {
+        "local_offset": [
+          0.0,
+          0.0
+        ],
+        "size_blocks": [
+          0.68,
+          0.62
+        ],
+        "height_class": "mid",
+        "roof_hint": "clinic_roof",
+        "height_units": 51.0
+      },
+      "foundation_profile": {
+        "foundation_type": "holo_foundation_pad",
+        "pad_local_offset": [
+          0.0,
+          0.0
+        ],
+        "pad_size_blocks": [
+          0.8600000000000001,
+          0.8
+        ],
+        "clearance_margin_blocks": 0.08,
+        "anchor_rule": "centered_on_town_block",
+        "cover_underlay_grid": true,
+        "visible_ground_pad": true,
+        "edge_style": "clean_outer_perimeter_only"
+      },
+      "building_profile": {
+        "building_type": "medical_staff_rooms",
+        "height_class": "mid",
+        "floor_count": 3,
+        "residential_capacity": 8,
+        "current_reserved_capacity": 0,
+        "roof_type": "clinic_roof",
+        "style_variant": "medical_staff_rooms_district_infill_04",
+        "height_units": 51.0
+      },
+      "line_policy": {
+        "roof_cross_braces": false,
+        "arbitrary_diagonals": false,
+        "floor_bands": "outer_perimeter_only",
+        "interior_lines": "highlight_only"
+      },
+      "anchors": {
+        "front_door": {
+          "id": "security_home_04_front_door",
+          "local_offset": [
+            0.0,
+            -0.38
+          ],
+          "kind": "door"
+        },
+        "porch": {
+          "id": "security_home_04_porch",
+          "local_offset": [
+            0.0,
+            -0.29
+          ],
+          "kind": "porch"
+        },
+        "mailbox": {
+          "id": "security_home_04_mailbox",
+          "local_offset": [
+            0.31,
+            -0.45
+          ],
+          "kind": "mailbox"
+        },
+        "lobby": {
+          "id": "security_home_04_lobby",
+          "local_offset": [
+            0.0,
+            -0.12
+          ],
+          "kind": "lobby"
+        },
+        "roof_access": {
+          "id": "security_home_04_roof_access",
+          "local_offset": [
+            0.18,
+            0.18
+          ],
+          "kind": "roof_access"
+        }
+      },
+      "rooms": [
+        {
+          "id": "security_home_04_entry_lobby",
+          "kind": "entry_lobby",
+          "local_offset": [
+            0.0,
+            -0.12
+          ],
+          "tags": [
+            "entry",
+            "future_interior"
+          ]
+        },
+        {
+          "id": "security_home_04_residential_core",
+          "kind": "residential_core",
+          "local_offset": [
+            0.0,
+            0.1
+          ],
+          "tags": [
+            "home",
+            "abstract_units"
+          ]
+        },
+        {
+          "id": "security_home_04_utility_closet",
+          "kind": "utility",
+          "local_offset": [
+            -0.25,
+            0.2
+          ],
+          "tags": [
+            "service",
+            "safe_edit"
+          ]
+        }
+      ],
+      "floor_anchors": [
+        {
+          "id": "security_home_04_floor_01_residential_anchor",
+          "floor": 1,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 3
+        },
+        {
+          "id": "security_home_04_floor_02_residential_anchor",
+          "floor": 2,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 3
+        },
+        {
+          "id": "security_home_04_floor_03_residential_anchor",
+          "floor": 3,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 3
+        }
+      ],
+      "vertical_anchors": {
+        "stair_core": {
+          "id": "security_home_04_stair_core",
+          "kind": "stairs_or_lift",
+          "floor_min": 0,
+          "floor_max": 3
+        },
+        "roof_anchor": {
+          "id": "security_home_04_roof_anchor",
+          "kind": "roof",
+          "floor": 3
+        }
+      },
+      "future_interior_policy": {
+        "load_mode": "highlight_only",
+        "interior_blueprint_pending": true,
+        "safe_to_stub_now": true,
+        "notes": "This property is exterior/massing ready. Interior blueprint should be authored only when this building becomes interactive."
+      },
+      "visual_model_profile": {
+        "kit_id": "residential_dorm",
+        "silhouette": "procedural_residential_model_v1",
+        "detail_level": "standard",
+        "interior_visibility": "solid_until_selected",
+        "purpose_driven": true
+      }
+    },
+    {
+      "id": "security_home_05",
+      "address": "S-05 Gate Expansion Watch Flats",
+      "display_name": "Gate Expansion Watch Flats",
+      "block": "block_future_gate_expansion",
+      "home_node": "security_gate_neighborhood_seed_anchor",
+      "resident_slot": "",
+      "resident_display_name": "",
+      "resident_role": "future_resident_pool",
+      "lot_class": "watch_staff_flats",
+      "privacy": "district_residential_property_highlight_for_interior",
+      "footprint": {
+        "local_offset": [
+          0.0,
+          0.0
+        ],
+        "size_blocks": [
+          0.72,
+          0.72
+        ],
+        "height_class": "tall",
+        "roof_hint": "sensor_roof",
+        "height_units": 77.0
+      },
+      "foundation_profile": {
+        "foundation_type": "holo_foundation_pad",
+        "pad_local_offset": [
+          0.0,
+          0.0
+        ],
+        "pad_size_blocks": [
+          0.8999999999999999,
+          0.8999999999999999
+        ],
+        "clearance_margin_blocks": 0.08,
+        "anchor_rule": "centered_on_town_block",
+        "cover_underlay_grid": true,
+        "visible_ground_pad": true,
+        "edge_style": "clean_outer_perimeter_only"
+      },
+      "building_profile": {
+        "building_type": "watch_staff_flats",
+        "height_class": "tall",
+        "floor_count": 5,
+        "residential_capacity": 18,
+        "current_reserved_capacity": 0,
+        "roof_type": "sensor_roof",
+        "style_variant": "watch_staff_flats_district_infill_05",
+        "height_units": 77.0
+      },
+      "line_policy": {
+        "roof_cross_braces": false,
+        "arbitrary_diagonals": false,
+        "floor_bands": "outer_perimeter_only",
+        "interior_lines": "highlight_only"
+      },
+      "anchors": {
+        "front_door": {
+          "id": "security_home_05_front_door",
+          "local_offset": [
+            0.0,
+            -0.38
+          ],
+          "kind": "door"
+        },
+        "porch": {
+          "id": "security_home_05_porch",
+          "local_offset": [
+            0.0,
+            -0.29
+          ],
+          "kind": "porch"
+        },
+        "mailbox": {
+          "id": "security_home_05_mailbox",
+          "local_offset": [
+            0.31,
+            -0.45
+          ],
+          "kind": "mailbox"
+        },
+        "lobby": {
+          "id": "security_home_05_lobby",
+          "local_offset": [
+            0.0,
+            -0.12
+          ],
+          "kind": "lobby"
+        },
+        "roof_access": {
+          "id": "security_home_05_roof_access",
+          "local_offset": [
+            0.18,
+            0.18
+          ],
+          "kind": "roof_access"
+        }
+      },
+      "rooms": [
+        {
+          "id": "security_home_05_entry_lobby",
+          "kind": "entry_lobby",
+          "local_offset": [
+            0.0,
+            -0.12
+          ],
+          "tags": [
+            "entry",
+            "future_interior"
+          ]
+        },
+        {
+          "id": "security_home_05_residential_core",
+          "kind": "residential_core",
+          "local_offset": [
+            0.0,
+            0.1
+          ],
+          "tags": [
+            "home",
+            "abstract_units"
+          ]
+        },
+        {
+          "id": "security_home_05_utility_closet",
+          "kind": "utility",
+          "local_offset": [
+            -0.25,
+            0.2
+          ],
+          "tags": [
+            "service",
+            "safe_edit"
+          ]
+        }
+      ],
+      "floor_anchors": [
+        {
+          "id": "security_home_05_floor_01_residential_anchor",
+          "floor": 1,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 4
+        },
+        {
+          "id": "security_home_05_floor_02_residential_anchor",
+          "floor": 2,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 4
+        },
+        {
+          "id": "security_home_05_floor_03_residential_anchor",
+          "floor": 3,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 4
+        },
+        {
+          "id": "security_home_05_floor_04_residential_anchor",
+          "floor": 4,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 4
+        },
+        {
+          "id": "security_home_05_floor_05_residential_anchor",
+          "floor": 5,
+          "kind": "abstract_unit_floor",
+          "capacity_hint": 4
+        }
+      ],
+      "vertical_anchors": {
+        "stair_core": {
+          "id": "security_home_05_stair_core",
+          "kind": "stairs_or_lift",
+          "floor_min": 0,
+          "floor_max": 5
+        },
+        "roof_anchor": {
+          "id": "security_home_05_roof_anchor",
+          "kind": "roof",
+          "floor": 5
+        }
+      },
+      "future_interior_policy": {
+        "load_mode": "highlight_only",
+        "interior_blueprint_pending": true,
+        "safe_to_stub_now": true,
+        "notes": "This property is exterior/massing ready. Interior blueprint should be authored only when this building becomes interactive."
+      },
+      "visual_model_profile": {
+        "kit_id": "residential_stack",
+        "silhouette": "procedural_residential_model_v1",
+        "detail_level": "standard",
+        "interior_visibility": "solid_until_selected",
+        "purpose_driven": true
+      }
+    }
+  ],
+  "micro_schedule_nodes": [
+    {
+      "id": "security_home_01_door_node",
+      "kind": "door",
+      "block": "block_barracks_west",
+      "town_node": "barracks_west_node",
+      "lot": "security_home_01",
+      "local_offset": [
+        0.0,
+        -0.42
+      ],
+      "tags": [
+        "residential",
+        "door",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_01_lobby_node",
+      "kind": "lobby",
+      "block": "block_barracks_west",
+      "town_node": "barracks_west_node",
+      "lot": "security_home_01",
+      "local_offset": [
+        0.0,
+        -0.1
+      ],
+      "tags": [
+        "residential",
+        "lobby",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_01_mail_node",
+      "kind": "mailbox",
+      "block": "block_barracks_west",
+      "town_node": "barracks_west_node",
+      "lot": "security_home_01",
+      "local_offset": [
+        0.32,
+        -0.46
+      ],
+      "tags": [
+        "residential",
+        "mailbox",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_01_roof_node",
+      "kind": "roof_social",
+      "block": "block_barracks_west",
+      "town_node": "barracks_west_node",
+      "lot": "security_home_01",
+      "local_offset": [
+        0.22,
+        0.22
+      ],
+      "tags": [
+        "residential",
+        "roof_social",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_02_door_node",
+      "kind": "door",
+      "block": "block_barracks_east",
+      "town_node": "barracks_east_node",
+      "lot": "security_home_02",
+      "local_offset": [
+        0.0,
+        -0.42
+      ],
+      "tags": [
+        "residential",
+        "door",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_02_lobby_node",
+      "kind": "lobby",
+      "block": "block_barracks_east",
+      "town_node": "barracks_east_node",
+      "lot": "security_home_02",
+      "local_offset": [
+        0.0,
+        -0.1
+      ],
+      "tags": [
+        "residential",
+        "lobby",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_02_mail_node",
+      "kind": "mailbox",
+      "block": "block_barracks_east",
+      "town_node": "barracks_east_node",
+      "lot": "security_home_02",
+      "local_offset": [
+        0.32,
+        -0.46
+      ],
+      "tags": [
+        "residential",
+        "mailbox",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_02_roof_node",
+      "kind": "roof_social",
+      "block": "block_barracks_east",
+      "town_node": "barracks_east_node",
+      "lot": "security_home_02",
+      "local_offset": [
+        0.22,
+        0.22
+      ],
+      "tags": [
+        "residential",
+        "roof_social",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_03_door_node",
+      "kind": "door",
+      "block": "block_training_pad",
+      "town_node": "training_pad_node",
+      "lot": "security_home_03",
+      "local_offset": [
+        0.0,
+        -0.42
+      ],
+      "tags": [
+        "residential",
+        "door",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_03_lobby_node",
+      "kind": "lobby",
+      "block": "block_training_pad",
+      "town_node": "training_pad_node",
+      "lot": "security_home_03",
+      "local_offset": [
+        0.0,
+        -0.1
+      ],
+      "tags": [
+        "residential",
+        "lobby",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_03_mail_node",
+      "kind": "mailbox",
+      "block": "block_training_pad",
+      "town_node": "training_pad_node",
+      "lot": "security_home_03",
+      "local_offset": [
+        0.32,
+        -0.46
+      ],
+      "tags": [
+        "residential",
+        "mailbox",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_03_roof_node",
+      "kind": "roof_social",
+      "block": "block_training_pad",
+      "town_node": "training_pad_node",
+      "lot": "security_home_03",
+      "local_offset": [
+        0.22,
+        0.22
+      ],
+      "tags": [
+        "residential",
+        "roof_social",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_04_door_node",
+      "kind": "door",
+      "block": "block_field_hospital",
+      "town_node": "field_hospital_node",
+      "lot": "security_home_04",
+      "local_offset": [
+        0.0,
+        -0.42
+      ],
+      "tags": [
+        "residential",
+        "door",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_04_lobby_node",
+      "kind": "lobby",
+      "block": "block_field_hospital",
+      "town_node": "field_hospital_node",
+      "lot": "security_home_04",
+      "local_offset": [
+        0.0,
+        -0.1
+      ],
+      "tags": [
+        "residential",
+        "lobby",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_04_mail_node",
+      "kind": "mailbox",
+      "block": "block_field_hospital",
+      "town_node": "field_hospital_node",
+      "lot": "security_home_04",
+      "local_offset": [
+        0.32,
+        -0.46
+      ],
+      "tags": [
+        "residential",
+        "mailbox",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_04_roof_node",
+      "kind": "roof_social",
+      "block": "block_field_hospital",
+      "town_node": "field_hospital_node",
+      "lot": "security_home_04",
+      "local_offset": [
+        0.22,
+        0.22
+      ],
+      "tags": [
+        "residential",
+        "roof_social",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_05_door_node",
+      "kind": "door",
+      "block": "block_future_gate_expansion",
+      "town_node": "security_gate_neighborhood_seed_anchor",
+      "lot": "security_home_05",
+      "local_offset": [
+        0.0,
+        -0.42
+      ],
+      "tags": [
+        "residential",
+        "door",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_05_lobby_node",
+      "kind": "lobby",
+      "block": "block_future_gate_expansion",
+      "town_node": "security_gate_neighborhood_seed_anchor",
+      "lot": "security_home_05",
+      "local_offset": [
+        0.0,
+        -0.1
+      ],
+      "tags": [
+        "residential",
+        "lobby",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_05_mail_node",
+      "kind": "mailbox",
+      "block": "block_future_gate_expansion",
+      "town_node": "security_gate_neighborhood_seed_anchor",
+      "lot": "security_home_05",
+      "local_offset": [
+        0.32,
+        -0.46
+      ],
+      "tags": [
+        "residential",
+        "mailbox",
+        "district_infill",
+        "safe_edit"
+      ]
+    },
+    {
+      "id": "security_home_05_roof_node",
+      "kind": "roof_social",
+      "block": "block_future_gate_expansion",
+      "town_node": "security_gate_neighborhood_seed_anchor",
+      "lot": "security_home_05",
+      "local_offset": [
+        0.22,
+        0.22
+      ],
+      "tags": [
+        "residential",
+        "roof_social",
+        "district_infill",
+        "safe_edit"
+      ]
+    }
+  ],
+  "neighborhood_routes": [
+    {
+      "id": "security_home_01_evening_home_route",
+      "role": "future_resident",
+      "nodes": [
+        "barracks_west_node",
+        "security_home_01_door_node",
+        "security_home_01_lobby_node"
+      ],
+      "schedule_hint": "evening_return_highlight_only_interior_future"
+    },
+    {
+      "id": "security_home_02_evening_home_route",
+      "role": "future_resident",
+      "nodes": [
+        "barracks_east_node",
+        "security_home_02_door_node",
+        "security_home_02_lobby_node"
+      ],
+      "schedule_hint": "evening_return_highlight_only_interior_future"
+    },
+    {
+      "id": "security_home_03_evening_home_route",
+      "role": "future_resident",
+      "nodes": [
+        "training_pad_node",
+        "security_home_03_door_node",
+        "security_home_03_lobby_node"
+      ],
+      "schedule_hint": "evening_return_highlight_only_interior_future"
+    },
+    {
+      "id": "security_home_04_evening_home_route",
+      "role": "future_resident",
+      "nodes": [
+        "field_hospital_node",
+        "security_home_04_door_node",
+        "security_home_04_lobby_node"
+      ],
+      "schedule_hint": "evening_return_highlight_only_interior_future"
+    },
+    {
+      "id": "security_home_05_evening_home_route",
+      "role": "future_resident",
+      "nodes": [
+        "security_gate_neighborhood_seed_anchor",
+        "security_home_05_door_node",
+        "security_home_05_lobby_node"
+      ],
+      "schedule_hint": "evening_return_highlight_only_interior_future"
+    },
+    {
+      "id": "security_gate_guard_housing_01_mail_loop",
+      "role": "courier",
+      "nodes": [
+        "security_home_01_mail_node",
+        "security_home_02_mail_node",
+        "security_home_03_mail_node",
+        "security_home_04_mail_node",
+        "security_home_05_mail_node"
+      ],
+      "schedule_hint": "morning_mail_safe_exterior"
+    }
+  ]
+}

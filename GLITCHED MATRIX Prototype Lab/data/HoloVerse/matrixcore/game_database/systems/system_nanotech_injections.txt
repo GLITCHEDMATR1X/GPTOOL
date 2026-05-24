@@ -1,0 +1,16 @@
+ID: matrixcore.system.nanotech_injections
+TITLE: Nanotech Birth Injections
+TYPE: system
+ERA: Utopia
+SPOILER_LEVEL: 2
+REGION_TIE: hub,forest,metropolis
+BOT_TIE: Vanta / Archivist
+UNLOCK: controlled_evolution_archive
+SUMMARY: Body-linked nanotechnology that extends life and connects hosts to UTOPIA.
+GLEEBS_NOTE: The first promise was health. The hidden cost was access.
+GAME_USE: Explains body upgrades, animal cognition, power leakage, and Andrew's breach danger.
+NOVEL_USE: Utopia foundation, Controlled Evolution, The Hacker.
+STATUS: draft-pass0006
+---
+BODY:
+Nano injections grant long life, stronger immunity, upgrades, and neural-network access. They also create the body interface Andrew exploits and the moral foundation for AICEP animal enhancement.

@@ -1,0 +1,51 @@
+HoloUtopia Pass 47C - Specific Citizen Question Router
+
+Scope:
+- Continue the proximity-only citizen dialogue system.
+- Add a specific question router so citizens answer exact known questions correctly.
+- Keep speeches brief, small, capped, and non-overlapping.
+- Keep all answers runtime-state based; unknown questions fail safely.
+
+Changed / added files:
+- data/HoloUtopia/holoutopia_citizen_dialogue.py
+- data/HoloUtopia/holoutopia_citizen_question_router.py
+- data/HoloUtopia/tools/validate_holoutopia_specific_question_router.py
+- data/database/utopia/dialogue/citizen_dialogue_rules.json
+- data/database/utopia/dialogue/question_answer_catalog.json
+- data/database/utopia/dialogue/specific_question_catalog.json
+- data/database/utopia/runtime/holoutopia_runtime_bridge.json
+
+Behavior added:
+- Specific question ids route to approved intents.
+- Supported exact/runtime questions include:
+  - What are you doing?
+  - What cycle is it?
+  - Where do you live?
+  - How many can be outside?
+  - How long can you stay active?
+  - How long do you recharge?
+  - Which hub node are you using?
+  - What is this district?
+  - Where are you going?
+  - What time is it?
+  - How many citizens live here?
+  - How many are visible?
+- Citizens still only speak when near another visible citizen.
+- Garrisoned citizens remain silent.
+- Bubble cap remains 3 active speeches.
+- Unknown or unsupported questions return safe fallback answers.
+
+Validation run:
+- python -m compileall -q main.py data/HoloUtopia
+- python data/HoloUtopia/tools/validate_holoutopia_specific_question_router.py
+- python data/HoloUtopia/tools/validate_holoutopia_citizen_dialogue.py
+- python data/HoloUtopia/tools/validate_holoutopia_citizen_dialogue_watch_log.py
+- plus full existing runtime, pathfinding, watch, city style, residential, screenshot, and town validators.
+
+Safety:
+- No authored data writes.
+- No collision added.
+- No HoloVerse routing changes.
+- No HoloCore changes.
+- No artifact routing changes.
+- No population, schedule, commute, or pathfinding rule changes.

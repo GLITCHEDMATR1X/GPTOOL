@@ -1,0 +1,42 @@
+{
+  "pass": "pass0006-utopia-to-matrixcore-source-map",
+  "created": "2026-05-01",
+  "source_layers": {
+    "utopia_project": "raw old-world salvage source",
+    "matrixcore_archive": "future archive layer",
+    "holoverse": "playable reconstruction layer"
+  },
+  "entry_format": [
+    "ID",
+    "TITLE",
+    "TYPE",
+    "ERA",
+    "SPOILER_LEVEL",
+    "REGION_TIE",
+    "BOT_TIE",
+    "UNLOCK",
+    "SUMMARY",
+    "GLEEBS_NOTE",
+    "GAME_USE",
+    "NOVEL_USE",
+    "STATUS",
+    "BODY"
+  ],
+  "entries": [
+    "data/database/matrixcore/00_matrixcore_index.txt",
+    "data/database/matrixcore/01_utopia_source_layer.txt",
+    "data/database/matrixcore/characters/character_gleebs.txt",
+    "data/database/matrixcore/characters/character_andrew.txt",
+    "data/database/matrixcore/systems/system_utopia_network.txt",
+    "data/database/matrixcore/systems/system_nanotech_injections.txt",
+    "data/database/matrixcore/systems/system_dream_catcher.txt",
+    "data/database/matrixcore/systems/system_the_patch.txt",
+    "data/database/matrixcore/locations/location_utopia_island.txt",
+    "data/database/matrixcore/simulations/simulation_portal_hub.txt",
+    "data/database/matrixcore/simulations/simulation_frontier_space.txt",
+    "data/database/matrixcore/archive_fragments/fragment_001_gleebs_first_body.txt",
+    "data/database/matrixcore/archive_fragments/fragment_002_andrew_first_breach.txt",
+    "data/database/matrixcore/archive_fragments/fragment_003_jupiter_beacon.txt"
+  ],
+  "next_pass": "AI_BUILD_THIS_REVISION_0007_MASTER_SOURCE_ASSEMBLY_SHELL"
+}

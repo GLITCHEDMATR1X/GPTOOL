@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "id": "holoutopia_citizen_simulation_rules_v1",
+  "runtime_writes_allowed": false,
+  "description": "Deterministic first-pass schedule runner rules for HoloUtopia citizens.",
+  "selection_policy": {
+    "schedule_block_rule": "last_block_at_or_before_current_time",
+    "wrap_before_first_block": true,
+    "missing_target_fallback_order": ["exact_node", "home_node", "town_safe_node", "core_plaza_center"],
+    "private_home_visibility": "hide_interior_lines_until_building_highlighted"
+  },
+  "activity_event_policy": {
+    "format": "jsonl",
+    "append_only": true,
+    "required_fields": ["time", "citizen_id", "display_name", "event", "action", "town_id", "node_id", "visibility", "result"],
+    "example_output": "data/database/utopia/simulation/examples/citizen_activity_log.example.jsonl"
+  },
+  "danger_override_policy": {
+    "enabled": true,
+    "override_activity_id": "danger_override",
+    "fallback_target": "nearest_safe_node",
+    "safe_node_tags_priority": ["shelter", "safe", "triage", "guard", "security"],
+    "interruptible_activities": ["commute", "work_shift", "meal_break", "visit_friend", "hobby", "district_errand"]
+  },
+  "runtime_state_policy": {
+    "authored_files_read_only": true,
+    "write_runtime_state_under": "data/database/utopia/saves",
+    "do_not_overwrite": [
+      "citizen_manifest.json",
+      "citizen_schedules.json",
+      "citizen_relationships.json",
+      "activity_catalog.json",
+      "citizen_social_circles.json"
+    ]
+  }
+}

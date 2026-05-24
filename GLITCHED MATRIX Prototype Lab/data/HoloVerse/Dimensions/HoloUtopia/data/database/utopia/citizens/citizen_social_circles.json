@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "id": "holoutopia_citizen_social_circles_v1",
+  "runtime_writes_allowed": false,
+  "circles": [
+    {
+      "id": "residential_alpha_neighbors",
+      "display_name": "Residential Alpha Neighbors",
+      "members": [
+        "npc_aria_voss",
+        "npc_ren_kael",
+        "npc_mira_sol",
+        "npc_nova_elle",
+        "npc_ion_sable",
+        "npc_lena_quill",
+        "npc_kade_mirror",
+        "npc_tala_orbit"
+      ]
+    },
+    {
+      "id": "central_core_civic_ring_contacts",
+      "display_name": "Central Core Contacts",
+      "members": [
+        "citizen_eira_glass",
+        "citizen_voss_ember",
+        "citizen_senna_lux",
+        "citizen_oro_wyde"
+      ]
+    },
+    {
+      "id": "market_crossing_regulars",
+      "display_name": "Market Crossing Regulars",
+      "members": [
+        "citizen_mako_penn",
+        "citizen_yara_cove",
+        "citizen_fenn_rook",
+        "citizen_lio_bright",
+        "citizen_zia_fold"
+      ]
+    },
+    {
+      "id": "citywide_friend_links",
+      "display_name": "Citywide Friend Links",
+      "source": "citizen_relationships.json"
+    }
+  ]
+}

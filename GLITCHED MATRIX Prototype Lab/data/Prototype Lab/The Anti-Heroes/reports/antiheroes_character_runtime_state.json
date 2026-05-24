@@ -1,0 +1,27 @@
+{
+  "schema_version": "antiheroes_character_runtime_state.v1",
+  "generated_at": "2026-05-05T01:37:01",
+  "project_root": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\Prototype Lab\\3D - Third Person\\The Anti-Heroes",
+  "manifest_path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\Prototype Lab\\3D - Third Person\\The Anti-Heroes\\assets\\characters\\humans\\human_manifest.json",
+  "state": {
+    "ok": false,
+    "role": "npc",
+    "model_id": "",
+    "actor_loaded": false,
+    "static_loaded": false,
+    "current_motion_state": "idle",
+    "current_animation_role": "idle",
+    "current_animation_name": "",
+    "available_animations": [],
+    "missing_roles": [],
+    "fallback_reason": "",
+    "last_error": "State-only proof; no Panda3D scene was created.",
+    "spawned_at": "2026-05-05T01:37:01"
+  },
+  "integration_notes": [
+    "Call spawn_manifest_character after the Panda3D scene exists.",
+    "Call set_motion_state from movement/combat state changes.",
+    "Missing animations are warnings; they should not crash the live route.",
+    "Anti-Heroes can become independent by keeping this state shape and replacing GPTOOL as the exporter only."
+  ]
+}

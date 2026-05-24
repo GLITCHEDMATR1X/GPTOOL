@@ -1,0 +1,22 @@
+{
+  "schema": 3,
+  "id": "holoutopia",
+  "title": "HOLOUTOPIA",
+  "description": "Same-window HoloVerse replacement artifact route that mounts the authored HoloUtopia living city runtime into the live Panda3D window.",
+  "entry": "main.py",
+  "original_entry": "main.py",
+  "launch_type": "native_panda",
+  "fallback_launch_type": "embedded_external",
+  "host_contract": "holoverse_same_window_holoutopia_live_city_v1",
+  "preferred_display": "same_window_native",
+  "return_target": "hub",
+  "requires_mouse_capture": false,
+  "panel_supported": true,
+  "native_adapter": "holoverse_native_adapter.py",
+  "native_panda_candidate": true,
+  "source_kind": "panda3d_runtime_bridge",
+  "crash_safe_wrapper": false,
+  "single_esc_return": true,
+  "same_window_city_runtime": true,
+  "missing_dimension_replacement": true
+}

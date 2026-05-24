@@ -1,0 +1,10 @@
+{
+  "name": "Guide",
+  "mood": 0.02,
+  "muted": false,
+  "memory": {
+    "topics": [],
+    "opinions": {}
+  },
+  "last_reply": ""
+}

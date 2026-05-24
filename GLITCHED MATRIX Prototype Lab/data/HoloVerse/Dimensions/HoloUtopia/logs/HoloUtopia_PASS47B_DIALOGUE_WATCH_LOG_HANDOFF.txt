@@ -1,0 +1,39 @@
+HoloUtopia Pass 47B - Citizen Dialogue Watch Log
+
+Scope:
+- Continue the citizen interaction system added in Pass 47A.
+- Keep speech small, brief, proximity-only, capped, and non-overlapping.
+- Add a tiny Watch Mode recent-talk line so city conversations can be observed without cluttering the world view.
+
+Changed runtime behavior:
+- Dialogue state is now built before the Watch Mode panel, so the panel can show recent conversation snippets.
+- Dialogue bubbles remain capped at 3 active bubbles.
+- Bubble text is shorter and the bubble scale is reduced.
+- Anchor spacing is increased to reduce overlap.
+- Dialogue state now includes category counts, intent/confidence metadata, and recent_conversations.
+- Watch Mode now displays a compact Talk line when nearby citizens are speaking.
+
+Changed files:
+- data/HoloUtopia/holoutopia_citizen_dialogue.py
+- data/HoloUtopia/holoutopia_game_runtime.py
+- data/HoloUtopia/holoutopia_watch_mode.py
+- data/HoloUtopia/tools/validate_holoutopia_citizen_dialogue_watch_log.py
+- data/database/utopia/dialogue/citizen_dialogue_rules.json
+- data/database/utopia/dialogue/question_answer_catalog.json
+- data/database/utopia/runtime/holoutopia_runtime_bridge.json
+
+Validation:
+- compileall passed
+- citizen dialogue validator passed
+- citizen dialogue watch-log validator passed
+- city atlas/style validator passed
+- watch focus and watch mode validators passed
+- commute, schedule, behavior, cluster, pathfinding, district activity, residential population, runtime, screenshot, and town validators passed
+
+Safety:
+- No HoloVerse route changes
+- No HoloCore changes
+- No artifact route changes
+- No collision added
+- No population/schedule/pathfinding rule changes
+- No authored data writes at runtime

@@ -1,0 +1,221 @@
+{
+  "tool": "bridge_exit_cleanup",
+  "project_root": "D:\\Apps\\GLITCHED MATRIX Prototype Lab",
+  "started_at": "2026-04-29T13:49:07",
+  "ended_at": "2026-04-29T13:49:09",
+  "status": {
+    "ok": true,
+    "candidate_count": 32,
+    "removed_count": 32,
+    "failure_count": 0
+  },
+  "config": {
+    "wipe_test_workspace": true,
+    "protect_logs": true,
+    "managed_relative_dirs": [
+      "workspace\\cache",
+      "workspace\\temp",
+      "workspace\\test_workspace"
+    ]
+  },
+  "removed": [
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Urban Warzone\\__pycache__\\runtime.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Urban Warzone\\__pycache__\\arena_blueprint.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Oddities\\__pycache__\\runtime.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Metropolis Robot Lab\\__pycache__\\runtime.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\HoloForge\\__pycache__\\runtime.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Hills of Life\\__pycache__\\runtime.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Frost Circuit\\__pycache__\\runtime.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Forest Growth\\__pycache__\\runtime.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Ember Hangar\\__pycache__\\runtime.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\Prototype Lab\\Radar Hell\\assets\\cache",
+      "category": "cache",
+      "reason": "directory_name:cache",
+      "kind": "directory"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\Prototype Lab\\Radar Hell\\__pycache__\\book.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Urban Warzone\\__pycache__",
+      "category": "cache",
+      "reason": "directory_name:__pycache__",
+      "kind": "directory"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Oddities\\__pycache__",
+      "category": "cache",
+      "reason": "directory_name:__pycache__",
+      "kind": "directory"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Metropolis Robot Lab\\__pycache__",
+      "category": "cache",
+      "reason": "directory_name:__pycache__",
+      "kind": "directory"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\HoloForge\\__pycache__",
+      "category": "cache",
+      "reason": "directory_name:__pycache__",
+      "kind": "directory"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Hills of Life\\__pycache__",
+      "category": "cache",
+      "reason": "directory_name:__pycache__",
+      "kind": "directory"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Frost Circuit\\__pycache__",
+      "category": "cache",
+      "reason": "directory_name:__pycache__",
+      "kind": "directory"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Forest Growth\\__pycache__",
+      "category": "cache",
+      "reason": "directory_name:__pycache__",
+      "kind": "directory"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\Dimensions\\Ember Hangar\\__pycache__",
+      "category": "cache",
+      "reason": "directory_name:__pycache__",
+      "kind": "directory"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\GX-Machine\\diagnostics\\__pycache__\\bridge_exit_cleanup.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\gx_core\\__pycache__\\runtime_paths.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\gx_core\\__pycache__\\__init__.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\Prototype Lab\\Radar Hell\\__pycache__",
+      "category": "cache",
+      "reason": "directory_name:__pycache__",
+      "kind": "directory"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\__pycache__\\world.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\__pycache__\\holoverse_world_shell_mount.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\__pycache__\\holoverse_mode_runtime.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\__pycache__\\holospace_travel_sequence.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\GX-Machine\\diagnostics\\__pycache__",
+      "category": "cache",
+      "reason": "directory_name:__pycache__",
+      "kind": "directory"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\gx_core\\__pycache__",
+      "category": "cache",
+      "reason": "directory_name:__pycache__",
+      "kind": "directory"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\__pycache__\\gx_app_main.cpython-312.pyc",
+      "category": "file_cleanup",
+      "reason": "file_suffix:.pyc",
+      "kind": "file"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\HoloVerse\\__pycache__",
+      "category": "cache",
+      "reason": "directory_name:__pycache__",
+      "kind": "directory"
+    },
+    {
+      "path": "D:\\Apps\\GLITCHED MATRIX Prototype Lab\\data\\__pycache__",
+      "category": "cache",
+      "reason": "directory_name:__pycache__",
+      "kind": "directory"
+    }
+  ],
+  "failures": [],
+  "notes": [
+    "Logs, reports, and source modules are protected by default so proof artifacts survive a passing run.",
+    "Use --wipe-test-workspace when you also want the managed test workspace removed after a commit or validation cycle.",
+    "Python bytecode caches are removed even when no managed workspace exists."
+  ]
+}

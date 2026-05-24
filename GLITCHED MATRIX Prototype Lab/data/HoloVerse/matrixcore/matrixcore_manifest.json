@@ -1,0 +1,12 @@
+{
+  "name": "MatrixCore",
+  "version": "0.10.09-holoverse-game-database-lane",
+  "role": "HoloVerse guide, progression observer, archive interface, and bot support brain.",
+  "storage_policy": "Shared app data only: data/holoverse, data/brain, data/database, and HoloVerse runtime matrixcore data.",
+  "holoverse_game_folder": "data/HoloVerse",
+  "shared_holoverse_data": "data/holoverse",
+  "brain_dir": "data/brain",
+  "database_dir": "data/database",
+  "matrixcore_chapter_database_dir": "data/database/MatrixCore",
+  "matrixcore_game_database_dir": "data/HoloVerse/matrixcore/game_database"
+}

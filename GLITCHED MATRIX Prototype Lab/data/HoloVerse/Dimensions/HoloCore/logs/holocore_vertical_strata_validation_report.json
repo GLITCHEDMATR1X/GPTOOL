@@ -1,0 +1,121 @@
+{
+  "schema": 1,
+  "kind": "holocore_vertical_strata_validation",
+  "status": "PASS",
+  "start_altitude": 100.0,
+  "layer_height": 3200.0,
+  "blend_height": 1400.0,
+  "visual_smooth_seconds": 18.0,
+  "update_interval": 0.2,
+  "encounter_update_interval": 0.25,
+  "layers": [
+    "safe_reef_layer",
+    "kelp_canopy_layer",
+    "glass_current_layer",
+    "archive_drift_layer",
+    "storm_abyss_layer",
+    "leviathan_expanse"
+  ],
+  "samples": [
+    {
+      "altitude": 0.0,
+      "layer_id": "safe_reef_layer",
+      "layer_name": "Safe Reef Layer",
+      "next_layer_id": "kelp_canopy_layer",
+      "blend_alpha": 0.0,
+      "intensity": 0.0,
+      "creature_scale_multiplier": 1.0,
+      "creature_distance_multiplier": 1.0,
+      "creature_rarity_multiplier": 1.0
+    },
+    {
+      "altitude": 99.0,
+      "layer_id": "safe_reef_layer",
+      "layer_name": "Safe Reef Layer",
+      "next_layer_id": "kelp_canopy_layer",
+      "blend_alpha": 0.0,
+      "intensity": 0.0,
+      "creature_scale_multiplier": 1.0,
+      "creature_distance_multiplier": 1.0,
+      "creature_rarity_multiplier": 1.0
+    },
+    {
+      "altitude": 100.0,
+      "layer_id": "safe_reef_layer",
+      "layer_name": "Safe Reef Layer",
+      "next_layer_id": "kelp_canopy_layer",
+      "blend_alpha": 0.0,
+      "intensity": 0.0,
+      "creature_scale_multiplier": 1.0,
+      "creature_distance_multiplier": 1.0,
+      "creature_rarity_multiplier": 1.0
+    },
+    {
+      "altitude": 1700.0,
+      "layer_id": "safe_reef_layer",
+      "layer_name": "Safe Reef Layer",
+      "next_layer_id": "kelp_canopy_layer",
+      "blend_alpha": 0.0,
+      "intensity": 0.0,
+      "creature_scale_multiplier": 1.0,
+      "creature_distance_multiplier": 1.0,
+      "creature_rarity_multiplier": 1.0
+    },
+    {
+      "altitude": 3280.0,
+      "layer_id": "safe_reef_layer",
+      "layer_name": "Safe Reef Layer",
+      "next_layer_id": "kelp_canopy_layer",
+      "blend_alpha": 0.9994,
+      "intensity": 0.0,
+      "creature_scale_multiplier": 1.0,
+      "creature_distance_multiplier": 1.0,
+      "creature_rarity_multiplier": 1.0
+    },
+    {
+      "altitude": 3302.0,
+      "layer_id": "kelp_canopy_layer",
+      "layer_name": "Kelp Canopy Layer",
+      "next_layer_id": "glass_current_layer",
+      "blend_alpha": 0.0,
+      "intensity": 0.1667,
+      "creature_scale_multiplier": 1.22,
+      "creature_distance_multiplier": 1.1667,
+      "creature_rarity_multiplier": 1.3017
+    },
+    {
+      "altitude": 8100.0,
+      "layer_id": "glass_current_layer",
+      "layer_name": "Glass Current Layer",
+      "next_layer_id": "archive_drift_layer",
+      "blend_alpha": 0.0,
+      "intensity": 0.3333,
+      "creature_scale_multiplier": 1.44,
+      "creature_distance_multiplier": 1.3333,
+      "creature_rarity_multiplier": 1.6033
+    },
+    {
+      "altitude": 16420.0,
+      "layer_id": "leviathan_expanse",
+      "layer_name": "Leviathan Expanse",
+      "next_layer_id": "safe_reef_layer",
+      "blend_alpha": 0.0,
+      "intensity": 0.8333,
+      "creature_scale_multiplier": 2.1,
+      "creature_distance_multiplier": 1.8333,
+      "creature_rarity_multiplier": 2.5083
+    },
+    {
+      "altitude": 28900.0,
+      "layer_id": "archive_drift_layer",
+      "layer_name": "Archive Drift Layer",
+      "next_layer_id": "storm_abyss_layer",
+      "blend_alpha": 0.0,
+      "intensity": 1.5,
+      "creature_scale_multiplier": 2.98,
+      "creature_distance_multiplier": 2.5,
+      "creature_rarity_multiplier": 3.715
+    }
+  ],
+  "errors": []
+}

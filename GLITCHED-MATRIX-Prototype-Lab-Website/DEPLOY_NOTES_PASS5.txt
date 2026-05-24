@@ -1,0 +1,17 @@
+GLITCHED MATRIX Prototype Lab site — pass 5 deploy notes
+
+Version: 20260429-pass5-layout-imagefix
+
+What changed:
+- Fixed Play Demos alignment so the Patch Notes panel does not cover the player/help interface.
+- Tightened the sidebar width and added final CSS overrides that come after older media rules.
+- Added an emergency in-page canvas fallback so the player does not sit on a permanent loading overlay if GitHub Pages serves a stale or slow script.
+- Reset/cleared older local browser site image config keys so the bundled site_current images load again.
+- Added visible fallback tiles for gallery images if a media path is wrong.
+
+Deploy:
+1. Open this zip.
+2. Copy the CONTENTS of GLITCHED-MATRIX-Prototype-Lab-main into the root of your GitHub Pages repo.
+3. Commit/push all changed files, especially index.html, style.css, admin.js, assets/js/demos.js, and assets/data/*.json.
+4. Wait for GitHub Pages to finish deploying.
+5. Hard-refresh once. If your browser still shows old media, clear site data for glitchedmatr1x.github.io or open in a private window.

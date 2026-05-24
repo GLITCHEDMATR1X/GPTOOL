@@ -1,0 +1,719 @@
+{
+  "schema": 2,
+  "id": "civic_commons_family_housing_01",
+  "town_id": "civic_commons_delta",
+  "display_name": "Civic Commons Family Housing 01",
+  "summary": "Family residences, student lofts, and caretaker homes for the education and public-commons district.",
+  "district_frame_alignment_id": "utopia_even_10x8_v1",
+  "buildout_stage": "pass16_complete_3x3_residential_seed",
+  "grid_policy": {
+    "uses_existing_town_grid": true,
+    "does_not_change_town_grid_size": true,
+    "town_grid_size": [
+      10,
+      8
+    ],
+    "block_size": 64,
+    "safe_to_edit_lots": true,
+    "runtime_writes_allowed": false
+  },
+  "residential_policy": {
+    "interiors_load_only_when_highlighted": true,
+    "exterior_massing_ready": true,
+    "npc_assignment_future": true,
+    "capacity_is_authority_for_future_residents": true
+  },
+  "lots": [
+    {
+      "id": "civic_family_lot_01",
+      "address": "C-01 Family Terrace",
+      "display_name": "Family Terrace",
+      "block": "civic_family_home_a",
+      "home_node": "civic_family_home_a_node",
+      "resident_slot": "civic_slot_teacher",
+      "resident_display_name": "",
+      "resident_role": "future_resident_pool",
+      "lot_class": "family_residence",
+      "privacy": "highlight_only_for_interiors",
+      "footprint": {
+        "local_offset": [
+          0,
+          0
+        ],
+        "size_blocks": [
+          0.58,
+          0.58
+        ],
+        "height_class": "mid",
+        "roof_hint": "roof_garden",
+        "height_units": 54.0
+      },
+      "foundation_profile": {
+        "foundation_type": "holo_foundation_pad",
+        "pad_local_offset": [
+          0,
+          0
+        ],
+        "pad_size_blocks": [
+          0.76,
+          0.76
+        ],
+        "clearance_margin_blocks": 0.08,
+        "anchor_rule": "centered_on_town_block",
+        "cover_underlay_grid": true,
+        "visible_ground_pad": true,
+        "edge_style": "clean_outer_perimeter_only"
+      },
+      "building_profile": {
+        "building_type": "family_residence",
+        "height_class": "mid",
+        "floor_count": 3,
+        "residential_capacity": 10,
+        "current_reserved_capacity": 0,
+        "roof_type": "roof_garden",
+        "style_variant": "civic_family_terrace_01",
+        "height_units": 54.0
+      },
+      "line_policy": {
+        "roof_cross_braces": false,
+        "arbitrary_diagonals": false,
+        "floor_bands": "outer_perimeter_only",
+        "interior_lines": "highlight_only"
+      },
+      "anchors": {
+        "front_door": {
+          "id": "civic_family_lot_01_front_door",
+          "local_offset": [
+            0,
+            -0.38
+          ],
+          "kind": "door"
+        },
+        "porch": {
+          "id": "civic_family_lot_01_porch",
+          "local_offset": [
+            0,
+            -0.29
+          ],
+          "kind": "porch"
+        },
+        "mailbox": {
+          "id": "civic_family_lot_01_mailbox",
+          "local_offset": [
+            0.28,
+            -0.28
+          ],
+          "kind": "mailbox"
+        },
+        "roof_access": {
+          "id": "civic_family_lot_01_roof_access",
+          "local_offset": [
+            0.24,
+            0.24
+          ],
+          "kind": "roof_access"
+        }
+      },
+      "visual_model_profile": {
+        "kit_id": "courtyard_home",
+        "silhouette": "procedural_residential_model_v1",
+        "detail_level": "standard",
+        "interior_visibility": "solid_until_selected",
+        "purpose_driven": true
+      }
+    },
+    {
+      "id": "civic_family_lot_02",
+      "address": "C-02 Caretaker House",
+      "display_name": "Caretaker House",
+      "block": "civic_family_home_b",
+      "home_node": "civic_family_home_b_node",
+      "resident_slot": "civic_slot_caretaker",
+      "resident_display_name": "",
+      "resident_role": "future_resident_pool",
+      "lot_class": "caretaker_house",
+      "privacy": "highlight_only_for_interiors",
+      "footprint": {
+        "local_offset": [
+          0,
+          0
+        ],
+        "size_blocks": [
+          0.58,
+          0.58
+        ],
+        "height_class": "mid",
+        "roof_hint": "flat_garden",
+        "height_units": 54.0
+      },
+      "foundation_profile": {
+        "foundation_type": "holo_foundation_pad",
+        "pad_local_offset": [
+          0,
+          0
+        ],
+        "pad_size_blocks": [
+          0.76,
+          0.76
+        ],
+        "clearance_margin_blocks": 0.08,
+        "anchor_rule": "centered_on_town_block",
+        "cover_underlay_grid": true,
+        "visible_ground_pad": true,
+        "edge_style": "clean_outer_perimeter_only"
+      },
+      "building_profile": {
+        "building_type": "caretaker_house",
+        "height_class": "mid",
+        "floor_count": 3,
+        "residential_capacity": 12,
+        "current_reserved_capacity": 0,
+        "roof_type": "flat_garden",
+        "style_variant": "civic_caretaker_house_01",
+        "height_units": 54.0
+      },
+      "line_policy": {
+        "roof_cross_braces": false,
+        "arbitrary_diagonals": false,
+        "floor_bands": "outer_perimeter_only",
+        "interior_lines": "highlight_only"
+      },
+      "anchors": {
+        "front_door": {
+          "id": "civic_family_lot_02_front_door",
+          "local_offset": [
+            0,
+            -0.38
+          ],
+          "kind": "door"
+        },
+        "porch": {
+          "id": "civic_family_lot_02_porch",
+          "local_offset": [
+            0,
+            -0.29
+          ],
+          "kind": "porch"
+        },
+        "mailbox": {
+          "id": "civic_family_lot_02_mailbox",
+          "local_offset": [
+            0.28,
+            -0.28
+          ],
+          "kind": "mailbox"
+        },
+        "roof_access": {
+          "id": "civic_family_lot_02_roof_access",
+          "local_offset": [
+            0.24,
+            0.24
+          ],
+          "kind": "roof_access"
+        }
+      },
+      "visual_model_profile": {
+        "kit_id": "micro_residence",
+        "silhouette": "procedural_residential_model_v1",
+        "detail_level": "standard",
+        "interior_visibility": "solid_until_selected",
+        "purpose_driven": true
+      }
+    },
+    {
+      "id": "civic_student_lot_01",
+      "address": "C-03 Student Loft A",
+      "display_name": "Student Loft A",
+      "block": "civic_student_loft_a",
+      "home_node": "civic_student_loft_a_node",
+      "resident_slot": "civic_slot_student",
+      "resident_display_name": "",
+      "resident_role": "future_resident_pool",
+      "lot_class": "student_loft",
+      "privacy": "highlight_only_for_interiors",
+      "footprint": {
+        "local_offset": [
+          0,
+          0
+        ],
+        "size_blocks": [
+          0.58,
+          0.58
+        ],
+        "height_class": "mid",
+        "roof_hint": "study_roof",
+        "height_units": 70.0
+      },
+      "foundation_profile": {
+        "foundation_type": "holo_foundation_pad",
+        "pad_local_offset": [
+          0,
+          0
+        ],
+        "pad_size_blocks": [
+          0.76,
+          0.76
+        ],
+        "clearance_margin_blocks": 0.08,
+        "anchor_rule": "centered_on_town_block",
+        "cover_underlay_grid": true,
+        "visible_ground_pad": true,
+        "edge_style": "clean_outer_perimeter_only"
+      },
+      "building_profile": {
+        "building_type": "student_loft",
+        "height_class": "mid",
+        "floor_count": 4,
+        "residential_capacity": 16,
+        "current_reserved_capacity": 0,
+        "roof_type": "study_roof",
+        "style_variant": "civic_student_loft_01",
+        "height_units": 70.0
+      },
+      "line_policy": {
+        "roof_cross_braces": false,
+        "arbitrary_diagonals": false,
+        "floor_bands": "outer_perimeter_only",
+        "interior_lines": "highlight_only"
+      },
+      "anchors": {
+        "front_door": {
+          "id": "civic_student_lot_01_front_door",
+          "local_offset": [
+            0,
+            -0.38
+          ],
+          "kind": "door"
+        },
+        "porch": {
+          "id": "civic_student_lot_01_porch",
+          "local_offset": [
+            0,
+            -0.29
+          ],
+          "kind": "porch"
+        },
+        "mailbox": {
+          "id": "civic_student_lot_01_mailbox",
+          "local_offset": [
+            0.28,
+            -0.28
+          ],
+          "kind": "mailbox"
+        },
+        "roof_access": {
+          "id": "civic_student_lot_01_roof_access",
+          "local_offset": [
+            0.24,
+            0.24
+          ],
+          "kind": "roof_access"
+        }
+      },
+      "visual_model_profile": {
+        "kit_id": "mixed_use_loft",
+        "silhouette": "procedural_residential_model_v1",
+        "detail_level": "standard",
+        "interior_visibility": "solid_until_selected",
+        "purpose_driven": true
+      }
+    },
+    {
+      "id": "civic_student_lot_02",
+      "address": "C-04 Student Loft B",
+      "display_name": "Student Loft B",
+      "block": "civic_student_loft_b",
+      "home_node": "civic_student_loft_b_node",
+      "resident_slot": "civic_slot_medic",
+      "resident_display_name": "",
+      "resident_role": "future_resident_pool",
+      "lot_class": "student_loft",
+      "privacy": "highlight_only_for_interiors",
+      "footprint": {
+        "local_offset": [
+          0,
+          0
+        ],
+        "size_blocks": [
+          0.58,
+          0.58
+        ],
+        "height_class": "mid",
+        "roof_hint": "study_roof",
+        "height_units": 70.0
+      },
+      "foundation_profile": {
+        "foundation_type": "holo_foundation_pad",
+        "pad_local_offset": [
+          0,
+          0
+        ],
+        "pad_size_blocks": [
+          0.76,
+          0.76
+        ],
+        "clearance_margin_blocks": 0.08,
+        "anchor_rule": "centered_on_town_block",
+        "cover_underlay_grid": true,
+        "visible_ground_pad": true,
+        "edge_style": "clean_outer_perimeter_only"
+      },
+      "building_profile": {
+        "building_type": "student_loft",
+        "height_class": "mid",
+        "floor_count": 4,
+        "residential_capacity": 16,
+        "current_reserved_capacity": 0,
+        "roof_type": "study_roof",
+        "style_variant": "civic_student_loft_02",
+        "height_units": 70.0
+      },
+      "line_policy": {
+        "roof_cross_braces": false,
+        "arbitrary_diagonals": false,
+        "floor_bands": "outer_perimeter_only",
+        "interior_lines": "highlight_only"
+      },
+      "anchors": {
+        "front_door": {
+          "id": "civic_student_lot_02_front_door",
+          "local_offset": [
+            0,
+            -0.38
+          ],
+          "kind": "door"
+        },
+        "porch": {
+          "id": "civic_student_lot_02_porch",
+          "local_offset": [
+            0,
+            -0.29
+          ],
+          "kind": "porch"
+        },
+        "mailbox": {
+          "id": "civic_student_lot_02_mailbox",
+          "local_offset": [
+            0.28,
+            -0.28
+          ],
+          "kind": "mailbox"
+        },
+        "roof_access": {
+          "id": "civic_student_lot_02_roof_access",
+          "local_offset": [
+            0.24,
+            0.24
+          ],
+          "kind": "roof_access"
+        }
+      },
+      "visual_model_profile": {
+        "kit_id": "mixed_use_loft",
+        "silhouette": "procedural_residential_model_v1",
+        "detail_level": "standard",
+        "interior_visibility": "solid_until_selected",
+        "purpose_driven": true
+      }
+    },
+    {
+      "id": "civic_artist_lot_01",
+      "address": "C-05 Culture Resident Pod",
+      "display_name": "Culture Resident Pod",
+      "block": "civic_culture_pavilion",
+      "home_node": "civic_culture_pavilion_node",
+      "resident_slot": "civic_slot_artist",
+      "resident_display_name": "",
+      "resident_role": "future_resident_pool",
+      "lot_class": "culture_residence",
+      "privacy": "highlight_only_for_interiors",
+      "footprint": {
+        "local_offset": [
+          0,
+          0
+        ],
+        "size_blocks": [
+          0.5,
+          0.5
+        ],
+        "height_class": "low",
+        "roof_hint": "mural_roof",
+        "height_units": 32.0
+      },
+      "foundation_profile": {
+        "foundation_type": "holo_foundation_pad",
+        "pad_local_offset": [
+          0,
+          0
+        ],
+        "pad_size_blocks": [
+          0.6799999999999999,
+          0.6799999999999999
+        ],
+        "clearance_margin_blocks": 0.08,
+        "anchor_rule": "centered_on_town_block",
+        "cover_underlay_grid": true,
+        "visible_ground_pad": true,
+        "edge_style": "clean_outer_perimeter_only"
+      },
+      "building_profile": {
+        "building_type": "culture_residence",
+        "height_class": "low",
+        "floor_count": 2,
+        "residential_capacity": 6,
+        "current_reserved_capacity": 0,
+        "roof_type": "mural_roof",
+        "style_variant": "civic_culture_residence_01",
+        "height_units": 32.0
+      },
+      "line_policy": {
+        "roof_cross_braces": false,
+        "arbitrary_diagonals": false,
+        "floor_bands": "outer_perimeter_only",
+        "interior_lines": "highlight_only"
+      },
+      "anchors": {
+        "front_door": {
+          "id": "civic_artist_lot_01_front_door",
+          "local_offset": [
+            0,
+            -0.38
+          ],
+          "kind": "door"
+        },
+        "porch": {
+          "id": "civic_artist_lot_01_porch",
+          "local_offset": [
+            0,
+            -0.29
+          ],
+          "kind": "porch"
+        },
+        "mailbox": {
+          "id": "civic_artist_lot_01_mailbox",
+          "local_offset": [
+            0.28,
+            -0.28
+          ],
+          "kind": "mailbox"
+        },
+        "roof_access": {
+          "id": "civic_artist_lot_01_roof_access",
+          "local_offset": [
+            0.24,
+            0.24
+          ],
+          "kind": "roof_access"
+        }
+      },
+      "visual_model_profile": {
+        "kit_id": "micro_residence",
+        "silhouette": "procedural_residential_model_v1",
+        "detail_level": "standard",
+        "interior_visibility": "solid_until_selected",
+        "purpose_driven": true
+      }
+    }
+  ],
+  "micro_schedule_nodes": [
+    {
+      "id": "civic_family_lot_01_front_door",
+      "block": "civic_family_home_a",
+      "local_offset": [
+        0,
+        -0.38
+      ],
+      "kind": "door"
+    },
+    {
+      "id": "civic_family_lot_01_porch",
+      "block": "civic_family_home_a",
+      "local_offset": [
+        0,
+        -0.29
+      ],
+      "kind": "porch"
+    },
+    {
+      "id": "civic_family_lot_01_mailbox",
+      "block": "civic_family_home_a",
+      "local_offset": [
+        0.28,
+        -0.28
+      ],
+      "kind": "mailbox"
+    },
+    {
+      "id": "civic_family_lot_01_roof_access",
+      "block": "civic_family_home_a",
+      "local_offset": [
+        0.24,
+        0.24
+      ],
+      "kind": "roof_access"
+    },
+    {
+      "id": "civic_family_lot_02_front_door",
+      "block": "civic_family_home_b",
+      "local_offset": [
+        0,
+        -0.38
+      ],
+      "kind": "door"
+    },
+    {
+      "id": "civic_family_lot_02_porch",
+      "block": "civic_family_home_b",
+      "local_offset": [
+        0,
+        -0.29
+      ],
+      "kind": "porch"
+    },
+    {
+      "id": "civic_family_lot_02_mailbox",
+      "block": "civic_family_home_b",
+      "local_offset": [
+        0.28,
+        -0.28
+      ],
+      "kind": "mailbox"
+    },
+    {
+      "id": "civic_family_lot_02_roof_access",
+      "block": "civic_family_home_b",
+      "local_offset": [
+        0.24,
+        0.24
+      ],
+      "kind": "roof_access"
+    },
+    {
+      "id": "civic_student_lot_01_front_door",
+      "block": "civic_student_loft_a",
+      "local_offset": [
+        0,
+        -0.38
+      ],
+      "kind": "door"
+    },
+    {
+      "id": "civic_student_lot_01_porch",
+      "block": "civic_student_loft_a",
+      "local_offset": [
+        0,
+        -0.29
+      ],
+      "kind": "porch"
+    },
+    {
+      "id": "civic_student_lot_01_mailbox",
+      "block": "civic_student_loft_a",
+      "local_offset": [
+        0.28,
+        -0.28
+      ],
+      "kind": "mailbox"
+    },
+    {
+      "id": "civic_student_lot_01_roof_access",
+      "block": "civic_student_loft_a",
+      "local_offset": [
+        0.24,
+        0.24
+      ],
+      "kind": "roof_access"
+    },
+    {
+      "id": "civic_student_lot_02_front_door",
+      "block": "civic_student_loft_b",
+      "local_offset": [
+        0,
+        -0.38
+      ],
+      "kind": "door"
+    },
+    {
+      "id": "civic_student_lot_02_porch",
+      "block": "civic_student_loft_b",
+      "local_offset": [
+        0,
+        -0.29
+      ],
+      "kind": "porch"
+    },
+    {
+      "id": "civic_student_lot_02_mailbox",
+      "block": "civic_student_loft_b",
+      "local_offset": [
+        0.28,
+        -0.28
+      ],
+      "kind": "mailbox"
+    },
+    {
+      "id": "civic_student_lot_02_roof_access",
+      "block": "civic_student_loft_b",
+      "local_offset": [
+        0.24,
+        0.24
+      ],
+      "kind": "roof_access"
+    },
+    {
+      "id": "civic_artist_lot_01_front_door",
+      "block": "civic_culture_pavilion",
+      "local_offset": [
+        0,
+        -0.38
+      ],
+      "kind": "door"
+    },
+    {
+      "id": "civic_artist_lot_01_porch",
+      "block": "civic_culture_pavilion",
+      "local_offset": [
+        0,
+        -0.29
+      ],
+      "kind": "porch"
+    },
+    {
+      "id": "civic_artist_lot_01_mailbox",
+      "block": "civic_culture_pavilion",
+      "local_offset": [
+        0.28,
+        -0.28
+      ],
+      "kind": "mailbox"
+    },
+    {
+      "id": "civic_artist_lot_01_roof_access",
+      "block": "civic_culture_pavilion",
+      "local_offset": [
+        0.24,
+        0.24
+      ],
+      "kind": "roof_access"
+    }
+  ],
+  "neighborhood_routes": [
+    {
+      "id": "civic_morning_school_loop",
+      "nodes": [
+        "civic_family_lot_01_front_door",
+        "civic_family_lot_02_front_door",
+        "civic_student_lot_01_front_door",
+        "civic_learning_hall_a_work"
+      ]
+    },
+    {
+      "id": "civic_evening_culture_loop",
+      "nodes": [
+        "civic_student_lot_02_front_door",
+        "civic_culture_pavilion_node",
+        "civic_garden_nw_node"
+      ]
+    }
+  ]
+}

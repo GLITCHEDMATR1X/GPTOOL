@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "id": "holoutopia_task_icon_catalog_v1",
+  "icons": {
+    "commute": "route",
+    "danger_override": "alert",
+    "district_errand": "errand",
+    "hobby": "spark",
+    "meal_break": "meal",
+    "return_home": "home",
+    "sleep": "moon",
+    "visit_friend": "friends",
+    "wake_up": "sunrise",
+    "work_shift": "tools"
+  }
+}

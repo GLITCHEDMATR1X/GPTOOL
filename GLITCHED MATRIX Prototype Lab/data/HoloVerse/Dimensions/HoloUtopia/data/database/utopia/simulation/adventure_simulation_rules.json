@@ -1,0 +1,114 @@
+{
+  "schema": 1,
+  "id": "holoutopia_adventure_simulation_rules_pass51e_readable_core_ring_combat",
+  "runtime_writes_allowed": false,
+  "enabled": true,
+  "hub": {
+    "town_id": "central_core_civic_ring",
+    "display_name": "Central Adventure Simulation",
+    "host_service_id": "simulation_core",
+    "observe_requires_active_players": true,
+    "embedded_dimension_location": "central_hub_circle_around_pyramid",
+    "join_zone_label": "Core Ring"
+  },
+  "match": {
+    "duration_real_seconds": 300,
+    "duration_game_hours": 5,
+    "active_player_slots": 4,
+    "queue_size": 8,
+    "replacement_policy": "dead_players_replaced_by_next_queue_member",
+    "combat_active": true,
+    "score_active": true,
+    "dimension_entry_active": false,
+    "defeated_respawn_policy": "defeated_players_respawn_in_central_hub_circle",
+    "embedded_hub_dimension_active": true,
+    "hub_ring_action_active": true,
+    "enemy_slots": 6,
+    "enemy_reinforce_every_seconds": 70,
+    "player_defeat_every_seconds": 45,
+    "enemy_score_value": 100,
+    "action_score_value": 12,
+    "survival_score_value": 5,
+    "wave_interval_seconds": 70,
+    "max_waves": 4,
+    "wave_enemy_bonus": 2,
+    "final_score_window_seconds": 60,
+    "final_score_bonus_per_survivor": 75,
+    "final_score_bonus_per_queue_left": 10,
+    "show_hero_status_bars": true,
+    "show_enemy_status_ticks": true,
+    "show_spawn_pulses": true,
+    "show_final_scoreboard_lines": true
+  },
+  "daily_match_windows": [
+    {
+      "start": "08:00",
+      "label": "morning adventure simulation"
+    },
+    {
+      "start": "13:00",
+      "label": "midday adventure simulation"
+    },
+    {
+      "start": "18:00",
+      "label": "evening adventure simulation"
+    }
+  ],
+  "classes": [
+    {
+      "id": "arc_mage",
+      "label": "Mage",
+      "weapon": "focus staff",
+      "magic": "arc bolt",
+      "visual": "cyan_arc",
+      "role": "burst_damage"
+    },
+    {
+      "id": "blade_guard",
+      "label": "Blade",
+      "weapon": "simulation sword",
+      "magic": "guard flare",
+      "visual": "gold_slash",
+      "role": "frontline"
+    },
+    {
+      "id": "rune_archer",
+      "label": "Archer",
+      "weapon": "rune bow",
+      "magic": "mark shot",
+      "visual": "green_arrow",
+      "role": "precision"
+    },
+    {
+      "id": "shield_mender",
+      "label": "Mender",
+      "weapon": "light mace",
+      "magic": "heal ward",
+      "visual": "violet_ward",
+      "role": "support"
+    }
+  ],
+  "observer_gate": {
+    "click_target": "central_simulation_core_hub",
+    "only_when_active": true,
+    "inactive_label": "No active adventure simulation in the Core Ring.",
+    "active_label": "Observe active Core Ring adventure simulation."
+  },
+  "safety": {
+    "read_only": true,
+    "no_route_changes": true,
+    "no_collision_changes": true,
+    "no_artifact_routing": true,
+    "no_player_control_yet": true,
+    "combat_dimension_not_spawned_yet": false,
+    "dimension_embedded_in_hub_ring": true,
+    "defeated_respawn_in_hub": true,
+    "combat_dimension_embedded_in_hub_ring": true,
+    "combat_waves_embedded_in_hub_ring": true,
+    "final_score_visual_only": true,
+    "combat_readability_visual_only": true,
+    "hero_status_bars_visual_only": true,
+    "enemy_spawn_pulses_visual_only": true,
+    "final_scoreboard_visual_only": true
+  }
+}

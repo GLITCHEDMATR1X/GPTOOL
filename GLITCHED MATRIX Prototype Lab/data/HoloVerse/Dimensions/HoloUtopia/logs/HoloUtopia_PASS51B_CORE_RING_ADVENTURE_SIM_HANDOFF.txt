@@ -1,0 +1,60 @@
+HoloUtopia Pass 51B - Core Ring Adventure Simulation
+
+Scope:
+- Keep the adventure simulation active inside the Central Hub circle around the pyramid.
+- Do not route to an artifact, HoloVerse route, HoloCore route, or external dimension yet.
+- Let the active Core Ring represent the adventure-dimension bubble.
+- Keep exactly four active citizen player slots.
+- Keep replacement queue behavior.
+- Defeated citizen players respawn at hub pads and queued citizens refill slots.
+
+Changed files:
+- data/HoloUtopia/holoutopia_adventure_simulation.py
+- data/HoloUtopia/holoutopia_game_runtime.py
+- data/HoloUtopia/holoutopia_citizen_question_router.py
+- data/HoloUtopia/holoutopia_watch_mode.py
+- data/HoloUtopia/tools/validate_holoutopia_adventure_simulation.py
+- data/HoloUtopia/tools/validate_holoutopia_adventure_hub_ring.py
+- data/database/utopia/simulation/adventure_simulation_rules.json
+- data/database/utopia/runtime/holoutopia_runtime_bridge.json
+
+Implemented:
+- embedded_hub_dimension_active=true while match is active.
+- hub_ring_action_active=true while match is active.
+- hub_ring_layout describes arena, join, respawn, queue, and active-slot radii.
+- Four active citizens now report status active_in_core_ring.
+- Deterministic runtime respawn event after elapsed action time for validation/proof.
+- Replacement queue keeps four active slots filled when a defeated citizen respawns.
+- Defeated player respawn policy: defeated_players_respawn_in_central_hub_circle.
+- Watch Mode target now points to observe_embedded_core_ring_adventure.
+- Citizen answer for adventure status now refers to Core Ring.
+- Runtime visuals now draw an embedded Core Ring bubble, inner action ring, join ring, respawn pads, active player glyphs, and queue ticks.
+
+Validation run:
+- python -m compileall -q main.py data/HoloUtopia
+- python data/HoloUtopia/tools/validate_holoutopia_adventure_simulation.py
+- python data/HoloUtopia/tools/validate_holoutopia_adventure_hub_ring.py
+- python data/HoloUtopia/tools/validate_holoutopia_service_behaviors.py
+- python data/HoloUtopia/tools/validate_holoutopia_service_routing.py
+- python data/HoloUtopia/tools/validate_holoutopia_functional_buildings.py
+- python data/HoloUtopia/tools/validate_holoutopia_citizen_dialogue.py
+- python data/HoloUtopia/tools/validate_holoutopia_specific_question_router.py
+- python data/HoloUtopia/tools/validate_holoutopia_daily_dialogue_memory.py
+- python data/HoloUtopia/tools/validate_holoutopia_citizen_dialogue_watch_log.py
+- python data/HoloUtopia/tools/validate_holoutopia_city_world_style.py
+- python data/HoloUtopia/tools/validate_holoutopia_watch_focus.py
+- python data/HoloUtopia/tools/validate_holoutopia_watch_mode.py
+- python data/HoloUtopia/tools/validate_holoutopia_commute_flow.py
+- python data/HoloUtopia/tools/validate_holoutopia_schedule_staggering.py
+- python data/HoloUtopia/tools/validate_holoutopia_activity_behaviors.py
+- python data/HoloUtopia/tools/validate_holoutopia_simulation_activity_clusters.py
+- python data/HoloUtopia/tools/validate_holoutopia_citizen_pathfinding.py
+- python data/HoloUtopia/tools/validate_holoutopia_district_activities.py
+- python data/HoloUtopia/tools/validate_holoutopia_residential_population.py
+- python data/HoloUtopia/tools/validate_holoutopia_game_runtime.py
+- python data/HoloUtopia/tools/validate_holoutopia_world_runtime_screenshot.py
+- python data/HoloUtopia/tools/validate_holoutopia_towns.py
+
+Notes:
+- Combat AI, enemies, magic/weapon damage, and scoring are still future-pass systems.
+- This pass adds the correct embedded hub-ring host and respawn/replacement rules without breaking routing.

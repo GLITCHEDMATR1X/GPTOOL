@@ -1,0 +1,95 @@
+{
+  "version": "0.1.0-pass29",
+  "districts": {
+    "central_nexus": {
+      "display": "Central Nexus",
+      "pressure_tags": [
+        "policy",
+        "surveillance",
+        "public_order"
+      ],
+      "default_pressure": 0.42,
+      "player_facing_status": "Civic routines are stable, but the plaza feels watched."
+    },
+    "biomedical_quarter": {
+      "display": "Biomedical Quarter",
+      "pressure_tags": [
+        "health",
+        "containment",
+        "ethics"
+      ],
+      "default_pressure": 0.38,
+      "player_facing_status": "Clinics are running clean, with low but constant containment tension."
+    },
+    "education_ring": {
+      "display": "Education Ring",
+      "pressure_tags": [
+        "knowledge",
+        "forbidden_history",
+        "youth_conflict"
+      ],
+      "default_pressure": 0.45,
+      "player_facing_status": "Students move between official lessons and quiet private questions."
+    },
+    "simulation_belt": {
+      "display": "Simulation Belt",
+      "pressure_tags": [
+        "safeguards",
+        "restricted_worlds",
+        "identity_play"
+      ],
+      "default_pressure": 0.56,
+      "player_facing_status": "Public simulations are bright, but restricted systems feel unstable."
+    },
+    "residential_terraces": {
+      "display": "Residential Terraces",
+      "pressure_tags": [
+        "class_tension",
+        "home",
+        "privacy"
+      ],
+      "default_pressure": 0.34,
+      "player_facing_status": "Homes look peaceful, though privacy feels thinner than it should."
+    },
+    "port_fabrication": {
+      "display": "Port & Fabrication Corridor",
+      "pressure_tags": [
+        "cargo",
+        "maintenance",
+        "mainland_boundary"
+      ],
+      "default_pressure": 0.49,
+      "player_facing_status": "Cargo crosses here. Ordinary citizens do not."
+    },
+    "green_wards": {
+      "display": "Green Wards",
+      "pressure_tags": [
+        "mood_stability",
+        "wildlife",
+        "managed_beauty"
+      ],
+      "default_pressure": 0.26,
+      "player_facing_status": "The gardens calm the city, maybe too perfectly."
+    },
+    "service_layers": {
+      "display": "Service Layers",
+      "pressure_tags": [
+        "hidden_infrastructure",
+        "transit",
+        "maintenance"
+      ],
+      "default_pressure": 0.61,
+      "player_facing_status": "Beneath the skyline, the city behaves like a machine."
+    },
+    "harbor": {
+      "display": "Harbor",
+      "pressure_tags": [
+        "water",
+        "energy",
+        "shipments"
+      ],
+      "default_pressure": 0.43,
+      "player_facing_status": "Tide relays hum beneath the seawall."
+    }
+  }
+}

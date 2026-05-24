@@ -1,0 +1,62 @@
+HoloUtopia Pass 42 - World Atlas Visual Style
+
+Goal:
+- Make the actual Panda3D game view move toward the generated neon city-map reference.
+- Show all 9 authored districts as a coherent world atlas.
+- Correct the central Simulation/Core so it reads as a substantial hub/plaza instead of a thin line.
+- Keep all changes visual-only and collisionless.
+
+Changed files:
+- data/HoloUtopia/holoutopia_city_world_style.py
+- data/HoloUtopia/holoutopia_game_runtime.py
+- data/HoloUtopia/holoutopia_town_blocks.py
+- data/HoloUtopia/tools/render_holoutopia_in_world_runtime_screenshot.py
+- data/HoloUtopia/tools/validate_holoutopia_city_world_style.py
+- data/database/utopia/runtime/holoutopia_runtime_bridge.json
+
+What changed:
+1) Added city-atlas style layer
+- Adds district pads under all 9 districts.
+- Adds dark global ring roads and radial roads between districts.
+- Adds faint district-color conduit lines for theme identity.
+- Adds subtle district frames/corner ticks.
+
+2) Central Simulation/Core hub rebuilt visually
+- Added solid layered circular plaza surfaces.
+- Added concentric raised rings.
+- Added radial spokes.
+- Added central pyramid/core glyph and vertical beam.
+- Added small wall/tick columns around the hub.
+- Central portal plaza block now stays a low floor/plaza footprint so it does not render as a building on top of the core.
+
+3) Cleaner world-atlas proof screenshots
+- Added world_atlas and world_atlas_close screenshot camera views.
+- Screenshot proof views remove Watch Mode/status panels so the city can be inspected without UI obstruction.
+- District labels are hidden in integrated city runtime views to avoid label clutter.
+
+4) Safety
+- No collision geometry added.
+- No HoloVerse routing changes.
+- No HoloCore changes.
+- No artifact routing changes.
+- No population, schedule, commute, watch, or citizen AI rule changes.
+
+Validation run:
+- python -m compileall -q main.py data/HoloUtopia
+- python data/HoloUtopia/tools/validate_holoutopia_city_world_style.py
+- python data/HoloUtopia/tools/validate_holoutopia_watch_focus.py
+- python data/HoloUtopia/tools/validate_holoutopia_watch_mode.py
+- python data/HoloUtopia/tools/validate_holoutopia_commute_flow.py
+- python data/HoloUtopia/tools/validate_holoutopia_schedule_staggering.py
+- python data/HoloUtopia/tools/validate_holoutopia_activity_behaviors.py
+- python data/HoloUtopia/tools/validate_holoutopia_simulation_activity_clusters.py
+- python data/HoloUtopia/tools/validate_holoutopia_citizen_pathfinding.py
+- python data/HoloUtopia/tools/validate_holoutopia_district_activities.py
+- python data/HoloUtopia/tools/validate_holoutopia_residential_population.py
+- python data/HoloUtopia/tools/validate_holoutopia_game_runtime.py
+- python data/HoloUtopia/tools/validate_holoutopia_world_runtime_screenshot.py
+- python data/HoloUtopia/tools/validate_holoutopia_towns.py
+
+Screenshot proof:
+- holoutopia_pass42_world_atlas_overview.png
+- holoutopia_pass42_central_core_hub_close.png

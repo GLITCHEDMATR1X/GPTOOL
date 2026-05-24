@@ -1,0 +1,22 @@
+{
+  "id": "holoforge",
+  "title": "HOLOFORGE",
+  "description": "In-world builder layer for the flat region: create, snap, move, save, and reload objects on the real HoloVerse ground.",
+  "entry": "main.py",
+  "runtime": "runtime.py",
+  "runtime_module": "holoforge_region_runtime",
+  "runtime_installer": "install_holoforge_region_runtime",
+  "launch_type": "in_world_region",
+  "placeholder_mode": false,
+  "source_kind": "in_world_panda3d",
+  "preferred_display": "current_flat_region",
+  "host_contract": "holoverse_in_world_holoforge_runtime_v5_dimension_local",
+  "region_owner": "FLAT",
+  "bot_owner": "IO",
+  "return_target": "same_region",
+  "requires_mouse_capture": true,
+  "native_adapter_enabled": false,
+  "x_transition_route": "transition_in_world_region",
+  "x_transition_stage": "dimension_folder_runtime",
+  "x_cleanup_note": "Runtime source now lives inside this dimension folder as runtime.py."
+}

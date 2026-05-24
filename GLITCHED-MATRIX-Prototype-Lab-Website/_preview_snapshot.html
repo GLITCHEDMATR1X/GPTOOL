@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GLITCHED MATRIX Prototype Lab</title>
+  <meta name="description" content="A dark connected arcade where HoloVerse, MatrixCore, Gleebs, playable prototypes, bots, creator tools, and mod-friendly experiments keep evolving inside one digital lab." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-backdrop"></div>
+  <div class="grid-overlay"></div>
+  <div class="noise-overlay"></div>
+  <div class="scanlines"></div>
+
+  <header class="topbar shell">
+    <div class="brand-block">
+      <span class="micro overline editable" data-key="microLabel">GLITCHED MATRIX</span>
+      <a class="brand-link" href="#top">
+        <img id="navLogo" class="nav-logo" src="assets/images/capsule_small.png" alt="GLITCHED MATRIX Prototype Lab logo" />
+      </a>
+    </div>
+    <nav class="nav">
+      <a href="#about">About</a>
+      <a href="#features">Inside the Lab</a>
+      <a href="#demos">Play Demos</a>
+      <a href="#roadmap">Plans</a>
+      <a href="#media">Media</a>
+      <a href="#community">Players + Creators</a>
+    </nav>
+    <button id="adminToggle" class="admin-toggle" type="button" aria-label="Open admin panel" hidden>Admin</button>
+  </header>
+
+  <main id="top" class="shell main-shell">
+    <section class="hero panel">
+      <div class="hero-visual">
+        <img id="heroHeaderImage" class="hero-header-art" src="assets/images/site_current/hero_header.png" alt="GLITCHED MATRIX Prototype Lab header art" />
+        <div class="hero-gradient"></div>
+      </div>
+
+      <div class="hero-copy">
+        <div class="eyebrow editable" data-key="heroEyebrow">&gt; HoloVerse + Prototype Arcade &lt;</div>
+        <h1 class="editable" data-key="heroTitle">GLITCHED MATRIX Prototype Lab</h1>
+        <p class="lead editable" data-key="heroLead">
+          A dark connected arcade where HoloVerse, MatrixCore, Gleebs, playable prototypes, bots, creator tools, and mod-friendly experiments keep evolving inside one digital lab.
+        </p>
+        <div class="cta-row">
+          <a id="primaryCta" class="btn btn-primary" href="https://store.steampowered.com/app/4386390/Matrix_OS_Arcade_Evolution/" target="_blank" rel="noopener noreferrer">View on Steam</a>
+          <a id="secondaryCta" class="btn btn-secondary" href="#features">See Features</a>
+        </div>
+        <div id="heroTags" class="tag-cloud"></div>
+      </div>
+    </section>
+
+    <section class="stats-grid">
+      <article class="panel stat-card">
+        <span class="stat-label editable" data-key="stat1Label">Status</span>
+        <strong class="stat-value editable" data-key="stat1Value">Active Prototype Lab</strong>
+      </article>
+      <article class="panel stat-card">
+        <span class="stat-label editable" data-key="stat2Label">What You Do</span>
+        <strong class="stat-value editable" data-key="stat2Value">Explore • Play • Build</strong>
+      </article>
+      <article class="panel stat-card">
+        <span class="stat-label editable" data-key="stat3Label">Core Appeal</span>
+        <strong class="stat-value editable" data-key="stat3Value">HoloVerse + prototype arcade</strong>
+      </article>
+      <article class="panel stat-card">
+        <span class="stat-label editable" data-key="stat4Label">Built For</span>
+        <strong class="stat-value editable" data-key="stat4Value">Players, tinkerers, creators</strong>
+      </article>
+    </section>
+
+    <div class="main-grid">
+      <div class="content-flow">
+    <section id="about" class="split-grid">
+      <article class="panel content-card">
+        <span class="section-label editable" data-key="aboutLabel">About</span>
+        <h2 class="editable" data-key="aboutTitle">A connected digital world built for discovery</h2>
+        <p class="editable" data-key="aboutBody1">
+          GLITCHED MATRIX Prototype Lab is a dark sci-fi hub where HoloVerse, MatrixCore, bots, standalone prototypes, and creation tools all live inside one evolving system.
+        </p>
+        <p class="editable" data-key="aboutBody2">
+          The current build focuses on turning separate experiments into connected places: a walkable HoloVerse, in-world dimension runtimes, site-replaceable media, and a growing library of playable prototypes.
+        </p>
+      </article>
+      <aside class="panel content-card tone-card">
+        <span class="section-label editable" data-key="fictionLabel">Lore</span>
+        <h2 class="editable" data-key="fictionTitle">MatrixCore, Gleebs, and the recovered system</h2>
+        <p class="editable" data-key="fictionBody1">
+          After the Utopia Project fractured, MatrixCore began preserving recoverable worlds, tools, and prototype fragments inside the lab. HoloVerse now acts as the living shell around those fragments.
+        </p>
+        <p class="editable" data-key="fictionBody2">
+          Gleebs, IO, Sable, Archivist, and the other region bots help guide players through the digital wreckage, opening experiments, lore paths, and region-specific systems as the project grows.
+        </p>
+        <div class="tone-actions" aria-hidden="true"></div>
+      </aside>
+    </section>
+
+    <section id="features" class="panel content-card">
+      <span class="section-label editable" data-key="featuresLabel">Inside the Lab</span>
+      <h2 class="editable" data-key="featuresTitle">What you can explore right now</h2>
+      <div id="featuresGrid" class="feature-grid"></div>
+    </section>
+
+    <section id="demos" class="panel content-card demo-section">
+      <div class="demo-head">
+        <div>
+          <span class="section-label">Playable Demos</span>
+          <h2 id="demoSectionTitle">Playable Web Demo Gallery</h2>
+          <p id="demoSectionIntro" class="demo-section-intro">Generated, asset-light browser demos. These are small site-safe versions for visitors, not full desktop builds.</p>
+        </div>
+        <a class="btn btn-secondary" href="assets/data/demo_manifest.json" target="_blank" rel="noopener noreferrer">Edit Demo Manifest</a>
+      </div>
+
+      <div class="demo-player-layout">
+        <aside class="demo-info-panel demo-info-left">
+          <span id="demoStatus" class="demo-status">Playable now</span>
+          <h3 id="demoTitle">Sky and Ground</h3>
+          <p id="demoSummary">Select a demo below.</p>
+          <div id="demoTags" class="demo-tags"></div>
+        </aside>
+
+        <div class="demo-canvas-shell">
+          <canvas id="demoCanvas" class="demo-canvas" width="960" height="540" aria-label="Playable generated web demo canvas"></canvas>
+        </div>
+
+        <aside class="demo-info-panel demo-info-right">
+          <h3>Brief Help</h3>
+          <dl class="demo-help-list">
+            <dt>Objective</dt>
+            <dd id="demoObjective">Collect points and avoid hazards.</dd>
+            <dt>Controls</dt>
+            <dd id="demoControls">WASD / Arrows move, R reset, P pause.</dd>
+            <dt>Build note</dt>
+            <dd id="demoDetails">Pure generated canvas demo.</dd>
+          </dl>
+        </aside>
+      </div>
+
+      <p id="demoSectionNote" class="demo-note">The player above the grid runs the selected demo. Replace thumbnails in assets/images/site_current/demo_thumbs or edit assets/data/demo_manifest.json to change the gallery.</p>
+      <div id="demoGalleryGrid" class="demo-gallery-grid" aria-label="Playable and future demo thumbnails"></div>
+    </section>
+
+    <section id="roadmap" class="split-grid split-grid-roadmap">
+      <article class="panel content-card">
+        <span class="section-label editable" data-key="roadmapLabel">Direction</span>
+        <h2 class="editable" data-key="roadmapTitle">How the lab can grow</h2>
+        <ul id="roadmapList" class="bullet-list"></ul>
+      </article>
+      <article class="panel content-card">
+        <span class="section-label editable" data-key="directionLabel">Right Now</span>
+        <h2 class="editable" data-key="directionTitle">What the current release emphasizes</h2>
+        <p class="editable" data-key="directionBody1">
+          The current release emphasizes HoloVerse route cleanup, MatrixCore/Gleebs guidance, better prototype documentation, more reliable points/UI behavior, and clearer presentation of what is actually inside the lab.
+        </p>
+        <p class="editable" data-key="directionBody2">
+          Urban Warzone and Metropolis are the most important verification paths: Sable should activate the live Urban runtime, while Archivist should stay in Metropolis as a robot selector.
+        </p>
+      </article>
+    </section>
+
+    <section id="media" class="panel content-card media-section">
+      <div class="media-head">
+        <div>
+          <span class="section-label editable" data-key="mediaLabel">Media</span>
+          <h2 class="editable" data-key="mediaTitle">Trailer, HoloVerse media, and prototype screenshots</h2>
+        </div>
+        <a id="trailerLink" class="btn btn-audio" href="https://www.youtube.com/watch?v=d78EOS1a1-8" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+      </div>
+      <div class="media-grid">
+        <figure class="media-card media-main-card media-video-card">
+          <div class="video-shell">
+            <iframe id="trailerEmbed" src="https://www.youtube.com/embed/d78EOS1a1-8?rel=0" title="GLITCHED MATRIX Prototype Lab trailer" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          </div>
+        </figure>
+        <div class="gallery-stack">
+          <p class="gallery-note editable" data-key="galleryNote">Click any image to open it at full size. Replace files in assets/images/site_current to update this gallery without changing the layout.</p>
+          <div id="mediaGallery" class="media-gallery"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel content-card store-meta">
+      <span class="section-label editable" data-key="metaLabel">What to Expect</span>
+      <h2 class="editable" data-key="metaTitle">Core identity</h2>
+      <div id="metaTags" class="tag-cloud tag-cloud-secondary"></div>
+    </section>
+
+    <section id="community" class="panel content-card">
+      <span class="section-label editable" data-key="communityLabel">Who It Is For</span>
+      <h2 class="editable" data-key="communityTitle">Players, tinkerers, and creators</h2>
+      <div id="communityGrid" class="feature-grid community-grid"></div>
+    </section>
+      </div>
+
+      <aside id="updatesPanel" class="panel updates-panel">
+        <div class="updates-head">
+          <div>
+            <span class="section-label editable" data-key="updatesLabel">Updates</span>
+            <h2 class="editable" data-key="updatesTitle">Patch Notes</h2>
+          </div>
+        </div>
+        <p class="updates-note editable" data-key="updatesNote">Latest development notes, HoloVerse route updates, and prototype inventory highlights.</p>
+        <div id="updatesList" class="updates-list" aria-live="polite"></div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="shell footer">
+    <div class="footer-left">
+      <img id="footerLogo" class="footer-logo" src="assets/images/capsule_small.png" alt="GLITCHED MATRIX Prototype Lab footer logo" />
+      <p class="footer-copy editable" data-key="footerCopy">© GLITCHED MATRIX — Prototype Lab</p>
+    </div>
+    <div class="footer-links">
+      <a href="https://store.steampowered.com/app/4386390/Matrix_OS_Arcade_Evolution/" target="_blank" rel="noopener noreferrer">Steam</a>
+      <a href="#demos">Demos</a>
+      <a href="#media">Media</a>
+      <a href="#community">Players + Creators</a>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-label="Expanded image viewer">
+      <button id="lightboxClose" class="lightbox-close" type="button" aria-label="Close image viewer">×</button>
+      <img id="lightboxImage" class="lightbox-image" src="" alt="" />
+    </div>
+  </div>
+
+  <aside id="adminPanel" class="admin-panel" aria-hidden="true">
+    <div class="admin-header">
+      <div>
+        <div class="admin-overline">Admin Mode</div>
+        <h3>Live page editor</h3>
+      </div>
+      <button id="closeAdmin" class="admin-close" type="button">×</button>
+    </div>
+
+    <div class="admin-section">
+      <label>Accent color <input id="accentColor" type="color" value="#cc1414" /></label>
+      <label>Background color <input id="bgColor" type="color" value="#060606" /></label>
+      <label>Panel tint <input id="panelColor" type="color" value="#140a0a" /></label>
+    </div>
+
+    <div class="admin-section two-col">
+      <label>Primary CTA text <input id="primaryCtaText" type="text" /></label>
+      <label>Primary CTA link <input id="primaryCtaLink" type="text" /></label>
+      <label>Secondary CTA text <input id="secondaryCtaText" type="text" /></label>
+      <label>Secondary CTA link <input id="secondaryCtaLink" type="text" /></label>
+      <label>Trailer URL <input id="trailerUrlInput" type="text" /></label>
+      <label>Trailer button text <input id="trailerLinkTextInput" type="text" /></label>
+    </div>
+
+    <div class="admin-section two-col">
+      <label>Nav logo path <input id="navLogoInput" type="text" /></label>
+      <label>Hero header image <input id="heroHeaderInput" type="text" /></label>
+      <label>Footer logo path <input id="footerLogoInput" type="text" /></label>
+      <label>Gallery images (one path per line) <textarea id="galleryImagesInput" rows="8"></textarea></label>
+      <p class="admin-note full-span">Repo image swaps: replace files in <code>assets/images/site_current</code> or edit <code>assets/data/image_manifest.json</code>. Use <code>?admin=1</code> or Ctrl+Shift+A for this editor.</p>
+    </div>
+
+    <div class="admin-section two-col">
+      <label>Upload nav logo <input id="uploadNavLogo" type="file" accept="image/*" /></label>
+      <label>Upload hero header <input id="uploadHeroHeader" type="file" accept="image/*" /></label>
+      <label>Upload footer logo <input id="uploadFooterLogo" type="file" accept="image/*" /></label>
+      <label>Add gallery images <input id="uploadGalleryImages" type="file" accept="image/*" multiple /></label>
+    </div>
+
+    <div class="admin-section">
+      <label>Asset version <input id="assetVersionInput" type="text" placeholder="e.g. 20260402a" /></label>
+      <p class="admin-note">Change the asset version after replacing repo images to force a refresh.</p>
+    </div>
+
+    <div class="admin-section">
+      <label>Hero tags (one per line) <textarea id="heroTagsInput" rows="5"></textarea></label>
+      <label>Feature cards (Title|Body per line) <textarea id="featuresInput" rows="8"></textarea></label>
+      <label>Roadmap bullets (one per line) <textarea id="roadmapInput" rows="8"></textarea></label>
+      <label>Meta tags (one per line) <textarea id="metaTagsInput" rows="8"></textarea></label>
+      <label>Community cards (Title|Body per line) <textarea id="communityInput" rows="8"></textarea></label>
+    </div>
+
+    <div class="admin-section">
+      <label>Updates note <input id="updatesNoteInput" type="text" /></label>
+      <label>Updates source text <textarea id="updatesInput" rows="14"></textarea></label>
+      <label>Import updates text file <input id="importUpdatesText" type="file" accept=".txt,text/plain" /></label>
+    </div>
+
+    <div class="admin-section two-col append-update-grid">
+      <label>New update heading <input id="newUpdateHeadingInput" type="text" placeholder="Project — Version — Date" /></label>
+      <label>Optional group title <input id="newUpdateGroupInput" type="text" placeholder="Optional section title" /></label>
+      <label class="full-span">New update bullets (one per line) <textarea id="newUpdateBulletsInput" rows="6" placeholder="First bullet&#10;Second bullet"></textarea></label>
+      <button id="appendUpdateBtn" class="btn btn-primary full-span" type="button">Add Update To Top</button>
+    </div>
+
+    <div class="admin-actions">
+      <button id="saveAdmin" class="btn btn-primary" type="button">Save Changes</button>
+      <button id="resetAdmin" class="btn btn-secondary" type="button">Reset to Defaults</button>
+      <button id="exportAdmin" class="btn btn-secondary" type="button">Export JSON</button>
+      <label class="btn btn-secondary import-label">Import JSON <input id="importAdmin" type="file" accept="application/json" hidden /></label>
+    </div>
+  </aside>
+
+  <script src="assets/js/demos.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

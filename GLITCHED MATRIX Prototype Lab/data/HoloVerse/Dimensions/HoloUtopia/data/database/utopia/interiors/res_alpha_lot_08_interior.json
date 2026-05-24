@@ -1,0 +1,380 @@
+{
+  "schema": 1,
+  "id": "res_alpha_lot_08_interior",
+  "town_id": "residential_alpha",
+  "neighborhood_id": "residential_alpha_neighborhood_01",
+  "lot_id": "res_alpha_lot_08",
+  "display_name": "Tala Orbit Residence Interior",
+  "address": "A-08 South Home Lane",
+  "source_building_profile": {
+    "building_type": "service_residence",
+    "height_class": "tall",
+    "floor_count": 5,
+    "residential_capacity": 14,
+    "height_units": 96.0,
+    "roof_type": "utility_signal_roof"
+  },
+  "load_policy": {
+    "mode": "highlight_only",
+    "load_trigger": "building_highlighted",
+    "unload_trigger": "building_unhighlighted_or_selection_changed",
+    "max_active_instances": 1,
+    "render_mode": "abstract_cutaway",
+    "runtime_writes_allowed": false
+  },
+  "entry_points": [
+    {
+      "id": "res_alpha_lot_08_front_door_to_interior",
+      "external_anchor": "res_alpha_home_h_front_door",
+      "interior_anchor": "res_alpha_lot_08_interior_entry"
+    }
+  ],
+  "floors": [
+    {
+      "floor": 0,
+      "kind": "lobby_service",
+      "height_units": 19.2,
+      "rooms": [
+        {
+          "id": "res_alpha_lot_08_entry_lobby",
+          "kind": "lobby",
+          "local_offset_3d": [
+            0.0,
+            -0.24,
+            0.0
+          ],
+          "tags": [
+            "entry",
+            "public_threshold"
+          ]
+        },
+        {
+          "id": "res_alpha_lot_08_utility_core",
+          "kind": "utility_core",
+          "local_offset_3d": [
+            0.26,
+            0.18,
+            0.0
+          ],
+          "tags": [
+            "utility",
+            "maintenance"
+          ]
+        }
+      ]
+    },
+    {
+      "floor": 1,
+      "kind": "residential_floor",
+      "height_units": 19.2,
+      "rooms": [
+        {
+          "id": "res_alpha_lot_08_unit_01_home_anchor",
+          "kind": "home_unit_anchor",
+          "unit_id": "res_alpha_lot_08_unit_01",
+          "local_offset_3d": [
+            -0.22,
+            0.02,
+            1.0
+          ],
+          "capacity_hint": 3,
+          "tags": [
+            "sleep",
+            "private",
+            "home"
+          ]
+        },
+        {
+          "id": "res_alpha_lot_08_floor_01_common_node",
+          "kind": "floor_common",
+          "local_offset_3d": [
+            0.0,
+            -0.16,
+            1.0
+          ],
+          "tags": [
+            "hallway",
+            "neighbor_social"
+          ]
+        }
+      ]
+    },
+    {
+      "floor": 2,
+      "kind": "residential_floor",
+      "height_units": 19.2,
+      "rooms": [
+        {
+          "id": "res_alpha_lot_08_unit_02_home_anchor",
+          "kind": "home_unit_anchor",
+          "unit_id": "res_alpha_lot_08_unit_02",
+          "local_offset_3d": [
+            -0.22,
+            0.02,
+            2.0
+          ],
+          "capacity_hint": 3,
+          "tags": [
+            "sleep",
+            "private",
+            "home"
+          ]
+        },
+        {
+          "id": "res_alpha_lot_08_floor_02_common_node",
+          "kind": "floor_common",
+          "local_offset_3d": [
+            0.0,
+            -0.16,
+            2.0
+          ],
+          "tags": [
+            "hallway",
+            "neighbor_social"
+          ]
+        }
+      ]
+    },
+    {
+      "floor": 3,
+      "kind": "residential_floor",
+      "height_units": 19.2,
+      "rooms": [
+        {
+          "id": "res_alpha_lot_08_unit_03_home_anchor",
+          "kind": "home_unit_anchor",
+          "unit_id": "res_alpha_lot_08_unit_03",
+          "local_offset_3d": [
+            -0.22,
+            0.02,
+            3.0
+          ],
+          "capacity_hint": 3,
+          "tags": [
+            "sleep",
+            "private",
+            "home"
+          ]
+        },
+        {
+          "id": "res_alpha_lot_08_floor_03_common_node",
+          "kind": "floor_common",
+          "local_offset_3d": [
+            0.0,
+            -0.16,
+            3.0
+          ],
+          "tags": [
+            "hallway",
+            "neighbor_social"
+          ]
+        }
+      ]
+    },
+    {
+      "floor": 4,
+      "kind": "residential_floor",
+      "height_units": 19.2,
+      "rooms": [
+        {
+          "id": "res_alpha_lot_08_unit_04_home_anchor",
+          "kind": "home_unit_anchor",
+          "unit_id": "res_alpha_lot_08_unit_04",
+          "local_offset_3d": [
+            -0.22,
+            0.02,
+            4.0
+          ],
+          "capacity_hint": 3,
+          "tags": [
+            "sleep",
+            "private",
+            "home"
+          ]
+        },
+        {
+          "id": "res_alpha_lot_08_floor_04_common_node",
+          "kind": "floor_common",
+          "local_offset_3d": [
+            0.0,
+            -0.16,
+            4.0
+          ],
+          "tags": [
+            "hallway",
+            "neighbor_social"
+          ]
+        }
+      ]
+    },
+    {
+      "floor": 5,
+      "kind": "residential_floor",
+      "height_units": 19.2,
+      "rooms": [
+        {
+          "id": "res_alpha_lot_08_unit_05_home_anchor",
+          "kind": "home_unit_anchor",
+          "unit_id": "res_alpha_lot_08_unit_05",
+          "local_offset_3d": [
+            -0.22,
+            0.02,
+            5.0
+          ],
+          "capacity_hint": 2,
+          "tags": [
+            "sleep",
+            "private",
+            "home"
+          ]
+        },
+        {
+          "id": "res_alpha_lot_08_floor_05_common_node",
+          "kind": "floor_common",
+          "local_offset_3d": [
+            0.0,
+            -0.16,
+            5.0
+          ],
+          "tags": [
+            "hallway",
+            "neighbor_social"
+          ]
+        }
+      ]
+    }
+  ],
+  "activity_nodes": [
+    {
+      "id": "res_alpha_lot_08_interior_entry",
+      "kind": "interior_entry",
+      "floor": 0,
+      "local_offset_3d": [
+        0.0,
+        -0.38,
+        0.0
+      ],
+      "tags": [
+        "door",
+        "load_anchor"
+      ]
+    },
+    {
+      "id": "res_alpha_lot_08_mail_check",
+      "kind": "mail_check",
+      "floor": 0,
+      "local_offset_3d": [
+        0.24,
+        -0.32,
+        0.0
+      ],
+      "tags": [
+        "morning",
+        "mail"
+      ]
+    },
+    {
+      "id": "res_alpha_lot_08_social_landing",
+      "kind": "social_landing",
+      "floor": 1,
+      "local_offset_3d": [
+        0.0,
+        -0.18,
+        1
+      ],
+      "tags": [
+        "friend_visit",
+        "conversation"
+      ]
+    },
+    {
+      "id": "res_alpha_lot_08_roof_idle",
+      "kind": "roof_idle",
+      "floor": 5,
+      "local_offset_3d": [
+        0.0,
+        0.0,
+        5
+      ],
+      "tags": [
+        "evening",
+        "roof",
+        "view"
+      ]
+    }
+  ],
+  "resident_unit_slots": [
+    {
+      "id": "res_alpha_lot_08_unit_01",
+      "floor": 1,
+      "capacity": 3,
+      "reserved_capacity": 1,
+      "assigned_npc_ids": [
+        "npc_tala_orbit"
+      ],
+      "schedule_anchor": "res_alpha_lot_08_unit_01_home_anchor",
+      "tags": [
+        "home_unit",
+        "abstract_interior",
+        "future_assignable"
+      ]
+    },
+    {
+      "id": "res_alpha_lot_08_unit_02",
+      "floor": 2,
+      "capacity": 3,
+      "reserved_capacity": 0,
+      "assigned_npc_ids": [],
+      "schedule_anchor": "res_alpha_lot_08_unit_02_home_anchor",
+      "tags": [
+        "home_unit",
+        "abstract_interior",
+        "future_assignable"
+      ]
+    },
+    {
+      "id": "res_alpha_lot_08_unit_03",
+      "floor": 3,
+      "capacity": 3,
+      "reserved_capacity": 0,
+      "assigned_npc_ids": [],
+      "schedule_anchor": "res_alpha_lot_08_unit_03_home_anchor",
+      "tags": [
+        "home_unit",
+        "abstract_interior",
+        "future_assignable"
+      ]
+    },
+    {
+      "id": "res_alpha_lot_08_unit_04",
+      "floor": 4,
+      "capacity": 3,
+      "reserved_capacity": 0,
+      "assigned_npc_ids": [],
+      "schedule_anchor": "res_alpha_lot_08_unit_04_home_anchor",
+      "tags": [
+        "home_unit",
+        "abstract_interior",
+        "future_assignable"
+      ]
+    },
+    {
+      "id": "res_alpha_lot_08_unit_05",
+      "floor": 5,
+      "capacity": 2,
+      "reserved_capacity": 0,
+      "assigned_npc_ids": [],
+      "schedule_anchor": "res_alpha_lot_08_unit_05_home_anchor",
+      "tags": [
+        "home_unit",
+        "abstract_interior",
+        "future_assignable"
+      ]
+    }
+  ],
+  "future_detail_policy": {
+    "full_mesh_interiors_allowed_later": true,
+    "npc_paths_use_activity_nodes_not_mesh_names": true
+  },
+  "notes": "Abstract lazy-loaded interior; room meshes and furniture can be detailed later while keeping these ids stable."
+}

@@ -1,0 +1,59 @@
+HoloUtopia Pass 51C - Core Ring Adventure Combat Prototype
+
+Scope:
+- Continue the Central Hub embedded adventure simulation from Pass 51B.
+- Keep the action inside the hub circle around the pyramid.
+- Add a first combat prototype without external dimension routing, collision, HoloVerse route edits, HoloCore edits, or player control.
+
+Changed files:
+- data/HoloUtopia/holoutopia_adventure_simulation.py
+- data/HoloUtopia/holoutopia_game_runtime.py
+- data/HoloUtopia/holoutopia_citizen_question_router.py
+- data/HoloUtopia/tools/validate_holoutopia_adventure_simulation.py
+- data/HoloUtopia/tools/validate_holoutopia_adventure_hub_ring.py
+- data/HoloUtopia/tools/validate_holoutopia_adventure_combat.py
+- data/database/utopia/simulation/adventure_simulation_rules.json
+- data/database/utopia/runtime/holoutopia_runtime_bridge.json
+
+What changed:
+- Core Ring adventure simulation now has embedded combat_active=true and score_active=true.
+- Four active citizen heroes remain the max active players.
+- Replacement queue still fills dead-player slots.
+- Defeated heroes respawn in the Central Hub ring.
+- Added deterministic enemy silhouettes and combat state:
+  - 6 enemy slots.
+  - enemies alive/defeated counters.
+  - hero magic/weapon action ticks.
+  - hero HP metadata.
+  - live team score.
+  - kill/death counters.
+- Runtime renderer now draws visual-only enemy silhouettes and magic/weapon ticks inside the Core Ring bubble.
+- Citizen Q/A answer for the adventure simulation now reports combat status, foes, score, and respawns.
+- Added validator for the embedded combat prototype.
+
+Preserved:
+- No external dimension route.
+- No artifact route changes.
+- No HoloVerse route changes.
+- No HoloCore changes.
+- No collision changes.
+- No player control yet.
+- The action is still in the Central Hub circle around the pyramid.
+- 5 minute match duration remains intact.
+- 4 active players max remains intact.
+
+Validation run:
+- python -m compileall -q main.py data/HoloUtopia
+- python data/HoloUtopia/tools/validate_holoutopia_adventure_combat.py
+- python data/HoloUtopia/tools/validate_holoutopia_adventure_simulation.py
+- python data/HoloUtopia/tools/validate_holoutopia_adventure_hub_ring.py
+- plus service, functional building, Watch Mode, commute, schedule, activity, pathfinding, district activity, population, runtime, world screenshot, and town validators.
+
+Key validation:
+- active=4/4
+- enemies=6/6 at 18:15
+- score=48 at 18:15
+- mid_score=138 at 18:45
+- kills=1 by 18:45
+- respawns=1 by 18:45
+- external_dimension=False
