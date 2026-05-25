@@ -34,7 +34,7 @@ from panda3d.core import (
 
 MODE_TITLE = "Vector Arena"
 MODE_ID = "vector_arena"
-MODE_STATUS = "VECTOR ARENA // PHASED FIRST-PERSON ARCADE SHOOTER // CURRENT-GEN HARDLIGHT STYLE PASS // ESC / 0 RETURN TO HOLOVERSE // H SHOWS LEGACY UI / HELP"
+MODE_STATUS = "VECTOR ARENA // PHASED FIRST-PERSON ARCADE SHOOTER // CURRENT-GEN HARDLIGHT STYLE + TRUE-HEADING CONTROLS + SFX PASS // ESC / 0 RETURN TO HOLOVERSE // H SHOWS LEGACY UI / HELP"
 
 ARENA_RADIUS = 118.0
 EYE_HEIGHT = 4.4
@@ -47,6 +47,25 @@ MUZZLE_FLASH_CAP = 12
 REPULSOR_WAVE_CAP = 8
 HEAT_VENT_SPARK_CAP = 16
 MAX_HEAT = 100.0
+
+VECTOR_ARENA_SFX_FILES = {
+    "pulse_rifle": "pulse_rifle.wav",
+    "repulsor_blast": "repulsor_blast.wav",
+    "heat_vent": "heat_vent.wav",
+    "enemy_hit": "enemy_hit.wav",
+    "enemy_destroyed": "enemy_destroyed.wav",
+    "wave_start": "wave_start.wav",
+    "player_hit": "player_hit.wav",
+}
+VECTOR_ARENA_SFX_MIN_INTERVALS = {
+    "pulse_rifle": 0.055,
+    "repulsor_blast": 0.35,
+    "heat_vent": 0.09,
+    "enemy_hit": 0.035,
+    "enemy_destroyed": 0.08,
+    "wave_start": 0.45,
+    "player_hit": 0.18,
+}
 
 ENEMY_VARIANTS = (
     {
@@ -264,16 +283,29 @@ def _safe_dt(dt: float) -> float:
 
 
 def _heading_vec(deg: float) -> Vec3:
+    """Return Panda3D camera-facing ground forward for a heading angle.
+
+    Panda3D heading rotates around +Z using the engine camera convention.
+    The old Vector Arena pass used ``+sin(H)`` here, which mirrored movement
+    relative to the camera: W/S felt plausible at H=0, but A/D and mouse-look
+    directions became inverted after turning. Use the same handedness as the
+    camera HPR so WASD movement, hitscan aim, and the visible view all agree.
+    """
     a = math.radians(float(deg))
-    return Vec3(math.sin(a), math.cos(a), 0.0)
+    return Vec3(-math.sin(a), math.cos(a), 0.0)
+
+
+def _right_vec_from_forward(forward: Vec3) -> Vec3:
+    """Return the player-right vector for a normalized ground forward vector."""
+    return Vec3(forward.y, -forward.x, 0.0)
 
 
 def _forward_vec(yaw: float, pitch: float) -> Vec3:
-    # Panda3D forward is +Y.  Positive pitch aims down, so z uses -sin(pitch).
+    # Panda3D forward is +Y. Positive pitch aims down, so z uses -sin(pitch).
     y = math.radians(float(yaw))
     p = math.radians(float(pitch))
     cp = math.cos(p)
-    vec = Vec3(math.sin(y) * cp, math.cos(y) * cp, -math.sin(p))
+    vec = Vec3(-math.sin(y) * cp, math.cos(y) * cp, -math.sin(p))
     if vec.lengthSquared() > 0.0001:
         vec.normalize()
     return vec
@@ -674,6 +706,8 @@ class HoloVerseNativeMode:
         self.scenery_motion_nodes: list[NodePath] = []
         self.cover_glow_nodes: list[NodePath] = []
         self.spawn_gate_nodes: list[NodePath] = []
+        self.sfx: dict[str, object] = {}
+        self._last_sfx_time: dict[str, float] = {}
 
     # ------------------------------------------------------------------
     # Host resources
@@ -684,6 +718,7 @@ class HoloVerseNativeMode:
         self.render2d = getattr(self.host, "render2d", self.aspect2d)
         self.camera = self.host.camera
         self.camLens = self.host.camLens
+        self.loader = getattr(self.host, "loader", None)
         self.win = getattr(self.host, "win", None)
         self.accept = getattr(self.host, "accept", lambda *a, **k: None)
         self.ignore = getattr(self.host, "ignore", lambda *a, **k: None)
@@ -1189,6 +1224,7 @@ class HoloVerseNativeMode:
         self.health = min(100.0, self.health + 8.0)
         self.wave_intro_timer = 2.2
         self._apply_scenery_theme(self.wave - 1)
+        self._play_sfx("wave_start")
         for i, enemy in enumerate(self.enemies):
             self._spawn_enemy(enemy, i)
 
@@ -1258,6 +1294,46 @@ class HoloVerseNativeMode:
             return self._button_down(button)
         except Exception:
             return False
+
+    # ------------------------------------------------------------------
+    # Audio helpers
+    # ------------------------------------------------------------------
+    def _load_sfx(self):
+        """Load optional Vector Arena SFX through the host/Panda3D loader.
+
+        These are tiny generated WAV assets. Audio must never be required for
+        adapter startup, because HoloVerse smoke runs and package validators can
+        execute without an audio device.
+        """
+        self.sfx.clear()
+        self._last_sfx_time.clear()
+        loader = getattr(self, "loader", None)
+        if loader is None:
+            return
+        sfx_dir = self.folder / "assets" / "sfx"
+        for key, filename in VECTOR_ARENA_SFX_FILES.items():
+            path = sfx_dir / filename
+            if not path.is_file():
+                continue
+            try:
+                sound = loader.loadSfx(str(path))
+                if sound is not None:
+                    self.sfx[key] = sound
+            except Exception:
+                continue
+
+    def _play_sfx(self, key: str):
+        sound = self.sfx.get(str(key))
+        if sound is None:
+            return
+        interval = float(VECTOR_ARENA_SFX_MIN_INTERVALS.get(str(key), 0.04))
+        if self._elapsed - float(self._last_sfx_time.get(str(key), -999.0)) < interval:
+            return
+        self._last_sfx_time[str(key)] = self._elapsed
+        try:
+            sound.play()
+        except Exception:
+            pass
 
     # ------------------------------------------------------------------
     # Gameplay
@@ -1420,7 +1496,7 @@ class HoloVerseNativeMode:
         if self.weapon_root is None:
             return
         forward = _forward_vec(self.player_yaw, self.player_pitch)
-        side = Vec3(forward.y, -forward.x, 0.0)
+        side = _right_vec_from_forward(forward)
         if side.lengthSquared() > 0.001:
             side.normalize()
         eye = self.player_pos + Vec3(0, 0, EYE_HEIGHT)
@@ -1448,6 +1524,7 @@ class HoloVerseNativeMode:
         self.combo_timer = 3.2
         self.enemy_variant_counts[enemy.variant] = self.enemy_variant_counts.get(enemy.variant, 0) + 1
         self.score += int((enemy.score_value + self.wave * 18) * min(4.5, multiplier * (1.0 + self.combo * 0.045)))
+        self._play_sfx("enemy_destroyed")
         self._kill_burst(enemy.pos, enemy)
         self._impact(enemy.pos + Vec3(0, 0, 4.8))
 
@@ -1455,12 +1532,13 @@ class HoloVerseNativeMode:
         if self.fire_cooldown > 0.0 or self.heat >= MAX_HEAT:
             return
         self.fire_cooldown = 0.082
+        self._play_sfx("pulse_rifle")
         self.heat = min(MAX_HEAT, self.heat + 8.5)
         self.weapon_recoil = max(self.weapon_recoil, 0.20)
         self.weapon_charge = min(1.0, self.weapon_charge + 0.22)
         eye = self.player_pos + Vec3(0, 0, EYE_HEIGHT)
         forward = _forward_vec(self.player_yaw, self.player_pitch)
-        side = Vec3(forward.y, -forward.x, 0.0)
+        side = _right_vec_from_forward(forward)
         if side.lengthSquared() > 0.001:
             side.normalize()
         muzzle = eye + forward * 2.2 + side * 0.36 + Vec3(0, 0, -0.44)
@@ -1474,6 +1552,7 @@ class HoloVerseNativeMode:
                 damage *= 1.08
             target.hp -= damage
             target.hit_flash = 0.18
+            self._play_sfx("enemy_hit")
             self._impact(target_point)
             if target.hp <= 0.0:
                 self._score_enemy_kill(target, 1.0)
@@ -1484,6 +1563,7 @@ class HoloVerseNativeMode:
         if self.blast_cooldown > 0.0 or self.heat > 85.0:
             return
         self.blast_cooldown = 2.2
+        self._play_sfx("repulsor_blast")
         self.heat = min(MAX_HEAT, self.heat + 26.0)
         self.weapon_recoil = max(self.weapon_recoil, 0.55)
         self.repulsor_flash = 1.0
@@ -1509,6 +1589,7 @@ class HoloVerseNativeMode:
                 damage *= 0.78
             enemy.hp -= damage
             enemy.hit_flash = 0.26
+            self._play_sfx("enemy_hit")
             push = Vec3(enemy.pos - self.player_pos)
             push.z = 0
             if push.lengthSquared() > 0.001:
@@ -1575,7 +1656,7 @@ class HoloVerseNativeMode:
     def _update_player(self, dt: float):
         self._update_pointer_look(dt)
         forward = _heading_vec(self.player_yaw)
-        right = Vec3(forward.y, -forward.x, 0)
+        right = _right_vec_from_forward(forward)
         move = Vec3(0, 0, 0)
         if self._key_down("w"):
             move += forward
@@ -1678,6 +1759,7 @@ class HoloVerseNativeMode:
                     damage -= used * 0.55
                 self.health = max(0.0, self.health - damage)
                 self.damage_flash = 0.24
+                self._play_sfx("player_hit")
                 push = Vec3(self.player_pos - enemy.pos)
                 push.z = 0
                 if push.lengthSquared() > 0.001:
@@ -1700,6 +1782,7 @@ class HoloVerseNativeMode:
             self.vent_fx_cooldown = max(0.0, self.vent_fx_cooldown - dt)
             if self.vent_fx_cooldown <= 0.0:
                 self.vent_fx_cooldown = 0.075
+                self._play_sfx("heat_vent")
                 self._heat_vent_spark()
         self._mouse1_latched = False
         self._mouse3_latched = False
@@ -1877,6 +1960,7 @@ class HoloVerseNativeMode:
     def enter(self):
         self._host_resources()
         self._build_scene()
+        self._load_sfx()
         self._set_dimension_ui_visible(False)
         self._entered = True
         self._update_camera(0.016)
@@ -1968,6 +2052,13 @@ class HoloVerseNativeMode:
         self.heat_vent_sparks.clear()
         self.cover_blocks.clear()
         self.enemy_variant_counts.clear()
+        for sound in list(self.sfx.values()):
+            try:
+                sound.stop()
+            except Exception:
+                pass
+        self.sfx.clear()
+        self._last_sfx_time.clear()
         self.scenery_nodes = {"primary": [], "secondary": [], "accent": [], "floor": []}
         self.scenery_motion_nodes.clear()
         self.cover_glow_nodes.clear()

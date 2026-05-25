@@ -7,7 +7,7 @@
   "original_entry": "main.py",
   "launch_type": "native_panda",
   "fallback_launch_type": "none",
-  "host_contract": "holoverse_vector_arena_native_adapter_v8_fps_first_person_current_gen_hardlight_style_weapon_fx_enemy_variants_menacing_models",
+  "host_contract": "holoverse_vector_arena_native_adapter_v9_fps_first_person_current_gen_hardlight_style_weapon_fx_enemy_variants_menacing_models_true_heading_controls_sfx",
   "preferred_display": "same_window_native",
   "return_target": "hub",
   "requires_mouse_capture": true,
@@ -36,7 +36,9 @@
     "transparency_policy": "minimal_alpha_for_fx_only_not_primary_forms",
     "arena_visuals": "opaque_armored_walls_cover_spawn_gate_machines_with_thin_glow_cuts",
     "enemy_materials": "opaque_black_armor_bodies_with_red_magenta_corrupted_cores_and_thin_emissive_accents",
-    "weapon_materials": "opaque_black_tactical_hardlight_rifle_with_cyan_power_coils_and_heat_slits"
+    "weapon_materials": "opaque_black_tactical_hardlight_rifle_with_cyan_power_coils_and_heat_slits",
+    "controls": "true_panda3d_heading_first_person_wasd_mouse_lmb_rmb_shift_r",
+    "sfx_assets": "generated_pulse_repulsor_vent_hit_destroyed_wave_player_hit_wav"
   },
   "performance_contract": {
     "enemy_cap": 20,
@@ -57,6 +59,7 @@
     "heat_vent_spark_pool": 16,
     "weapon_fx_runtime_creation": "pooled_only_after_enter",
     "current_gen_style_nodes": "prebuilt_solid_card_cuboids_plus_line_seams",
-    "transparency_policy": "limited_to_thin_seams_hud_and_pooled_fx"
+    "transparency_policy": "limited_to_thin_seams_hud_and_pooled_fx",
+    "sfx_policy": "tiny_generated_wav_assets_loaded_optionally_no_audio_required_for_smoke"
   }
 }

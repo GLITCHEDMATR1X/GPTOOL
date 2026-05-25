@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "generated_by": "GPTOOL patch gate procedural sfx generator",
+  "target": "Vector Arena",
+  "policy": "tiny generated wav assets, optional host loader, no audio required for smoke",
+  "files": [
+    {
+      "file": "enemy_destroyed.wav",
+      "channels": 1,
+      "sample_rate": 44100,
+      "frames": 14994,
+      "duration_seconds": 0.34,
+      "purpose": "enemy_destroyed"
+    },
+    {
+      "file": "enemy_hit.wav",
+      "channels": 1,
+      "sample_rate": 44100,
+      "frames": 5733,
+      "duration_seconds": 0.13,
+      "purpose": "enemy_hit"
+    },
+    {
+      "file": "heat_vent.wav",
+      "channels": 1,
+      "sample_rate": 44100,
+      "frames": 8820,
+      "duration_seconds": 0.2,
+      "purpose": "heat_vent"
+    },
+    {
+      "file": "player_hit.wav",
+      "channels": 1,
+      "sample_rate": 44100,
+      "frames": 10584,
+      "duration_seconds": 0.24,
+      "purpose": "player_hit"
+    },
+    {
+      "file": "pulse_rifle.wav",
+      "channels": 1,
+      "sample_rate": 44100,
+      "frames": 7056,
+      "duration_seconds": 0.16,
+      "purpose": "pulse_rifle"
+    },
+    {
+      "file": "repulsor_blast.wav",
+      "channels": 1,
+      "sample_rate": 44100,
+      "frames": 19404,
+      "duration_seconds": 0.44,
+      "purpose": "repulsor_blast"
+    },
+    {
+      "file": "wave_start.wav",
+      "channels": 1,
+      "sample_rate": 44100,
+      "frames": 24255,
+      "duration_seconds": 0.55,
+      "purpose": "wave_start"
+    }
+  ]
+}

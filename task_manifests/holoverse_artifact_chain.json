@@ -1,0 +1,14 @@
+{
+  "schema": "gptool.task.v1",
+  "id": "holoverse_artifact_chain_smoke",
+  "title": "HoloVerse artifact chain smoke journey",
+  "requires_approval": false,
+  "steps": [
+    {"action": "note", "label": "intent", "message": "Validate that HoloVerse artifact routes still launch and return cleanly."},
+    {"action": "assert_file_exists", "label": "HoloVerse main exists", "path": "D:/Apps/GLITCHED MATRIX Prototype Lab/data/HoloVerse/main.py", "block_on_fail": false},
+    {"action": "command", "label": "compile HoloVerse", "cmd": "python -m compileall -q .", "cwd": "D:/Apps/GLITCHED MATRIX Prototype Lab/data/HoloVerse", "timeout": 180, "run_in_dry_run": false, "block_on_fail": true},
+    {"action": "command", "label": "route validator", "cmd": "python tools/validate_holoverse_routes.py", "cwd": "D:/Apps/GLITCHED MATRIX Prototype Lab/data/HoloVerse", "timeout": 120, "run_in_dry_run": false, "block_on_fail": true},
+    {"action": "command", "label": "artifact route smoke", "cmd": "python main.py --self-test --artifact-route-smoke-test", "cwd": "D:/Apps/GLITCHED MATRIX Prototype Lab/data/HoloVerse", "timeout": 180, "run_in_dry_run": false, "block_on_fail": true},
+    {"action": "assert_no_junk", "label": "no runtime junk", "path": "D:/Apps/GLITCHED MATRIX Prototype Lab/data/HoloVerse", "block_on_fail": false}
+  ]
+}

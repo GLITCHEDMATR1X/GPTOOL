@@ -1,0 +1,11 @@
+{
+  "schema": "gptool.task.v1",
+  "id": "holoutopia_capsule_smoke",
+  "title": "HoloUtopia capsule contract smoke",
+  "requires_approval": false,
+  "steps": [
+    {"action": "note", "label": "intent", "message": "Validate HoloUtopia as a capsule rather than a fake adapter."},
+    {"action": "command", "label": "capsule contract", "cmd": "python tools/validate_holoutopia_capsule_contract.py", "cwd": "D:/Apps/GLITCHED MATRIX Prototype Lab/data/HoloVerse", "timeout": 120, "run_in_dry_run": false},
+    {"action": "command", "label": "HoloUtopia runtime", "cmd": "python Dimensions/HoloUtopia/tools/validate_holoutopia_game_runtime.py", "cwd": "D:/Apps/GLITCHED MATRIX Prototype Lab/data/HoloVerse", "timeout": 120, "run_in_dry_run": false}
+  ]
+}

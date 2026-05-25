@@ -1,0 +1,7 @@
+Panda Asset Workstation 0.3.0
+2026-05-02T19:16:08
+
+Traceback (most recent call last):
+  File "D:\Apps\BACKUP\3D Editors\panda_asset_workstation\main.py", line 1901, in <module>
+    raise SystemExit(main())
+SystemExit: 0
