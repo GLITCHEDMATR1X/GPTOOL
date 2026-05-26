@@ -1,4 +1,0 @@
-checking file main.py
-checking file README.txt
-checking file patch_notes.txt
-checking file assets/character/README.txt

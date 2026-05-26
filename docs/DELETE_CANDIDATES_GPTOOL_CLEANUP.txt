@@ -1,0 +1,23 @@
+GLITCHED MATRIX Prototype Lab/
+GLITCHED-MATRIX-Prototype-Lab-Website/
+VR/
+logs/
+reports/
+tools/pass_combiner_tool_v5/
+clone_attempt.log
+dry_run_result.txt
+portable_build_fix_v4.zip
+fbx_animation_body_pass.patch
+PATCH_GATE_DROP_IN_README.md
+PASS18_APP_CAPSULE_DROP_IN_README.md
+PASS19_AUTOMATION_TASK_DROP_IN_README.md
+APPLY_PATCH_NOTES.txt
+cleanup_optional.txt
+README_LOCAL_COPY.md
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.log
+**/.venv/
+**/venv/
+**/crash_reports/

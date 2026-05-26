@@ -5,9 +5,9 @@
   "requires_approval": false,
   "steps": [
     {"action": "note", "label": "intent", "message": "Validate HoloCore ascent, ocean-space math, and vessel smoke hooks."},
-    {"action": "command", "label": "vertical strata", "cmd": "python tools/validate_holocore_vertical_strata.py", "cwd": "D:/Apps/GLITCHED MATRIX Prototype Lab/data/HoloVerse/Dimensions/HoloCore", "timeout": 120, "run_in_dry_run": false},
-    {"action": "command", "label": "ocean-space", "cmd": "python tools/validate_holocore_ocean_space.py", "cwd": "D:/Apps/GLITCHED MATRIX Prototype Lab/data/HoloVerse/Dimensions/HoloCore", "timeout": 120, "run_in_dry_run": false},
-    {"action": "command", "label": "vessel", "cmd": "python tools/validate_holocore_vessel.py", "cwd": "D:/Apps/GLITCHED MATRIX Prototype Lab/data/HoloVerse/Dimensions/HoloCore", "timeout": 120, "run_in_dry_run": false},
-    {"action": "command", "label": "integration smoke", "cmd": "python main.py --integration-smoke", "cwd": "D:/Apps/GLITCHED MATRIX Prototype Lab/data/HoloVerse/Dimensions/HoloCore", "timeout": 180, "run_in_dry_run": false}
+    {"action": "command", "label": "vertical strata", "cmd": "python tools/validate_holocore_vertical_strata.py", "cwd": "${holoverse}/Dimensions/HoloCore", "timeout": 120, "run_in_dry_run": false},
+    {"action": "command", "label": "ocean-space", "cmd": "python tools/validate_holocore_ocean_space.py", "cwd": "${holoverse}/Dimensions/HoloCore", "timeout": 120, "run_in_dry_run": false},
+    {"action": "command", "label": "vessel", "cmd": "python tools/validate_holocore_vessel.py", "cwd": "${holoverse}/Dimensions/HoloCore", "timeout": 120, "run_in_dry_run": false},
+    {"action": "command", "label": "integration smoke", "cmd": "python main.py --integration-smoke", "cwd": "${holoverse}/Dimensions/HoloCore", "timeout": 180, "run_in_dry_run": false}
   ]
 }

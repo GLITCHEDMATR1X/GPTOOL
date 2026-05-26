@@ -1,7 +1,0 @@
-Panda Asset Workstation 0.3.0
-- Added formal import/export validation reports and JSON report output
-- Added CLI commands for validate, convert, and package workflows
-- Added explicit rig-safe versus static-only export labeling
-- Added candidate versus passed-test export state folders
-- Added preview screenshot output for validated runs
-- Packages latest logs and validation reports with Panda-ready exports

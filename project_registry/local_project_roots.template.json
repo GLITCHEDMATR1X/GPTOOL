@@ -1,0 +1,13 @@
+{
+  "schema": "gptool.local_project_roots.v1",
+  "notes": "Copy this file to local_project_roots.json and edit paths for your machine. Do not commit personal absolute paths.",
+  "roots": {
+    "gptool": "D:/Apps/GPTOOL",
+    "gx_prototype_lab": "D:/Apps/GLITCHED MATRIX Prototype Lab",
+    "holoverse": "D:/Apps/GLITCHED MATRIX Prototype Lab/data/HoloVerse",
+    "holocore": "D:/Apps/GLITCHED MATRIX Prototype Lab/data/HoloVerse/Dimensions/HoloCore",
+    "holoutopia": "D:/Apps/GLITCHED MATRIX Prototype Lab/data/HoloVerse/Dimensions/HoloUtopia",
+    "gx_website": "D:/Apps/GLITCHED-MATRIX-Prototype-Lab-Website",
+    "vr_workspace": "D:/Apps/VR"
+  }
+}

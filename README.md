@@ -1,10 +1,43 @@
-# GPT Game Generation Bridge v0.6.6-pass16
+# GPT Game Generation Bridge v0.6.6-pass21
 
 Private AI-facing validation harness for more disciplined game and app generation.
 
 This lean Pass 9 bundle removes heavyweight generated proof worlds from the core zip and adds maintenance commands to audit and prevent package bloat.
 
 This release keeps the one-command workflow and adds a Panda3D runtime provider layer so AI agents can test games through the best available display path without reinstalling Panda3D for every project.
+
+
+## Current local engine systems
+
+Recent GPTOOL passes add three major AI-engine control systems:
+
+```text
+Pass 17 - AI Patch Gate
+Pass 18 - App Capsule Bridge
+Pass 19 - Automation Task Director
+```
+
+These systems live in:
+
+```text
+patching/
+app_capsules/
+automation_tasks/
+task_manifests/
+```
+
+They are intended to keep HoloVerse, HoloCore, HoloUtopia, GX Prototype Lab, and related projects patchable, testable, and clean without merging unrelated apps into one giant file or silently overwriting protected files.
+
+See:
+
+```text
+docs/AI_PATCH_GATE_RULES.md
+docs/APP_CAPSULE_BRIDGE.md
+docs/AUTOMATION_TASK_DIRECTOR.md
+docs/GPTOOL_ENGINE_SCOPE.md
+docs/NOTES_LOGS_REPORTS_POLICY.md
+```
+
 
 ## What it does now
 
@@ -328,3 +361,36 @@ The asset validator ignores known runtime-generated screenshot/proof/log outputs
 ## Repository baseline
 
 This tree is source-control-ready. Generated worlds, screenshots, release zips, local Panda3D runtimes, and build outputs are intentionally ignored. Use GitHub Releases for proof bundles and zipped pass deliveries. See `docs/REPOSITORY_SETUP.md` and `docs/GITHUB_RELEASE_GUIDE.md`.
+
+## Pass 21 — Bridge Extension Registry
+
+GPTOOL now registers major subsystems through one extension registry instead of manually growing `bridge.py` with pasted command blocks.
+
+Check extension status:
+
+```bash
+python bridge.py extension-status
+python bridge.py extension-status --json
+```
+
+Registered extension command groups:
+
+```bash
+python bridge.py patch-menu
+python bridge.py patch-rules
+python bridge.py patch-combine --help
+python bridge.py patch-repo-dry-run --help
+python bridge.py patch-repo-apply --help
+
+python bridge.py app-menu
+python bridge.py app-scan ./SomeApp
+python bridge.py app-migrate-plan ./SomeApp --target panda3d_same_window
+python bridge.py app-adapter-audit ./data/HoloVerse
+python bridge.py app-validate ./data/HoloVerse/Dimensions/HoloUtopia
+
+python bridge.py task-menu
+python bridge.py task-validate task_manifests/holoverse_artifact_chain.json
+python bridge.py task-run task_manifests/holoverse_artifact_chain.json
+```
+
+Automation manifests support local path variables such as `${holoverse}` and `${holocore}`. Copy `project_registry/local_project_roots.template.json` to `project_registry/local_project_roots.json` and edit it for your machine.

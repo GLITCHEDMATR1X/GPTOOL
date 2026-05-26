@@ -35,3 +35,12 @@ runtimes/panda3d_py313/**
 Thumbs.db
 .vscode/
 .idea/
+# GPTOOL managed-project cleanup
+GLITCHED MATRIX Prototype Lab/
+GLITCHED-MATRIX-Prototype-Lab-Website/
+VR/
+managed_projects/
+managed_tools/
+project_registry/local_project_roots.json
+crash_reports/
+*.patch

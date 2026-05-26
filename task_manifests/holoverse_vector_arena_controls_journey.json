@@ -1,0 +1,130 @@
+{
+  "schema": "gptool.task.v1",
+  "id": "holoverse_vector_arena_controls_journey",
+  "title": "HoloVerse Vector Arena controls and SFX journey foundation",
+  "requires_approval": false,
+  "steps": [
+    {
+      "action": "note",
+      "label": "intent",
+      "message": "Plan and validate the Vector Arena player journey after controls/SFX changes. Real bot input is exposed to the Panda3D smoke hook through GPT_BRIDGE_JOURNEY_PLAN when run with --apply."
+    },
+    {
+      "action": "assert_file_exists",
+      "label": "Vector Arena adapter exists",
+      "path": "${holoverse}/Dimensions/Vector Arena/holoverse_native_adapter.py",
+      "block_on_fail": true
+    },
+    {
+      "action": "write_input_plan",
+      "label": "write Vector Arena input plan",
+      "id": "vector_arena_controls_sfx_input_plan",
+      "title": "Vector Arena controls/SFX journey",
+      "output": "input_plans/vector_arena_controls_sfx_input_plan.json",
+      "target": {
+        "project": "${holoverse}",
+        "entry": "main.py",
+        "mode": "Vector Arena"
+      },
+      "steps": [
+        {
+          "action": "enter_artifact",
+          "slot": 1,
+          "label": "enter Vector Arena artifact"
+        },
+        {
+          "action": "wait",
+          "seconds": 0.5,
+          "label": "allow native adapter to enter"
+        },
+        {
+          "action": "hold_key",
+          "key": "w",
+          "seconds": 0.9,
+          "label": "move forward relative to camera"
+        },
+        {
+          "action": "hold_key",
+          "key": "a",
+          "seconds": 0.6,
+          "label": "strafe left"
+        },
+        {
+          "action": "hold_key",
+          "key": "d",
+          "seconds": 0.6,
+          "label": "strafe right"
+        },
+        {
+          "action": "mouse_move",
+          "dx": 180,
+          "dy": 0,
+          "label": "turn right"
+        },
+        {
+          "action": "mouse_click",
+          "button": "left",
+          "label": "fire pulse rifle"
+        },
+        {
+          "action": "mouse_click",
+          "button": "right",
+          "label": "fire repulsor"
+        },
+        {
+          "action": "press",
+          "key": "r",
+          "label": "vent heat"
+        },
+        {
+          "action": "screenshot",
+          "name": "vector_arena_controls_sfx",
+          "label": "proof screenshot"
+        },
+        {
+          "action": "exit_to_hub",
+          "label": "return to HoloVerse"
+        },
+        {
+          "action": "assert_state",
+          "state": "hub_restored",
+          "label": "hub restored"
+        }
+      ]
+    },
+    {
+      "action": "command",
+      "label": "Vector Arena controls/SFX validator",
+      "cmd": "python tools/validate_pass99_vector_arena_controls_sfx.py",
+      "cwd": "${holoverse}",
+      "timeout": 120,
+      "run_in_dry_run": false,
+      "block_on_fail": true
+    },
+    {
+      "action": "command",
+      "label": "Vector Arena current-gen validator",
+      "cmd": "python tools/validate_pass98_vector_arena_current_gen_style.py",
+      "cwd": "${holoverse}",
+      "timeout": 120,
+      "run_in_dry_run": false,
+      "block_on_fail": true
+    },
+    {
+      "action": "panda3d_journey_smoke",
+      "label": "optional Vector Arena journey smoke",
+      "project": "${holoverse}",
+      "entry": "main.py",
+      "runtime": "auto",
+      "journey_plan": "reports/automation_tasks/input_plans/vector_arena_controls_sfx_input_plan.json",
+      "journey_id": "vector_arena_controls_sfx_input_plan",
+      "screenshot_path": "${holoverse}/reports/vector_arena_controls_sfx_journey.png",
+      "require_screenshot": false,
+      "run_in_dry_run": false,
+      "block_on_fail": false,
+      "timeout": 120,
+      "window_type": "offscreen",
+      "frames": 4
+    }
+  ]
+}

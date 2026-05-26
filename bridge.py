@@ -28,7 +28,7 @@ from validators.text_fit_validator import validate_text_fit
 from validators.ui_bounds_validator import validate_ui_bounds
 from maintenance.package_cleaner import analyze_package, clean_package_tree, create_lean_package_zip, render_package_audit_text
 
-BRIDGE_VERSION = "0.6.6-pass16"
+BRIDGE_VERSION = "0.6.6-pass23"
 DEFAULT_REPORT_DIR = "reports"
 EXCLUDED_DIRS = {".git", "__pycache__", ".mypy_cache", ".pytest_cache", "node_modules", "dist", "build"}
 PANDA3D_PROFILE_NAMES = {"panda3d", "holoverse", "codered", "code_red"}
@@ -1231,6 +1231,29 @@ def build_parser() -> argparse.ArgumentParser:
     report = sub.add_parser("report", help="Render a JSON report as Markdown text.")
     report.add_argument("report")
     report.set_defaults(func=command_report)
+
+    try:
+        from integrations.bridge_extension_registry import register_bridge_extensions
+        register_bridge_extensions(sub)
+    except Exception as exc:
+        extension_status = sub.add_parser("extension-status", help="Show GPTOOL bridge extension registration status.")
+        extension_status.add_argument("--json", action="store_true")
+
+        def _extension_status_failed(args, _exc=exc):
+            payload = {
+                "schema": "gptool.bridge_extensions.v1",
+                "ok": False,
+                "extensions": [],
+                "error": str(_exc),
+            }
+            if getattr(args, "json", False):
+                print(json.dumps(payload, indent=2))
+            else:
+                print("GPTOOL bridge extension registry failed to load:")
+                print(str(_exc))
+            return 1
+
+        extension_status.set_defaults(func=_extension_status_failed)
 
     return parser
 

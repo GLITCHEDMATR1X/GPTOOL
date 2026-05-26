@@ -1,9 +1,0 @@
-Radar Hell 3D latest pass
-- Added Panda3D first-person vertical slice.
-- Added radar pulse reveal mechanic and arena/corridor layout.
-- Added procedural textures, enemies, pickups, and exit gate.
-- Added multi-weapon combat, stronger movement feel, and mob/layout variety.
-- Added game modes: Purge, Survival, and Relic Hunt.
-- Added ammo/relic pickup logic and stronger weapon feel hooks.
-- Added projectile enemy attacks, infernal hazards, and stronger mode-specific sectors.
-- Added full-load gate before reveal and screenshot hook.

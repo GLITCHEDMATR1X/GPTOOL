@@ -16,14 +16,14 @@ else:
 
 
 def command_validate(args: argparse.Namespace) -> int:
-    data = load_manifest(args.manifest)
+    data = load_manifest(args.manifest, root_config=getattr(args, "root_config", None))
     report = validate_manifest(data)
     print(json.dumps(report, indent=2) if args.json else ("PASS" if report["ok"] else "FAIL"))
     return 0 if report["ok"] else 2
 
 
 def command_run(args: argparse.Namespace) -> int:
-    data = load_manifest(args.manifest)
+    data = load_manifest(args.manifest, root_config=getattr(args, "root_config", None))
     validation = validate_manifest(data)
     report_dir = Path(args.report_dir)
     report_dir.mkdir(parents=True, exist_ok=True)
@@ -70,10 +70,12 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command", required=True)
     val = sub.add_parser("validate")
     val.add_argument("manifest")
+    val.add_argument("--root-config", help="Optional local_project_roots.json path for ${root} expansion.")
     val.add_argument("--json", action="store_true")
     val.set_defaults(func=command_validate)
     run = sub.add_parser("run")
     run.add_argument("manifest")
+    run.add_argument("--root-config", help="Optional local_project_roots.json path for ${root} expansion.")
     run.add_argument("--apply", action="store_true", help="Actually run write/launch commands. Dry-run by default.")
     run.add_argument("--approval", default="", help="Use APPLY for approval-required steps.")
     run.add_argument("--report-dir", default="reports/automation_tasks")

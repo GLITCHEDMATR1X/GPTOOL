@@ -1,5 +1,0 @@
-# One patch zip per line, in the exact order you want them applied.
-# Example:
-# HoloCore_PASS_ASSET_LAYOUT_PATCH_ONLY.zip
-# HoloCore_PASS_EXPANDED_BIOMES_PATCH_ONLY.zip
-# HoloCore_PASS_BIOME_MOTION_PATCH_ONLY.zip

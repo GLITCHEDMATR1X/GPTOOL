@@ -18,11 +18,18 @@ def command_task_menu(args: argparse.Namespace) -> int:
 
 
 def command_task_validate(args: argparse.Namespace) -> int:
-    return _run(["validate", args.manifest, *( ["--json"] if args.json else [] )])
+    cmd = ["validate", args.manifest]
+    if args.root_config:
+        cmd.extend(["--root-config", args.root_config])
+    if args.json:
+        cmd.append("--json")
+    return _run(cmd)
 
 
 def command_task_run(args: argparse.Namespace) -> int:
     cmd = ["run", args.manifest, "--report-dir", args.report_dir]
+    if args.root_config:
+        cmd.extend(["--root-config", args.root_config])
     if args.apply:
         cmd.append("--apply")
     if args.approval:
@@ -42,11 +49,13 @@ def add_automation_task_commands(sub) -> None:
 
     validate = sub.add_parser("task-validate", help="Validate a GPTOOL task manifest.")
     validate.add_argument("manifest")
+    validate.add_argument("--root-config")
     validate.add_argument("--json", action="store_true")
     validate.set_defaults(func=command_task_validate)
 
     run = sub.add_parser("task-run", help="Dry-run or apply a GPTOOL task manifest.")
     run.add_argument("manifest")
+    run.add_argument("--root-config")
     run.add_argument("--apply", action="store_true")
     run.add_argument("--approval", default="")
     run.add_argument("--report-dir", default="reports/automation_tasks")

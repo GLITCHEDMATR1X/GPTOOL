@@ -1,0 +1,49 @@
+{
+  "schema": "gptool.task.v1",
+  "id": "holoverse_artifact_chain_bot_foundation",
+  "title": "HoloVerse artifact chain bot-input foundation",
+  "requires_approval": false,
+  "steps": [
+    {"action": "note", "label": "intent", "message": "Create an explicit artifact-chain input plan for future Panda3D bot playback and run current route smoke checks."},
+    {"action": "assert_file_exists", "label": "HoloVerse main exists", "path": "${holoverse}/main.py", "block_on_fail": true},
+    {
+      "action": "write_input_plan",
+      "label": "write artifact chain input plan",
+      "id": "holoverse_artifact_chain_input_plan",
+      "title": "Enter and exit all HoloVerse artifact slots",
+      "output": "input_plans/holoverse_artifact_chain_input_plan.json",
+      "target": {"project": "${holoverse}", "entry": "main.py"},
+      "steps": [
+        {"action": "note", "message": "Slot mapping is validated by HoloVerse route validators before playback."},
+        {"action": "enter_artifact", "slot": 0, "label": "enter artifact 0"},
+        {"action": "wait", "seconds": 0.25},
+        {"action": "exit_to_hub"},
+        {"action": "enter_artifact", "slot": 1, "label": "enter artifact 1"},
+        {"action": "wait", "seconds": 0.25},
+        {"action": "exit_to_hub"},
+        {"action": "enter_artifact", "slot": 2, "label": "enter artifact 2"},
+        {"action": "wait", "seconds": 0.25},
+        {"action": "exit_to_hub"},
+        {"action": "enter_artifact", "slot": 3, "label": "enter artifact 3"},
+        {"action": "wait", "seconds": 0.25},
+        {"action": "exit_to_hub"},
+        {"action": "enter_artifact", "slot": 4, "label": "enter artifact 4"},
+        {"action": "wait", "seconds": 0.25},
+        {"action": "exit_to_hub"},
+        {"action": "enter_artifact", "slot": 5, "label": "enter artifact 5"},
+        {"action": "wait", "seconds": 0.25},
+        {"action": "exit_to_hub"},
+        {"action": "enter_artifact", "slot": 6, "label": "enter artifact 6"},
+        {"action": "wait", "seconds": 0.25},
+        {"action": "exit_to_hub"},
+        {"action": "enter_artifact", "slot": 7, "label": "enter artifact 7"},
+        {"action": "wait", "seconds": 0.25},
+        {"action": "exit_to_hub"},
+        {"action": "screenshot", "name": "artifact_chain_restored_hub"},
+        {"action": "assert_state", "state": "hub_restored"}
+      ]
+    },
+    {"action": "command", "label": "compile HoloVerse", "cmd": "python -m compileall -q .", "cwd": "${holoverse}", "timeout": 180, "run_in_dry_run": false, "block_on_fail": true},
+    {"action": "command", "label": "artifact route smoke", "cmd": "python main.py --self-test --artifact-route-smoke-test", "cwd": "${holoverse}", "timeout": 180, "run_in_dry_run": false, "block_on_fail": true}
+  ]
+}
