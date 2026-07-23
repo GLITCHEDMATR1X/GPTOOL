@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - archive-theater-runtime-bootstrap
+  pull_request:
+    branches:
+      - main
+      - master
 
 jobs:
   runtime-wheels:
